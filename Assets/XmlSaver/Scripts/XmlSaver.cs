@@ -9,24 +9,32 @@ using System.Linq;
 
 
 namespace XmlSaver {
+    using ExDictionary = Dictionary<Type, Dictionary<string, object>>;
+
     [Serializable]
-    public sealed class KeyValue {
+    public sealed class SaveDataElement {
         public string key { get; private set; }
         public object value { get; private set; }
+        public string type { get; private set; }
+        public Type ValueType { get { return Type.GetType(this.type); } }
 
 
-        public KeyValue() : this(Guid.NewGuid().ToString(), new object()) { ; }
-        public KeyValue(string key, object value) { this.Set(key, value); }
-        public KeyValue(KeyValuePair<string, object> pair) : this(pair.Key, pair.Value) { ; }
-
-
-        public void Set(string key, object value) {
+        public SaveDataElement() : this(Guid.NewGuid().ToString(), new object(), typeof(object).FullName) { ; }
+        public SaveDataElement(string key, object value, string type) { this.Set(key, value, type); }
+        public SaveDataElement(string key, object value, Type type) { this.Set(key, value, type.FullName); }
+        
+        public void Set(string key, object value, string type) {
             if(key == null) { throw new ArgumentNullException("key", "Key cannot be null."); }
-            else if(key == "") { throw new ArgumentException("key", "Key cannot be empty."); }
-            else if(value == null) { throw new ArgumentNullException("value", "Value cannot be null."); }
+            if(key == "") { throw new ArgumentException("key", "Key cannot be empty."); }
+
+            if(value == null) { throw new ArgumentNullException("value", "Value cannot be null."); }
+
+            if(type == null) { throw new ArgumentNullException("type", "Type cannnot be null."); }
+            if(type == "") { throw new ArgumentException("type", "Type cannot be empty."); }
 
             this.key = key;
             this.value = value;
+            this.type = type;
         }
     }
 
@@ -39,13 +47,13 @@ namespace XmlSaver {
             get { return extension; }
             set { if(value != null && value != "") { extension = value.StartsWith(".") ? value : "." + value; } }
         }
-        public static string FileNameWithoutExtension { get { return FileName.Substring(0, FileName.Length - extension.Length); } }
+        public static string FileNameWithoutExtension { get { return FileName.Substring(0, FileName.Length - Extension.Length); } }
         public static string FullPath { get { return Application.persistentDataPath + Path.DirectorySeparatorChar + FileName; } }
 
         private static string fileName = "XmlSaver.xml";
         private static string extension = ".xml";
-        private static Dictionary<string, object> dictionary = new Dictionary<string, object>();
-        private readonly static XmlSerializer serializer = new XmlSerializer(typeof(List<KeyValue>));
+        private static ExDictionary dictionary = new ExDictionary();
+        private readonly static XmlSerializer serializer = new XmlSerializer(typeof(List<SaveDataElement>));
         private readonly static UTF8Encoding encode = new UTF8Encoding(false);
 
 
@@ -57,12 +65,18 @@ namespace XmlSaver {
             dictionary.Clear();
             Save();
         }
-
+        
         public static void DeleteKey(string key) {
-            dictionary.Remove(key);
+            foreach(var pair in dictionary) { pair.Value.Remove(key); }
+
             Save();
         }
         
+        public static void DeleteKey(string key, Type type) {
+            dictionary[type].Remove(key);
+            Save();
+        }
+
         public static void Save() {
             if(dictionary.Count <= 0) {
                 File.Delete(FullPath);
@@ -70,12 +84,20 @@ namespace XmlSaver {
             }
 
             using(var sw = new StreamWriter(FullPath, false, encode)) {
-                serializer.Serialize(sw, ConvertDictionary2List(dictionary));
+                serializer.Serialize(sw, ConvertExDictionary2List(dictionary));
             }
         }
 
         public static bool HasKey(string key) {
-            return dictionary.ContainsKey(key);
+            foreach(var pair in dictionary) {
+                if(HasKey(key, pair.Key)) { return true; }
+            }
+
+            return false;
+        }
+
+        public static bool HasKey(string key, Type type) {
+            return dictionary.ContainsKey(type) && dictionary[type].ContainsKey(key);
         }
 
         #region "Setters"
@@ -84,24 +106,31 @@ namespace XmlSaver {
             
             using(var sw = new StringWriter()) {
                 serializer.Serialize(sw, value);
-                dictionary[key] = sw.ToString();
+                SetValue(key, sw.ToString(), typeof(T));
             }
         }
 
         public static void SetFloat(string key, float value) {
-            dictionary[key] = value;
+            SetValue<float>(key, value);
         }
 
         public static void SetInt(string key, int value) {
-            dictionary[key] = value;
+            SetValue<int>(key, value);
         }
 
         public static void SetString(string key, string value) {
-            dictionary[key] = value;
+            SetValue<string>(key, value);
         }
 
         public static void SetBool(string key, bool value) {
-            dictionary[key] = value;
+            SetValue<bool>(key, value);
+        }
+
+        private static void SetValue<T>(string key, T value, Type type = null) {
+            type = (type == null ? typeof(T) : type);
+            if(!dictionary.ContainsKey(type)) { dictionary[type] = new Dictionary<string, object>(); }
+
+            dictionary[type][key] = value;
         }
         #endregion
 
@@ -110,7 +139,7 @@ namespace XmlSaver {
             return Get<T>(key, default(T));
         }
 
-        public static T Get<T>(string key, T defaultValue) {
+        public static T Get<T>(string key, T defaultValue = default(T)) {
             return Get<T>(key, defaultValue, obj => {
                 var serializer = new XmlSerializer(typeof(T));
 
@@ -120,11 +149,11 @@ namespace XmlSaver {
             });
         }
 
-        public static float GetFloat(string key, float defaultValue = 0.0f) {
+        public static float GetFloat(string key, float defaultValue = default(float)) {
             return Get<float>(key, defaultValue, null);
         }
 
-        public static float GetInt(string key, int defaultValue = 0) {
+        public static float GetInt(string key, int defaultValue = default(int)) {
             return Get<int>(key, defaultValue, null);
         }
 
@@ -132,33 +161,36 @@ namespace XmlSaver {
             return Get<string>(key, defaultValue, null);
         }
 
-        public static bool GetBool(string key, bool defaultValue = false) {
+        public static bool GetBool(string key, bool defaultValue = default(bool)) {
             return Get<bool>(key, defaultValue, null);
         }
 
         private static T Get<T>(string key, T defaultValue, Func<object, T> getter) {
-            return HasKey(key) ? (getter == null ? (T)dictionary[key] : getter(dictionary[key])) : defaultValue;
+            var type = typeof(T);
+            return HasKey(key, type) ? (getter == null ? (T)dictionary[type][key] : getter(dictionary[type][key])) : defaultValue;
         }
         #endregion
         
-        private static Dictionary<string, object> Load() {
-            if(!File.Exists(FullPath)) { return new Dictionary<string, object>(); }
+        private static ExDictionary Load() {
+            if(!File.Exists(FullPath)) { return new ExDictionary(); }
             
             using(var sr = new StreamReader(FullPath, encode)) {
-                return ConvertList2Dictionary((List<KeyValue>)serializer.Deserialize(sr));
+                return ConvertList2ExDictionary((List<SaveDataElement>)serializer.Deserialize(sr));
             }
         }
 
-        private static Dictionary<string, object> ConvertList2Dictionary(List<KeyValue> list) {
-            dictionary = new Dictionary<string, object>();
-            list.ForEach(e => dictionary.Add(e.key, e.value));
+        private static ExDictionary ConvertList2ExDictionary(List<SaveDataElement> list) {
+            dictionary = new Dictionary<Type, Dictionary<string, object>>();
+            list.ForEach(e => SetValue(e.key, e.value, e.ValueType));
 
             return dictionary;
         }
 
-        private static List<KeyValue> ConvertDictionary2List(Dictionary<string, object> dic) {
-            var list = new List<KeyValue>();
-            foreach(var pair in dic) { list.Add(new KeyValue(pair)); }
+        private static List<SaveDataElement> ConvertExDictionary2List(ExDictionary dic) {
+            var list = new List<SaveDataElement>();
+            foreach(var pair in dic) {
+                foreach(var e in pair.Value) { list.Add(new SaveDataElement(e.Key, e.Value, pair.Key)); }
+            }
 
             return list;
         }

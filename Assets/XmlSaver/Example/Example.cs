@@ -19,12 +19,35 @@ namespace XmlSaver {
             XmlSaver.SetFloat("float", 1.1f);
             XmlSaver.Set<AAA>("aaa", new AAA());
 
+            XmlSaver.SetInt("test", 5);
+            XmlSaver.SetString("test", "test");
+
             XmlSaver.Save();
 
             Debug.Log(XmlSaver.GetInt("integer"));
             Debug.Log(XmlSaver.GetFloat("float"));
-            Debug.Log(XmlSaver.GetBool("bool", false));
+            Debug.Log(XmlSaver.GetBool("bool", true));
+            Debug.Log(XmlSaver.Get<AAA>("aaa", null));
             Debug.Log(XmlSaver.Get<AAA>("aaa", null).list.First());
+
+            Debug.Log("");
+
+            Debug.Log(XmlSaver.GetString("test"));
+            Debug.Log(XmlSaver.GetInt("test"));
+
+            XmlSaver.DeleteKey("test");
+
+            Debug.Log(XmlSaver.GetString("test"));
+            Debug.Log(XmlSaver.GetInt("test"));
+
+            Debug.Log("");
+
+            XmlSaver.SetInt("test", 5);
+            XmlSaver.SetString("test", "test");
+            XmlSaver.DeleteKey("test", typeof(int));
+
+            Debug.Log(XmlSaver.GetString("test"));
+            Debug.Log(XmlSaver.GetInt("test"));
         }
     }
 }
