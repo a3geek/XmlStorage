@@ -72,45 +72,67 @@ namespace XmlSaver {
         }
     }
 
+    /// <summary>セットしたデータ群をXML形式で保存する</summary>
     public sealed class XmlSaver {
+        /// <summary>保存する時のファイル名</summary>
         public static string FileName {
             get { return fileName; }
             set { if(value != null && value != "") { fileName = value.EndsWith(extension) ? value : value + extension; } }
         }
+        /// <summary>保存する時のファイル拡張子</summary>
         public static string Extension {
             get { return extension; }
             set { if(value != null && value != "") { extension = value.StartsWith(".") ? value : "." + value; } }
         }
+        /// <summary>保存する時のファイル名(拡張子なし)</summary>
         public static string FileNameWithoutExtension { get { return FileName.Substring(0, FileName.Length - Extension.Length); } }
+        /// <summary>保存する時のフルファイルパス</summary>
         public static string FullPath { get { return Application.persistentDataPath + Path.DirectorySeparatorChar + FileName; } }
 
+        /// <summary>保存する時のファイル名を保持</summary>
         private static string fileName = "XmlSaver.xml";
+        /// <summary>保存する時のファイル拡張子を保持</summary>
         private static string extension = ".xml";
+        /// <summary>セットされたデータ群を保持</summary>
         private static ExDictionary dictionary = new ExDictionary();
+        /// <summary>データをXMLにシリアライズするためのシリアライザーインスタンス</summary>
         private readonly static XmlSerializer serializer = new XmlSerializer(typeof(List<SaveDataElement>));
+        /// <summary>ファイルに保存する際のエンコード情報</summary>
         private readonly static UTF8Encoding encode = new UTF8Encoding(false);
 
 
+        /// <summary>静的コンストラクタ</summary>
         static XmlSaver() {
             dictionary = Load();
         }
 
+        /// <summary>セットした全てのデータを消去する</summary>
         public static void DeleteAll() {
             dictionary.Clear();
             Save();
         }
-        
+
+        /// <summary>
+        /// 引数に渡したキーと一致するデータを全て消去する
+        /// </summary>
+        /// <param name="key">消去するデータ郡のキー</param>
         public static void DeleteKey(string key) {
             foreach(var pair in dictionary) { pair.Value.Remove(key); }
 
             Save();
         }
         
+        /// <summary>
+        /// 引数に渡したキーと型に一致するデータを消去する
+        /// </summary>
+        /// <param name="key">消去するデータのキー</param>
+        /// <param name="type">消去するデータの型</param>
         public static void DeleteKey(string key, Type type) {
             dictionary[type].Remove(key);
             Save();
         }
 
+        /// <summary>セットしたデータ群をXML形式でファイルに保存する</summary>
         public static void Save() {
             if(dictionary.Count <= 0) {
                 File.Delete(FullPath);
@@ -122,6 +144,11 @@ namespace XmlSaver {
             }
         }
 
+        /// <summary>
+        /// 引数に渡したキーと一致するデータが一つでも存在するかどうかを検索する
+        /// </summary>
+        /// <param name="key">検索するデータ群のキー</param>
+        /// <returns>検索結果</returns>
         public static bool HasKey(string key) {
             foreach(var pair in dictionary) {
                 if(HasKey(key, pair.Key)) { return true; }
@@ -130,6 +157,12 @@ namespace XmlSaver {
             return false;
         }
 
+        /// <summary>
+        /// 引数に渡したキーと型に一致するデータが存在するかどうかを検索する
+        /// </summary>
+        /// <param name="key">検索するデータのキー</param>
+        /// <param name="type">検索するデータの型</param>
+        /// <returns>検索結果</returns>
         public static bool HasKey(string key, Type type) {
             return dictionary.ContainsKey(type) && dictionary[type].ContainsKey(key);
         }
