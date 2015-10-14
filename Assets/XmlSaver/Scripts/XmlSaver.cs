@@ -11,18 +11,52 @@ using System.Linq;
 namespace XmlSaver {
     using ExDictionary = Dictionary<Type, Dictionary<string, object>>;
 
+    /// <summary>SerializeしてXMLデータとしてファイル保存する時に利用する形式</summary>
     [Serializable]
     public sealed class SaveDataElement {
-        public string key { get; private set; }
-        public object value { get; private set; }
-        public string type { get; private set; }
-        public Type ValueType { get { return Type.GetType(this.type); } }
+        /// <summary>データを取り出す時に使うキー</summary>
+        public string Key { get; private set; }
+        /// <summary>保存するデータ</summary>
+        public object Value { get; private set; }
+        /// <summary>データの型のフルネーム</summary>
+        public string TypeName { get; private set; }
+        /// <summary>データの型(RO)</summary>
+        public Type ValueType { get { return Type.GetType(this.TypeName); } }
 
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public SaveDataElement() : this(Guid.NewGuid().ToString(), new object(), typeof(object).FullName) { ; }
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="key">データを取り出す時に使うキー</param>
+        /// <param name="value">保存するデータ</param>
+        /// <param name="type">データの型</param>
+        public SaveDataElement(string key, object value, Type type) : this(key, value, type.FullName) { ; }
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="key">データを取り出す時に使うキー</param>
+        /// <param name="value">保存するデータ</param>
+        /// <param name="type">データの型のフルネーム</param>
         public SaveDataElement(string key, object value, string type) { this.Set(key, value, type); }
-        public SaveDataElement(string key, object value, Type type) { this.Set(key, value, type.FullName); }
-        
+
+        /// <summary>
+        /// メンバ変数の値を更新する
+        /// </summary>
+        /// <param name="key">データを取り出す時に使うキー</param>
+        /// <param name="value">保存するデータ</param>
+        /// <param name="type">データの型</param>
+        public void Set(string key, object value, Type type) { this.Set(key, value, type.FullName); }
+
+        /// <summary>
+        /// メンバ変数の値を更新する
+        /// </summary>
+        /// <param name="key">データを取り出す時に使うキー</param>
+        /// <param name="value">保存するデータ</param>
+        /// <param name="type">データの型のフルネーム</param>
         public void Set(string key, object value, string type) {
             if(key == null) { throw new ArgumentNullException("key", "Key cannot be null."); }
             if(key == "") { throw new ArgumentException("key", "Key cannot be empty."); }
@@ -32,9 +66,9 @@ namespace XmlSaver {
             if(type == null) { throw new ArgumentNullException("type", "Type cannnot be null."); }
             if(type == "") { throw new ArgumentException("type", "Type cannot be empty."); }
 
-            this.key = key;
-            this.value = value;
-            this.type = type;
+            this.Key = key;
+            this.Value = value;
+            this.TypeName = type;
         }
     }
 
@@ -181,7 +215,7 @@ namespace XmlSaver {
 
         private static ExDictionary ConvertList2ExDictionary(List<SaveDataElement> list) {
             dictionary = new Dictionary<Type, Dictionary<string, object>>();
-            list.ForEach(e => SetValue(e.key, e.value, e.ValueType));
+            list.ForEach(e => SetValue(e.Key, e.Value, e.ValueType));
 
             return dictionary;
         }
