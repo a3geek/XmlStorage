@@ -168,6 +168,12 @@ namespace XmlSaver {
         }
 
         #region "Setters"
+        /// <summary>
+        /// 任意の型のデータとキーをセットする
+        /// </summary>
+        /// <typeparam name="T">セットするデータの型(Serializable)</typeparam>
+        /// <param name="key">セットするデータのキー</param>
+        /// <param name="value">セットするデータ</param>
         public static void Set<T>(string key, T value) {
             var serializer = new XmlSerializer(typeof(T));
             
@@ -177,22 +183,49 @@ namespace XmlSaver {
             }
         }
 
+        /// <summary>
+        /// float型のデータとキーをセットする
+        /// </summary>
+        /// <param name="key">セットするデータのキー</param>
+        /// <param name="value">セットするデータ</param>
         public static void SetFloat(string key, float value) {
             SetValue<float>(key, value);
         }
 
+        /// <summary>
+        /// int型のデータとキーをセットする
+        /// </summary>
+        /// <param name="key">セットするデータのキー</param>
+        /// <param name="value">セットするデータ</param>
         public static void SetInt(string key, int value) {
             SetValue<int>(key, value);
         }
 
+        /// <summary>
+        /// string型のデータとキーをセットする
+        /// </summary>
+        /// <param name="key">セットするデータのキー</param>
+        /// <param name="value">セットするデータ</param>
         public static void SetString(string key, string value) {
             SetValue<string>(key, value);
         }
 
+        /// <summary>
+        /// bool型のデータとキーをセットする
+        /// </summary>
+        /// <param name="key">セットするデータのキー</param>
+        /// <param name="value">セットするデータ</param>
         public static void SetBool(string key, bool value) {
             SetValue<bool>(key, value);
         }
 
+        /// <summary>
+        /// データとキー情報を内部的に保持する
+        /// </summary>
+        /// <typeparam name="T">保持するデータの型(Serializable)</typeparam>
+        /// <param name="key">保持するデータのキー</param>
+        /// <param name="value">保持するデータ</param>
+        /// <param name="type">保持するデータの型情報</param>
         private static void SetValue<T>(string key, T value, Type type = null) {
             type = (type == null ? typeof(T) : type);
             if(!dictionary.ContainsKey(type)) { dictionary[type] = new Dictionary<string, object>(); }
@@ -202,10 +235,13 @@ namespace XmlSaver {
         #endregion
 
         #region "Getters"
-        public static T Get<T>(string key) {
-            return Get<T>(key, default(T));
-        }
-
+        /// /// <summary>
+        /// 引数に渡したキーと対応する任意の型のデータを取得する
+        /// </summary>
+        /// <typeparam name="T">取得するデータの型</typeparam>
+        /// <param name="key">取得するデータのキー</param>
+        /// /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <returns>キーに対応するデータ</returns>
         public static T Get<T>(string key, T defaultValue = default(T)) {
             return Get<T>(key, defaultValue, obj => {
                 var serializer = new XmlSerializer(typeof(T));
@@ -216,28 +252,64 @@ namespace XmlSaver {
             });
         }
 
+        /// <summary>
+        /// 引数に渡したキーと対応するfloat型のデータを取得する
+        /// </summary>
+        /// <param name="key">取得するデータのキー</param>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <returns>キーに対応するデータ</returns>
         public static float GetFloat(string key, float defaultValue = default(float)) {
             return Get<float>(key, defaultValue, null);
         }
 
+        /// <summary>
+        /// 引数に渡したキーと対応するint型のデータを取得する
+        /// </summary>
+        /// <param name="key">取得するデータのキー</param>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <returns>キーに対応するデータ</returns>
         public static float GetInt(string key, int defaultValue = default(int)) {
             return Get<int>(key, defaultValue, null);
         }
 
+        /// <summary>
+        /// 引数に渡したキーと対応するstring型のデータを取得する
+        /// </summary>
+        /// <param name="key">取得するデータのキー</param>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <returns>キーに対応するデータ</returns>
         public static string GetString(string key, string defaultValue = "") {
             return Get<string>(key, defaultValue, null);
         }
 
+        /// <summary>
+        /// 引数に渡したキーと対応するbool型のデータを取得する
+        /// </summary>
+        /// <param name="key">取得するデータのキー</param>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <returns>キーに対応するデータ</returns>
         public static bool GetBool(string key, bool defaultValue = default(bool)) {
             return Get<bool>(key, defaultValue, null);
         }
 
-        private static T Get<T>(string key, T defaultValue, Func<object, T> getter) {
+        /// <summary>
+        /// キー情報を元に内部保持しているデータ郡から対応するデータを取得する
+        /// </summary>
+        /// <typeparam name="T">取得するデータの型</typeparam>
+        /// <param name="key">取得するデータのキー</param>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <param name="converter">見つかったデータをobject型から本来のデータの型に変換する変換器</param>
+        /// <returns>キーに対応するデータ</returns>
+        private static T Get<T>(string key, T defaultValue, Func<object, T> converter) {
             var type = typeof(T);
-            return HasKey(key, type) ? (getter == null ? (T)dictionary[type][key] : getter(dictionary[type][key])) : defaultValue;
+            return HasKey(key, type) ? (converter == null ? (T)dictionary[type][key] : converter(dictionary[type][key])) : defaultValue;
         }
         #endregion
         
+        /// <summary>
+        /// 保存したファイルから情報を読み込む
+        /// </summary>
+        /// <returns>読み込んだ情報</returns>
         private static ExDictionary Load() {
             if(!File.Exists(FullPath)) { return new ExDictionary(); }
             
@@ -246,6 +318,11 @@ namespace XmlSaver {
             }
         }
 
+        /// <summary>
+        /// ファイルに保存するための形式から内部的に保持するための形式に変換する
+        /// </summary>
+        /// <param name="list">変換するデータ群</param>
+        /// <returns>形式を変換した情報</returns>
         private static ExDictionary ConvertList2ExDictionary(List<SaveDataElement> list) {
             dictionary = new Dictionary<Type, Dictionary<string, object>>();
             list.ForEach(e => SetValue(e.Key, e.Value, e.ValueType));
@@ -253,6 +330,11 @@ namespace XmlSaver {
             return dictionary;
         }
 
+        /// <summary>
+        /// 内部的に保持するための形式からファイルに保存するための形式に変換する
+        /// </summary>
+        /// <param name="dic">変換するデータ群</param>
+        /// <returns>形式を変換した情報</returns>
         private static List<SaveDataElement> ConvertExDictionary2List(ExDictionary dic) {
             var list = new List<SaveDataElement>();
             foreach(var pair in dic) {
