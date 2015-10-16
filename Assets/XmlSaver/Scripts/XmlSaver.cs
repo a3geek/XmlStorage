@@ -73,7 +73,7 @@ namespace XmlSaver {
     }
 
     /// <summary>セットしたデータ群をXML形式で保存する</summary>
-    public sealed class XmlSaver {
+    public static class XmlSaver {
         /// <summary>保存する時のファイル名</summary>
         public static string FileName {
             get { return fileName; }
