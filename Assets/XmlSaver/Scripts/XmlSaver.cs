@@ -27,14 +27,14 @@ namespace XmlSaver {
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public SaveDataElement() : this(Guid.NewGuid().ToString(), new object(), typeof(object).FullName) { ; }
+        public SaveDataElement() : this(Guid.NewGuid().ToString(), new object(), typeof(object).FullName) {; }
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="key">データを取り出す時に使うキー</param>
         /// <param name="value">保存するデータ</param>
         /// <param name="type">データの型</param>
-        public SaveDataElement(string key, object value, Type type) : this(key, value, type.FullName) { ; }
+        public SaveDataElement(string key, object value, Type type) : this(key, value, type.FullName) {; }
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -121,7 +121,7 @@ namespace XmlSaver {
 
             Save();
         }
-        
+
         /// <summary>
         /// 引数に渡したキーと型に一致するデータを消去する
         /// </summary>
@@ -175,11 +175,15 @@ namespace XmlSaver {
         /// <param name="key">セットするデータのキー</param>
         /// <param name="value">セットするデータ</param>
         public static void Set<T>(string key, T value) {
-            var serializer = new XmlSerializer(typeof(T));
-            
+            Set<T>(key, value, typeof(T));
+        }
+
+        public static void Set<T>(string key, T value, Type type) {
+            var serializer = new XmlSerializer(type);
+
             using(var sw = new StringWriter()) {
                 serializer.Serialize(sw, value);
-                SetValue(key, sw.ToString(), typeof(T));
+                SetValue(key, sw.ToString(), type);
             }
         }
 
@@ -243,13 +247,17 @@ namespace XmlSaver {
         /// /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <returns>キーに対応するデータ</returns>
         public static T Get<T>(string key, T defaultValue = default(T)) {
-            return Get<T>(key, defaultValue, obj => {
-                var serializer = new XmlSerializer(typeof(T));
+            return Get<T>(key, typeof(T), defaultValue);
+        }
+
+        public static T Get<T>(string key, Type type, T defaultValue) {
+            return GetValue<T>(key, defaultValue, obj => {
+                var serializer = new XmlSerializer(type);
 
                 using(var sr = new StringReader((string)obj)) {
                     return (T)serializer.Deserialize(sr);
                 }
-            });
+            }, type);
         }
 
         /// <summary>
@@ -259,7 +267,7 @@ namespace XmlSaver {
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <returns>キーに対応するデータ</returns>
         public static float GetFloat(string key, float defaultValue = default(float)) {
-            return Get<float>(key, defaultValue, null);
+            return GetValue<float>(key, defaultValue, null);
         }
 
         /// <summary>
@@ -269,7 +277,7 @@ namespace XmlSaver {
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <returns>キーに対応するデータ</returns>
         public static float GetInt(string key, int defaultValue = default(int)) {
-            return Get<int>(key, defaultValue, null);
+            return GetValue<int>(key, defaultValue, null);
         }
 
         /// <summary>
@@ -279,7 +287,7 @@ namespace XmlSaver {
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <returns>キーに対応するデータ</returns>
         public static string GetString(string key, string defaultValue = "") {
-            return Get<string>(key, defaultValue, null);
+            return GetValue<string>(key, defaultValue, null);
         }
 
         /// <summary>
@@ -289,7 +297,7 @@ namespace XmlSaver {
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <returns>キーに対応するデータ</returns>
         public static bool GetBool(string key, bool defaultValue = default(bool)) {
-            return Get<bool>(key, defaultValue, null);
+            return GetValue<bool>(key, defaultValue, null);
         }
 
         /// <summary>
@@ -300,19 +308,19 @@ namespace XmlSaver {
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <param name="converter">見つかったデータをobject型から本来のデータの型に変換する変換器</param>
         /// <returns>キーに対応するデータ</returns>
-        private static T Get<T>(string key, T defaultValue, Func<object, T> converter) {
-            var type = typeof(T);
+        private static T GetValue<T>(string key, T defaultValue, Func<object, T> converter = null, Type type = null) {
+            type = (type == null ? typeof(T) : type);
             return HasKey(key, type) ? (converter == null ? (T)dictionary[type][key] : converter(dictionary[type][key])) : defaultValue;
         }
         #endregion
-        
+
         /// <summary>
         /// 保存したファイルから情報を読み込む
         /// </summary>
         /// <returns>読み込んだ情報</returns>
         private static ExDictionary Load() {
             if(!File.Exists(FullPath)) { return new ExDictionary(); }
-            
+
             using(var sr = new StreamReader(FullPath, encode)) {
                 return ConvertList2ExDictionary((List<SaveDataElement>)serializer.Deserialize(sr));
             }
