@@ -87,9 +87,9 @@ namespace XmlSaver {
         /// <summary>保存する時のファイル名(拡張子なし)</summary>
         public static string FileNameWithoutExtension { get { return FileName.Substring(0, FileName.Length - Extension.Length); } }
         /// <summary>保存する時のフルファイルパス</summary>
-        public static string FullPath { get { return DirectoryPath + Path.DirectorySeparatorChar + FileName; } }
+        public static string FullPath { get { return ChangePath4Platform(DirectoryPath + Path.DirectorySeparatorChar + FileName); } }
         /// <summary>保存するファイルを置くフォルダ</summary>
-        public static string DirectoryPath { get { return Application.persistentDataPath; } }
+        public static string DirectoryPath { get { return ChangePath4Platform(Application.persistentDataPath); } }
 
         /// <summary>保存する時のファイル名を保持</summary>
         private static string fileName = "XmlSaver.xml";
@@ -352,6 +352,13 @@ namespace XmlSaver {
             }
 
             return list;
+        }
+
+        private static string ChangePath4Platform(string path) {
+            var pf = Application.platform;
+            var target = ((pf == RuntimePlatform.WindowsEditor || pf == RuntimePlatform.WindowsPlayer) ? '/' : '\\');
+
+            return path.Replace(target, Path.DirectorySeparatorChar);
         }
     }
 }
