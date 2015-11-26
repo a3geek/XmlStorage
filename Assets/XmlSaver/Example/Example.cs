@@ -5,6 +5,7 @@ using System.Linq;
 
 
 namespace XmlSaver {
+    [AddComponentMenu("")]
     public class Example : MonoBehaviour {
         public class AAA {
             public string str = "string-AAA";
