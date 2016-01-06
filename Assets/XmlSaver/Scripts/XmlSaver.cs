@@ -278,7 +278,7 @@ namespace XmlSaver {
         /// <param name="key">取得するデータのキー</param>
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <returns>キーに対応するデータ</returns>
-        public static float GetInt(string key, int defaultValue = default(int)) {
+        public static int GetInt(string key, int defaultValue = default(int)) {
             return GetValue<int>(key, defaultValue, null);
         }
 
