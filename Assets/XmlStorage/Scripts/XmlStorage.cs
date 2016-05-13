@@ -8,7 +8,7 @@ using System.Text;
 using System.Linq;
 
 
-namespace XmlSaver {
+namespace XmlStorage {
     using ExDictionary = Dictionary<Type, Dictionary<string, object>>;
 
     /// <summary>SerializeしてXMLデータとしてファイル保存する時に利用する形式</summary>
@@ -73,7 +73,7 @@ namespace XmlSaver {
     }
 
     /// <summary>セットしたデータ群をXML形式で保存する</summary>
-    public static class XmlSaver {
+    public static class XmlStorage {
         /// <summary>保存する時のファイル名</summary>
         public static string FileName {
             get { return fileName; }
@@ -104,7 +104,7 @@ namespace XmlSaver {
 
 
         /// <summary>静的コンストラクタ</summary>
-        static XmlSaver() {
+        static XmlStorage() {
             dictionary = Load();
         }
 
