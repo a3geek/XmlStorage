@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Text;
 using System.Linq;
+using System.Reflection;
 
 
 namespace XmlSaver {
@@ -21,7 +22,7 @@ namespace XmlSaver {
         /// <summary>データの型のフルネーム</summary>
         public string TypeName { get; private set; }
         /// <summary>データの型(RO)</summary>
-        public Type ValueType { get { return Type.GetType(this.TypeName); } }
+        public Type ValueType { get { return this.GetType(this.TypeName); } }
 
 
         /// <summary>
@@ -69,6 +70,62 @@ namespace XmlSaver {
             this.Key = key;
             this.Value = value;
             this.TypeName = type;
+        }
+
+        /// <summary>
+        /// 文字列から型情報を取得する(UnityEngine内部の型はType.GetTypeではnullになるのでこの関数を利用する)
+        /// </summary>
+        /// <param name="typeName">型のフルネーム</param>
+        /// <returns>検索結果</returns>
+        private Type GetType(string typeName) {
+            // Try Type.GetType() first. This will work with types defined
+            // by the Mono runtime, in the same assembly as the caller, etc.
+            var type = Type.GetType(typeName);
+
+            // If it worked, then we're done here
+            if(type != null) {
+                return type;
+            }
+
+            // If the TypeName is a full name, then we can try loading the defining assembly directly
+            if(typeName.Contains(".")) {
+                // Get the name of the assembly (Assumption is that we are using 
+                // fully-qualified type names)
+                var assemblyName = typeName.Substring(0, typeName.IndexOf('.'));
+
+                // Attempt to load the indicated Assembly
+                var assembly = Assembly.Load(assemblyName);
+                if(assembly == null) {
+                    return null;
+                }
+
+                // Ask that assembly to return the proper Type
+                type = assembly.GetType(typeName);
+                if(type != null) {
+                    return type;
+                }
+            }
+
+            // If we still haven't found the proper type, we can enumerate all of the 
+            // loaded assemblies and see if any of them define the type
+            var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+
+            foreach(var assemblyName in referencedAssemblies) {
+                // Load the referenced assembly
+                var assembly = Assembly.Load(assemblyName);
+
+                if(assembly != null) {
+                    // See if that assembly defines the named type
+                    type = assembly.GetType(typeName);
+
+                    if(type != null) {
+                        return type;
+                    }
+                }
+            }
+
+            // The type just couldn't be found...
+            return null;
         }
     }
 
