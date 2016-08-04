@@ -30,8 +30,6 @@ namespace XmlStorage.Examples {
         }
 
         private void SetData2XmlStorage(int value) {
-            Debug.Log(value);
-            Debug.Log(this.qua.x);
             XmlStorage.SetInt("integer", value);
             XmlStorage.SetFloat("float", 1.111f);
             XmlStorage.Set("TestClass", this.test);
