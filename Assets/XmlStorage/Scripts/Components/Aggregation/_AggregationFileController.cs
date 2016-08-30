@@ -10,6 +10,23 @@ using System.Linq;
 
 namespace XmlStorage.Components {
     public sealed partial class Aggregation {
+        private class StringWriterEncode : StringWriter {
+            public override Encoding Encoding {
+                get {
+                    return this.encode;
+                }
+            }
+
+            private Encoding encode = Encoding.UTF8;
+
+
+            public StringWriterEncode() : base() {; }
+            
+            public StringWriterEncode(Encoding encode) : this() {
+                this.encode = (encode == null ? this.encode : encode);
+            }
+        }
+
         private string Adjust4FileName(string fileName, string defaultValue = null) {
             if(string.IsNullOrEmpty(fileName)) {
                 return string.IsNullOrEmpty(defaultValue) ? this.FileName : defaultValue;

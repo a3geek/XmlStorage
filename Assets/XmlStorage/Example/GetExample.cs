@@ -22,6 +22,8 @@ namespace XmlStorage.Examples {
              * 0
              * "del_tes2"
              * 
+             * "lab-interactive@team-lab.com"
+             * 
              * (0.1, 0.2)
              * (1.0, 2.0, 3.0)
              * (10.0, 20.0, 30.0)
@@ -42,6 +44,8 @@ namespace XmlStorage.Examples {
              * 
              * 0
              * "del_tes2"
+             * 
+             * "lab-interactive@team-lab.com"
              * 
              * (0.1, 0.2)
              * (1.0, 2.0, 3.0)
@@ -64,6 +68,8 @@ namespace XmlStorage.Examples {
              * 
              * 0
              * "del_tes2"
+             * 
+             * "lab-interactive@team-lab.com"
              * 
              * (0.1, 0.2)
              * (1.0, 2.0, 3.0)
@@ -91,6 +97,10 @@ namespace XmlStorage.Examples {
 
             Debug.Log(XmlStorage.GetInt("del_tes2"));
             Debug.Log(XmlStorage.GetString("del_tes2"));
+
+            Debug.Log("");
+
+            Debug.Log(XmlStorage.Get<string>("address"));
 
             Debug.Log("");
 

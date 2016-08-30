@@ -42,6 +42,9 @@ namespace XmlStorage.Examples {
             XmlStorage.SetString("del_tes2", "del_tes2");
             XmlStorage.DeleteKey("del_tes2", typeof(int));
 
+            var address = "lab-interactive@team-lab.com";
+            XmlStorage.SetString("address", address);
+
             XmlStorage.Set("vec2", this.vec2);
             XmlStorage.Set("vec3", this.vec3);
             XmlStorage.Set("qua", this.qua);

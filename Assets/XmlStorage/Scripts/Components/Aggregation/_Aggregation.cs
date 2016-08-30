@@ -40,9 +40,9 @@ namespace XmlStorage.Components {
         private ExDictionary dictionary = new ExDictionary();
 
 
-        public Aggregation(List<DataElement> elements, string aggregationName) {
+        public Aggregation(List<DataElement> elements, string aggregationName, bool serialize = true) {
             if(elements != null) {
-                this.Set2DictionaryByList(elements);
+                this.Set2DictionaryByList(elements, serialize);
             }
 
             this.AggregationName = (string.IsNullOrEmpty(aggregationName) ? Guid.NewGuid().ToString() : aggregationName);
@@ -82,25 +82,46 @@ namespace XmlStorage.Components {
             return dictionary.ContainsKey(type) && dictionary[type].ContainsKey(key);
         }
 
-        public void Set2DictionaryByList(List<DataElement> list) {
+        public void Set2DictionaryByList(List<DataElement> list, bool serialize = true) {
             this.dictionary.Clear();
-            this.Add2DictionaryByList(list);
+            this.Add2DictionaryByList(list, serialize);
         }
 
-        public void Add2DictionaryByList(List<DataElement> list) {
+        public void Add2DictionaryByList(List<DataElement> list, bool serialize = true) {
             list.ForEach(e => {
-                if(!this.dictionary.ContainsKey(e.ValueType)) { this.dictionary[e.ValueType] = new Dictionary<string, object>(); }
+                var vt = e.ValueType;
 
-                this.dictionary[e.ValueType][e.Key] = e.Value;
+                if(!this.dictionary.ContainsKey(vt)) { this.dictionary[vt] = new Dictionary<string, object>(); }
+
+                if(serialize) {
+                    var serializer = new XmlSerializer(vt);
+
+                    using(var sr = new StringReader(e.Value.ToString())) {
+                        this.dictionary[vt][e.Key] = serializer.Deserialize(sr);
+                    }
+                }
+                else {
+                    this.dictionary[vt][e.Key] = e.Value;
+                }
             });
         }
 
-        public List<DataElement> GetDataAsList() {
+        public List<DataElement> GetDataAsList(Encoding encode = null, bool serialize = true) {
             var list = new List<DataElement>();
 
             foreach(var pair in this.dictionary) {
+                var serializer = new XmlSerializer(pair.Key);
+
                 foreach(var e in pair.Value) {
-                    list.Add(new DataElement(e.Key, e.Value, pair.Key));
+                    if(serialize) {
+                        using(var sw = new StringWriterEncode(encode)) {
+                            serializer.Serialize(sw, e.Value);
+                            list.Add(new DataElement(e.Key, sw.ToString(), pair.Key));
+                        }
+                    }
+                    else {
+                        list.Add(new DataElement(e.Key, e.Value, pair.Key));
+                    }
                 }
             }
 

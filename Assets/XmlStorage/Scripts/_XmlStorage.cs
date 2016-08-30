@@ -58,23 +58,7 @@ namespace XmlStorage {
             if(!aggregations.ContainsKey(aggregationName)) { aggregations.Add(aggregationName, new Aggregation(null, aggregationName)); }
             CurrentAggregationName = aggregationName;
         }
-
-        private static void Action4ChosenAggregation(string aggregationName, Action<Aggregation> action) {
-            Action4ChosenAggregation(aggregationName, agg => {
-                action(agg);
-                return false;
-            });
-        }
-
-        private static T Action4ChosenAggregation<T>(string aggregationName, Func<Aggregation, T> func) {
-            if(HasAggregation(aggregationName)) {
-                return func(aggregations[aggregationName]);
-            }
-            else {
-                return func(CurrentAggregation);
-            }
-        }
-
+        
         public static bool DeleteAggregation(string aggregationName) {
             if(aggregationName == DefaultAggregationName) { return false; }
             if(HasAggregation(aggregationName)) { return aggregations.Remove(aggregationName); }
@@ -86,30 +70,7 @@ namespace XmlStorage {
             return (string.IsNullOrEmpty(aggregationName) ? false : aggregations.ContainsKey(aggregationName));
         }
         
-        private static Dictionary<string, SerializeType> Aggregations2Dictionary4FileControl(Dictionary<string, Aggregation> aggregations) {
-            var dic = new Dictionary<string, SerializeType>();
-
-            foreach(var pair in aggregations) {
-                var agg = pair.Value;
-                var dataset = new DataSet(agg.AggregationName, agg.FileName, agg.Extension, agg.DirectoryPath, agg.GetDataAsList());
-                
-                if(!dic.ContainsKey(agg.FullPath)) { dic.Add(agg.FullPath, new SerializeType()); }
-
-                dic[agg.FullPath].Add(dataset);
-            }
-
-            return dic;
-        }
-
-        private static Dictionary<string, Aggregation> DataSetsList2Aggregations(SerializeType sets) {
-            var dic = new Dictionary<string, Aggregation>();
-
-            foreach(var set in sets) {
-                if(!dic.ContainsKey(set.AggregationName)) { dic.Add(set.AggregationName, new Aggregation(set.Elements, set.AggregationName)); }
-            }
-
-            return dic;
-        }
+        
 
         /// <summary>セットした全てのデータを消去する</summary>
         public static void DeleteAll(string aggregationName = null) {
@@ -176,7 +137,7 @@ namespace XmlStorage {
         private static Dictionary<string, Aggregation> Load() {
             var aggs = new Dictionary<string, Aggregation>();
             var filePaths = filePathStorage.Load();
-            
+
             if(filePaths.Count <= 0) {
                 aggs.Add(DefaultAggregationName, new Aggregation(null, DefaultAggregationName));
 
@@ -196,6 +157,49 @@ namespace XmlStorage {
             if(aggs.Count <= 0) { aggs.Add(DefaultAggregationName, new Aggregation(null, DefaultAggregationName)); }
 
             return aggs;
+        }
+
+        private static void Action4ChosenAggregation(string aggregationName, Action<Aggregation> action) {
+            Action4ChosenAggregation(aggregationName, agg => {
+                action(agg);
+                return false;
+            });
+        }
+
+        private static T Action4ChosenAggregation<T>(string aggregationName, Func<Aggregation, T> func) {
+            if(HasAggregation(aggregationName)) {
+                return func(aggregations[aggregationName]);
+            }
+            else {
+                return func(CurrentAggregation);
+            }
+        }
+
+        private static Dictionary<string, SerializeType> Aggregations2Dictionary4FileControl(Dictionary<string, Aggregation> aggregations) {
+            var dic = new Dictionary<string, SerializeType>();
+
+            foreach(var pair in aggregations) {
+                var agg = pair.Value;
+                var dataset = new DataSet(agg.AggregationName, agg.FileName, agg.Extension, agg.DirectoryPath, agg.GetDataAsList(encode));
+
+                if(!dic.ContainsKey(agg.FullPath)) { dic.Add(agg.FullPath, new SerializeType()); }
+
+                dic[agg.FullPath].Add(dataset);
+            }
+
+            return dic;
+        }
+
+        private static Dictionary<string, Aggregation> DataSetsList2Aggregations(SerializeType sets) {
+            var dic = new Dictionary<string, Aggregation>();
+
+            foreach(var set in sets) {
+                if(!dic.ContainsKey(set.AggregationName)) {
+                    dic.Add(set.AggregationName, new Aggregation(set.Elements, set.AggregationName));
+                }
+            }
+
+            return dic;
         }
     }
 }
