@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using System.Text;
@@ -33,6 +34,7 @@ namespace XmlStorage.Components {
             get { return this.DirectoryPath + Path.DirectorySeparatorChar + this.FileName; }
         }
         public string AggregationName { get; private set; }
+        public bool IsAllTypesSerialize { get; private set; }
 
         private string fileName = "XmlStorage.xml";
         private string extension = ".xml";
@@ -40,11 +42,10 @@ namespace XmlStorage.Components {
         private ExDictionary dictionary = new ExDictionary();
 
 
-        public Aggregation(List<DataElement> elements, string aggregationName, bool serialize = true) {
-            if(elements != null) {
-                this.Set2DictionaryByList(elements, serialize);
-            }
+        public Aggregation(List<DataElement> elements, string aggregationName, bool isAllTypesSerialize = false) {
+            this.IsAllTypesSerialize = isAllTypesSerialize;
 
+            if(elements != null) { this.Set2DictionaryByList(elements); }
             this.AggregationName = (string.IsNullOrEmpty(aggregationName) ? Guid.NewGuid().ToString() : aggregationName);
 
             this.Extension = ".xml";
@@ -82,23 +83,19 @@ namespace XmlStorage.Components {
             return dictionary.ContainsKey(type) && dictionary[type].ContainsKey(key);
         }
 
-        public void Set2DictionaryByList(List<DataElement> list, bool serialize = true) {
+        public void Set2DictionaryByList(List<DataElement> list) {
             this.dictionary.Clear();
-            this.Add2DictionaryByList(list, serialize);
+            this.Add2DictionaryByList(list);
         }
 
-        public void Add2DictionaryByList(List<DataElement> list, bool serialize = true) {
+        public void Add2DictionaryByList(List<DataElement> list) {
             list.ForEach(e => {
                 var vt = e.ValueType;
 
                 if(!this.dictionary.ContainsKey(vt)) { this.dictionary[vt] = new Dictionary<string, object>(); }
 
-                if(serialize) {
-                    var serializer = new XmlSerializer(vt);
-
-                    using(var sr = new StringReader(e.Value.ToString())) {
-                        this.dictionary[vt][e.Key] = serializer.Deserialize(sr);
-                    }
+                if(this.IsAllTypesSerialize || !vt.IsSerializable) {
+                    this.dictionary[vt][e.Key] = this.Deserialize(e.Value, vt);
                 }
                 else {
                     this.dictionary[vt][e.Key] = e.Value;
@@ -106,26 +103,45 @@ namespace XmlStorage.Components {
             });
         }
 
-        public List<DataElement> GetDataAsList(Encoding encode = null, bool serialize = true) {
+        public List<DataElement> GetDataAsList(Encoding encode = null) {
             var list = new List<DataElement>();
-
+            
             foreach(var pair in this.dictionary) {
-                var serializer = new XmlSerializer(pair.Key);
-
                 foreach(var e in pair.Value) {
-                    if(serialize) {
-                        using(var sw = new StringWriterEncode(encode)) {
-                            serializer.Serialize(sw, e.Value);
-                            list.Add(new DataElement(e.Key, sw.ToString(), pair.Key));
-                        }
+                    if(this.IsAllTypesSerialize) {
+                        list.Add(this.Object2DataElement(e.Value, e.Key, pair.Key, true, encode));
                     }
                     else {
-                        list.Add(new DataElement(e.Key, e.Value, pair.Key));
+                        list.Add(this.Object2DataElement(e.Value, e.Key, pair.Key, !e.Value.GetType().IsSerializable, encode));
                     }
                 }
             }
 
             return list;
+        }
+
+        private DataElement Object2DataElement(object value, string key, Type type, bool serialize = false, Encoding encode = null) {
+            if(serialize) {
+                var serializer = new XmlSerializer(type);
+
+                using(var sw = new StringWriterEncode(encode)) {
+                    serializer.Serialize(sw, value);
+
+                    return new DataElement(key, sw.ToString(), type);
+                }
+            }
+
+            return new DataElement(key, value, type);
+        }
+
+        private object Deserialize(object value, Type type) { return this.Deserialize(value.ToString(), type); }
+
+        private object Deserialize(string value, Type type) {
+            var serializer = new XmlSerializer(type);
+
+            using(var sr = new StringReader(value)) {
+                return serializer.Deserialize(sr);
+            }
         }
     }
 }
