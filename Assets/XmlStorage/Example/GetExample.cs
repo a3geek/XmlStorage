@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-
 
 namespace XmlStorage.Examples {
     [AddComponentMenu("")]
@@ -28,7 +25,7 @@ namespace XmlStorage.Examples {
              * (1.0, 2.0, 3.0)
              * (10.0, 20.0, 30.0)
              */
-            Debug.Log("Default Aggregatpion");
+            this.Log("Default Aggregatpion");
             this.GetDataFromXmlStorage();
 
             /*
@@ -51,7 +48,7 @@ namespace XmlStorage.Examples {
              * (1.0, 2.0, 3.0)
              * (10.0, 20.0, 30.0)
              */
-            Debug.Log("Test1 Aggregation");
+            this.Log("Test1 Aggregation");
             XmlStorage.ChangeAggregation("Test1");
             this.GetDataFromXmlStorage();
 
@@ -75,41 +72,41 @@ namespace XmlStorage.Examples {
              * (1.0, 2.0, 3.0)
              * (10.0, 20.0, 30.0)
              */
-            Debug.Log("Test2 Aggregation");
+            this.Log("Test2 Aggregation");
             XmlStorage.ChangeAggregation("Test2");
             this.GetDataFromXmlStorage();
         }
 
         private void GetDataFromXmlStorage() {
-            Debug.Log(XmlStorage.GetInt("integer", 0));
-            Debug.Log(XmlStorage.GetFloat("float", 0f));
-            Debug.Log(XmlStorage.Get<ExampleController.Test>("TestClass", null));
-            Debug.Log(XmlStorage.Get<ExampleController.Test>("TestClass", null).str);
-            Debug.Log(XmlStorage.Get<ExampleController.Test>("TestClass", null).list1.First());
-            Debug.Log(XmlStorage.Get<ExampleController.Test>("TestClass", null).list1.Last());
+            this.Log(XmlStorage.GetInt("integer", 0));
+            this.Log(XmlStorage.GetFloat("float", 0f));
+            this.Log(XmlStorage.Get<ExampleController.Test>("TestClass", null));
+            this.Log(XmlStorage.Get<ExampleController.Test>("TestClass", null).str);
+            this.Log(XmlStorage.Get<ExampleController.Test>("TestClass", null).list1.First());
+            this.Log(XmlStorage.Get<ExampleController.Test>("TestClass", null).list1.Last());
 
-            Debug.Log("");
+            this.Log("");
 
-            Debug.Log(XmlStorage.GetInt("del_tes1"));
-            Debug.Log(XmlStorage.GetString("del_tes1"));
+            this.Log(XmlStorage.GetInt("del_tes1"));
+            this.Log(XmlStorage.GetString("del_tes1"));
 
-            Debug.Log("");
+            this.Log("");
 
-            Debug.Log(XmlStorage.GetInt("del_tes2"));
-            Debug.Log(XmlStorage.GetString("del_tes2"));
+            this.Log(XmlStorage.GetInt("del_tes2"));
+            this.Log(XmlStorage.GetString("del_tes2"));
 
-            Debug.Log("");
+            this.Log("");
 
-            Debug.Log(XmlStorage.Get<string>("address"));
+            this.Log(XmlStorage.Get<string>("address"));
 
-            Debug.Log("");
+            this.Log("");
 
-            Debug.Log(XmlStorage.Get("vec2", Vector2.zero));
-            Debug.Log(XmlStorage.Get("vec3", Vector3.zero));
-            Debug.Log(XmlStorage.Get("qua", Quaternion.identity).eulerAngles);
+            this.Log(XmlStorage.Get("vec2", Vector2.zero));
+            this.Log(XmlStorage.Get("vec3", Vector3.zero));
+            this.Log(XmlStorage.Get("qua", Quaternion.identity).eulerAngles);
 
-            Debug.Log("");
-            Debug.Log("");
+            this.Log("");
+            this.Log("");
         }
 
         private void Log(object obj) { Debug.Log(obj); }

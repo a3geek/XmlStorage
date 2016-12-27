@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-
 namespace XmlStorage.Examples {
     [AddComponentMenu("")]
     public class ExampleController : MonoBehaviour {

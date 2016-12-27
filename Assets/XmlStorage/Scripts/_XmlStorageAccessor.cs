@@ -1,16 +1,4 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using System.IO;
-using System.Text;
-using System.Linq;
-
-
-namespace XmlStorage {
-    using Components;
-
+﻿namespace XmlStorage {
     /// <summary>セットしたデータ群をXML形式で保存する</summary>
     public static partial class XmlStorage {
         #region "Setters"
