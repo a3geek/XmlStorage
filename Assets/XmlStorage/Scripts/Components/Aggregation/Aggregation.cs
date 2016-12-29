@@ -9,6 +9,9 @@ using System.Text;
 namespace XmlStorage.Components {
     using ExDictionary = Dictionary<Type, Dictionary<string, object>>;
 
+    /// <summary>
+    /// データ群が所属する集団
+    /// </summary>
     [Serializable]
     public sealed partial class Aggregation {
         public string FileName {

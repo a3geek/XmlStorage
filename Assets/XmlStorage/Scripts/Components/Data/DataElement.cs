@@ -2,7 +2,9 @@
 using System.Reflection;
 
 namespace XmlStorage.Components {
-    /// <summary>SerializeしてXMLデータとしてファイル保存する時に利用する形式</summary>
+    /// <summary>
+    /// データをファイルに保存する際のデータ形式
+    /// </summary>
     [Serializable]
     public sealed class DataElement {
         /// <summary>データを取り出す時に使うキー</summary>
@@ -42,7 +44,9 @@ namespace XmlStorage.Components {
         /// <param name="key">データを取り出す時に使うキー</param>
         /// <param name="value">保存するデータ</param>
         /// <param name="type">データの型</param>
-        public void Set(string key, object value, Type type) { this.Set(key, value, type.FullName); }
+        public void Set(string key, object value, Type type) {
+            this.Set(key, value, type.FullName);
+        }
 
         /// <summary>
         /// メンバ変数の値を更新する
@@ -52,12 +56,12 @@ namespace XmlStorage.Components {
         /// <param name="type">データの型のフルネーム</param>
         public void Set(string key, object value, string type) {
             if(key == null) { throw new ArgumentNullException("key", "Key cannot be null."); }
-            if(key == "") { throw new ArgumentException("key", "Key cannot be empty."); }
-
+            else if(key == "") { throw new ArgumentException("key", "Key cannot be empty."); }
+            
             if(value == null) { throw new ArgumentNullException("value", "Value cannot be null."); }
 
             if(type == null) { throw new ArgumentNullException("type", "Type cannnot be null."); }
-            if(type == "") { throw new ArgumentException("type", "Type cannot be empty."); }
+            else if(type == "") { throw new ArgumentException("type", "Type cannot be empty."); }
 
             this.Key = key;
             this.Value = value;
@@ -65,6 +69,11 @@ namespace XmlStorage.Components {
         }
 
         // http://ja.stackoverflow.com/questions/1552/type-gettypestring%E3%81%AE%E5%B8%B0%E3%82%8A%E5%80%A4%E3%81%8Cnull%E3%81%AB%E3%81%AA%E3%82%8B
+        /// <summary>
+        /// 型名からType型に変換する
+        /// </summary>
+        /// <param name="typeName">型名</param>
+        /// <returns>変換した型</returns>
         private Type GetType(string typeName) {
             // Try Type.GetType() first. This will work with types defined
             // by the Mono runtime, in the same assembly as the caller, etc.
