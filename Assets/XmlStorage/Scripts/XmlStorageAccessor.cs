@@ -11,7 +11,7 @@
         /// <param name="key">セットするデータのキー</param>
         /// <param name="value">セットするデータ</param>
         /// <param name="aggregationName">データが所属する集団名</param>
-        public static void Set<T>(string key, T value, string aggregationName = null) where T : new()
+        public static void Set<T>(string key, T value, string aggregationName = null)
         {
             Action4ChosenAggregation(aggregationName, agg => agg.Set(key, value));
         }

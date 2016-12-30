@@ -45,11 +45,6 @@ namespace XmlStorage
         {
             get { return CurrentAggregation.FullPath; }
         }
-        /// <summary>現在選択されている集団</summary>
-        public static Aggregation CurrentAggregation
-        {
-            get { return aggregations[CurrentAggregationName]; }
-        }
         /// <summary>現在選択されている集団名</summary>
         public static string CurrentAggregationName
         {
@@ -61,6 +56,11 @@ namespace XmlStorage
         /// <summary>ファイルに保存する時のエンコード情報</summary>
         private readonly static UTF8Encoding encode = new UTF8Encoding(false);
 
+        /// <summary>現在選択されている集団</summary>
+        private static Aggregation CurrentAggregation
+        {
+            get { return aggregations[CurrentAggregationName]; }
+        }
         /// <summary>集団群</summary>
         private static Dictionary<string, Aggregation> aggregations = new Dictionary<string, Aggregation>();
         /// <summary>全保存ファイルの管理</summary>
