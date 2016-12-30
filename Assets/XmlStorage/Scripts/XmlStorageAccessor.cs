@@ -67,7 +67,7 @@
 
         #region "Getters"
         /// /// <summary>
-        /// 引数に渡したキーと対応する任意の型のデータを取得する
+        /// キーと対応する任意の型のデータを取得する
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
         /// <typeparam name="T">取得するデータの型</typeparam>
@@ -81,7 +81,7 @@
         }
 
         /// <summary>
-        /// 引数に渡したキーと対応するfloat型のデータを取得する
+        /// キーと対応するfloat型のデータを取得する
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
         /// <param name="key">取得するデータのキー</param>
@@ -94,7 +94,7 @@
         }
 
         /// <summary>
-        /// 引数に渡したキーと対応するint型のデータを取得する
+        /// キーと対応するint型のデータを取得する
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
         /// <param name="key">取得するデータのキー</param>
@@ -107,7 +107,7 @@
         }
 
         /// <summary>
-        /// 引数に渡したキーと対応するstring型のデータを取得する
+        /// キーと対応するstring型のデータを取得する
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
         /// <param name="key">取得するデータのキー</param>
@@ -120,7 +120,7 @@
         }
 
         /// <summary>
-        /// 引数に渡したキーと対応するbool型のデータを取得する
+        /// キーと対応するbool型のデータを取得する
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
         /// <param name="key">取得するデータのキー</param>

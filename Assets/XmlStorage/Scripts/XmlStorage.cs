@@ -17,33 +17,38 @@ namespace XmlStorage
         /// <summary>デフォルトの集団名</summary>
         public const string DefaultAggregationName = "Default";
 
-        /// <summary>保存する時のファイル名</summary>
+        /// <summary><see cref="CurrentAggregation"/>がデータ群を保存する時のファイル名</summary>
         public static string FileName
         {
             set { CurrentAggregation.FileName = value; }
             get { return CurrentAggregation.FileName; }
         }
-        /// <summary>保存する時のファイル拡張子</summary>
+        /// <summary><see cref="CurrentAggregation"/>がデータ群を保存する時のファイル拡張子</summary>
         public static string Extension
         {
             set { CurrentAggregation.Extension = value; }
             get { return CurrentAggregation.Extension; }
         }
-        /// <summary>保存するファイルを置くフォルダ</summary>
+        /// <summary><see cref="CurrentAggregation"/>がデータ群を保存するファイルを置くフォルダ</summary>
         public static string DirectoryPath
         {
             set { CurrentAggregation.DirectoryPath = value; }
             get { return CurrentAggregation.DirectoryPath; }
         }
-        /// <summary>保存する時のファイル名(拡張子なし)</summary>
+        /// <summary><see cref="CurrentAggregation"/>がデータ群を保存する時のファイル名(拡張子なし)</summary>
         public static string FileNameWithoutExtension
         {
             get { return CurrentAggregation.FileNameWithoutExtension; }
         }
-        /// <summary>保存する時のフルパス</summary>
+        /// <summary><see cref="CurrentAggregation"/>がデータ群を保存する時のフルパス</summary>
         public static string FullPath
         {
             get { return CurrentAggregation.FullPath; }
+        }
+        /// <summary>現在選択されている集団</summary>
+        public static Aggregation CurrentAggregation
+        {
+            get { return aggregations[CurrentAggregationName]; }
         }
         /// <summary>現在選択されている集団名</summary>
         public static string CurrentAggregationName
@@ -53,13 +58,11 @@ namespace XmlStorage
 
         /// <summary>データをXMLにシリアライズするためのシリアライザーインスタンス</summary>
         private readonly static XmlSerializer serializer = new XmlSerializer(typeof(SerializeType));
-        /// <summary>ファイルに保存する際のエンコード情報</summary>
+        /// <summary>ファイルに保存する時のエンコード情報</summary>
         private readonly static UTF8Encoding encode = new UTF8Encoding(false);
 
         /// <summary>集団群</summary>
         private static Dictionary<string, Aggregation> aggregations = new Dictionary<string, Aggregation>();
-        /// <summary>アクティブ状態の集団</summary>
-        private static Aggregation CurrentAggregation { get { return aggregations[CurrentAggregationName]; } }
         /// <summary>全保存ファイルの管理</summary>
         private static FilePathStorage filePathStorage = new FilePathStorage();
 
@@ -78,7 +81,10 @@ namespace XmlStorage
         public static void ChangeAggregation(string aggregationName)
         {
             if(!aggregations.ContainsKey(aggregationName))
-            { aggregations.Add(aggregationName, new Aggregation(null, aggregationName)); }
+            {
+                aggregations.Add(aggregationName, new Aggregation(null, aggregationName));
+            }
+
             CurrentAggregationName = aggregationName;
         }
 
@@ -90,9 +96,13 @@ namespace XmlStorage
         public static bool DeleteAggregation(string aggregationName)
         {
             if(aggregationName == DefaultAggregationName)
-            { return false; }
-            if(HasAggregation(aggregationName))
-            { return aggregations.Remove(aggregationName); }
+            {
+                return false;
+            }
+            else if(HasAggregation(aggregationName))
+            {
+                return aggregations.Remove(aggregationName);
+            }
 
             return false;
         }
@@ -221,7 +231,9 @@ namespace XmlStorage
             }
 
             if(aggs.Count <= 0)
-            { aggs.Add(DefaultAggregationName, new Aggregation(null, DefaultAggregationName)); }
+            {
+                aggs.Add(DefaultAggregationName, new Aggregation(null, DefaultAggregationName));
+            }
 
             return aggs;
         }
@@ -271,7 +283,7 @@ namespace XmlStorage
             foreach(var pair in aggregations)
             {
                 var agg = pair.Value;
-                var dataset = new DataSet(agg.AggregationName, agg.FileName, agg.Extension, agg.DirectoryPath, agg.GetDataAsList(encode));
+                var dataset = new DataSet(agg.AggregationName, agg.FileName, agg.Extension, agg.DirectoryPath, agg.GetDataAsDataElements(encode));
 
                 if(!dic.ContainsKey(agg.FullPath))
                 {

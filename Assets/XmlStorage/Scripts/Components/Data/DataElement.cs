@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Reflection;
 
-namespace XmlStorage.Components {
+namespace XmlStorage.Components
+{
     /// <summary>
-    /// データをファイルに保存する際のデータ形式
+    /// データをファイルに保存する時のデータ形式
     /// </summary>
     [Serializable]
-    public sealed class DataElement {
+    public sealed class DataElement
+    {
         /// <summary>データを取り出す時に使うキー</summary>
         public string Key { get; private set; }
         /// <summary>保存するデータ</summary>
@@ -44,7 +46,8 @@ namespace XmlStorage.Components {
         /// <param name="key">データを取り出す時に使うキー</param>
         /// <param name="value">保存するデータ</param>
         /// <param name="type">データの型</param>
-        public void Set(string key, object value, Type type) {
+        public void Set(string key, object value, Type type)
+        {
             this.Set(key, value, type.FullName);
         }
 
@@ -54,14 +57,30 @@ namespace XmlStorage.Components {
         /// <param name="key">データを取り出す時に使うキー</param>
         /// <param name="value">保存するデータ</param>
         /// <param name="type">データの型のフルネーム</param>
-        public void Set(string key, object value, string type) {
-            if(key == null) { throw new ArgumentNullException("key", "Key cannot be null."); }
-            else if(key == "") { throw new ArgumentException("key", "Key cannot be empty."); }
-            
-            if(value == null) { throw new ArgumentNullException("value", "Value cannot be null."); }
+        public void Set(string key, object value, string type)
+        {
+            if(key == null)
+            {
+                throw new ArgumentNullException("key", "Key cannot be null.");
+            }
+            else if(key == "")
+            {
+                throw new ArgumentException("key", "Key cannot be empty.");
+            }
 
-            if(type == null) { throw new ArgumentNullException("type", "Type cannnot be null."); }
-            else if(type == "") { throw new ArgumentException("type", "Type cannot be empty."); }
+            if(value == null)
+            {
+                throw new ArgumentNullException("value", "Value cannot be null.");
+            }
+
+            if(type == null)
+            {
+                throw new ArgumentNullException("type", "Type cannnot be null.");
+            }
+            else if(type == "")
+            {
+                throw new ArgumentException("type", "Type cannot be empty.");
+            }
 
             this.Key = key;
             this.Value = value;
@@ -74,31 +93,36 @@ namespace XmlStorage.Components {
         /// </summary>
         /// <param name="typeName">型名</param>
         /// <returns>変換した型</returns>
-        private Type GetType(string typeName) {
+        private Type GetType(string typeName)
+        {
             // Try Type.GetType() first. This will work with types defined
             // by the Mono runtime, in the same assembly as the caller, etc.
             var type = Type.GetType(typeName);
 
             // If it worked, then we're done here
-            if(type != null) {
+            if(type != null)
+            {
                 return type;
             }
 
             // If the TypeName is a full name, then we can try loading the defining assembly directly
-            if(typeName.Contains(".")) {
+            if(typeName.Contains("."))
+            {
                 // Get the name of the assembly (Assumption is that we are using 
                 // fully-qualified type names)
                 var assemblyName = typeName.Substring(0, typeName.IndexOf('.'));
 
                 // Attempt to load the indicated Assembly
                 var assembly = Assembly.Load(assemblyName);
-                if(assembly == null) {
+                if(assembly == null)
+                {
                     return null;
                 }
 
                 // Ask that assembly to return the proper Type
                 type = assembly.GetType(typeName);
-                if(type != null) {
+                if(type != null)
+                {
                     return type;
                 }
             }
@@ -107,15 +131,18 @@ namespace XmlStorage.Components {
             // loaded assemblies and see if any of them define the type
             var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
 
-            foreach(var assemblyName in referencedAssemblies) {
+            foreach(var assemblyName in referencedAssemblies)
+            {
                 // Load the referenced assembly
                 var assembly = Assembly.Load(assemblyName);
 
-                if(assembly != null) {
+                if(assembly != null)
+                {
                     // See if that assembly defines the named type
                     type = assembly.GetType(typeName);
 
-                    if(type != null) {
+                    if(type != null)
+                    {
                         return type;
                     }
                 }
