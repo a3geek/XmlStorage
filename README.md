@@ -22,7 +22,7 @@ void Start()
     Debug.Log(XmlStorage.GetInt("int3", 0)); // 3
 }
 ````
-より詳しい使い方は[Example](XmlStorage/Assets/XmlStorage/Example)を参照してください。
+より詳しい使い方は[Example](Assets/XmlStorage/Example)を参照してください。
 
 ## Behaviour
 - クラスのインスタンスでもシリアライズ可能であればそのまま保存できます。
