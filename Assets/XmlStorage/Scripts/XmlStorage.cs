@@ -76,6 +76,7 @@ namespace XmlStorage
 
         /// <summary>
         /// 別の集団を選択する
+        /// <paramref name="aggregationName"/>集団が存在しない場合は新しく生成する
         /// </summary>
         /// <param name="aggregationName">集団名</param>
         public static void ChangeAggregation(string aggregationName)

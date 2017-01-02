@@ -94,6 +94,9 @@ void Start()
 ````
 <br />
 
+- 全Aggregationの保存ファイルの絶対パスを、[Application.persistentDataPath](https://docs.unity3d.com/ja/current/ScriptReference/Application-persistentDataPath.html)フォルダ内にFilePaths.txtに保存してあります。
+    - XmlStorageは最初にFilePaths.txtを読み込み、保存されている全パスからXMLファイルを検索・読み込みを行います。
+
 ## API
 ### XmlStorageクラス
 XmlStorageクラスはstaticクラスであり、全てのプロパティ・メソッド等はstatic宣言されています。  
@@ -103,8 +106,8 @@ XmlStorageクラスはstaticクラスであり、全てのプロパティ・メ�
 
 ### プロパティ
 #### `const string DefaultAggregationName = "Default"`
-デフォルトの集団名。  
-初期状態ではこの集団名が選択されています。
+デフォルトの集団名  
+初期状態ではこの集団名が選択されています
 
 #### `string FileNmae`
 データを保存する時のファイル名
@@ -125,7 +128,79 @@ XmlStorageクラスはstaticクラスであり、全てのプロパティ・メ�
 現在選択されている集団名
 
 ### メソッド
+#### `void ChangeAggregation(string aggregationName)`
+別の集団を選択する  
+引数で渡した集団名の集団が存在しない場合は、新しく生成されます
 
+#### `bool DeleteAggregation(string aggregationName)`
+集団を消去する
 
-## デフォルトの保存先
-Windows： c:\Users\[username]\AppData\LocalLow\[CompanyName]\[ProductName]\[SceneName].xml
+#### `bool HasAggregation(string aggregationName)`
+集団が存在するか確認
+
+#### `void DeleteAll(string aggregationName = null)`
+セットしたすべてのデータを消去  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `bool DeleteKey(string key, string aggregationName = null)`
+キーと一致するデータを全て消去  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `bool DeleteKey(string key, Type type, string aggregationName = null)`
+キーと型に一致するデータを全て消去  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `bool HasKey(string key, string aggregationName = null)`
+キーと一致するデータが一つでも存在するか確認  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `bool HasKey(string key, Type type, stringa aggregationName = null)`
+キーと型に一致するデータが存在するか確認  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `void Save()`
+セットしたデータ群をファイルに保存
+
+### アクセッサ
+#### `void Set<T>(string key, T value, string aggregationName = null)`
+任意の型のデータとキーをセット  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `void SetFloat(string key, float value, string aggregationName = null)`
+float型のデータとキーをセット  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `void SetInt(string key, int value, string aggregationName = null)`
+int型のデータとキーをセット  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `void SetString(string key, string value, string aggregationName = null)`
+string型のデータとキーをセット  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `void SetBool(string key, bool value, string aggregationName = null)`
+bool型のデータとキーをセット  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `T Get<T>(string key, T defaultValue = default(T), string aggregationName = null)`
+キーと対応する任意の型のデータを取得  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `float GetFloat(string key, float defaultValue = default(float), string aggregationName = null)`
+キーと対応するfloat型のデータを取得  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `int GetInt(string key, int defaultValue = default(int), string aggregationName = null)`
+キーと対応するint型のデータを取得する  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `string GetString(string key, string defaultValue = "", string aggregationName = null)`
+キーと対応するstring型のデータを取得  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+#### `bool GetBool(string key, bool defaultValue = default(bool), string aggregationName = null)`
+キーと対応するbool型のデータを取得  
+aggregationNameがnullの時は、CurrentAggregationNameが使われます
+
+## Default save folder
+Windows： c:\Users\\#{username}\\AppData\\LocalLow\\#{CompanyName}\\#{ProductName}\\#{SceneName}.xml
