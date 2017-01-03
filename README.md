@@ -140,23 +140,23 @@ XmlStorageクラスはstaticクラスであり、全てのプロパティ・メ�
 
 #### `void DeleteAll(string aggregationName = null)`
 セットしたすべてのデータを消去  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `bool DeleteKey(string key, string aggregationName = null)`
 キーと一致するデータを全て消去  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `bool DeleteKey(string key, Type type, string aggregationName = null)`
 キーと型に一致するデータを全て消去  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `bool HasKey(string key, string aggregationName = null)`
 キーと一致するデータが一つでも存在するか確認  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `bool HasKey(string key, Type type, stringa aggregationName = null)`
 キーと型に一致するデータが存在するか確認  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `void Save()`
 セットしたデータ群をファイルに保存
@@ -164,43 +164,43 @@ aggregationNameがnullの時は、CurrentAggregationNameが使われます
 ### アクセッサ
 #### `void Set<T>(string key, T value, string aggregationName = null)`
 任意の型のデータとキーをセット  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `void SetFloat(string key, float value, string aggregationName = null)`
 float型のデータとキーをセット  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `void SetInt(string key, int value, string aggregationName = null)`
 int型のデータとキーをセット  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `void SetString(string key, string value, string aggregationName = null)`
 string型のデータとキーをセット  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `void SetBool(string key, bool value, string aggregationName = null)`
 bool型のデータとキーをセット  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `T Get<T>(string key, T defaultValue = default(T), string aggregationName = null)`
 キーと対応する任意の型のデータを取得  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `float GetFloat(string key, float defaultValue = default(float), string aggregationName = null)`
 キーと対応するfloat型のデータを取得  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `int GetInt(string key, int defaultValue = default(int), string aggregationName = null)`
 キーと対応するint型のデータを取得する  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `string GetString(string key, string defaultValue = "", string aggregationName = null)`
 キーと対応するstring型のデータを取得  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `bool GetBool(string key, bool defaultValue = default(bool), string aggregationName = null)`
 キーと対応するbool型のデータを取得  
-aggregationNameがnullの時は、CurrentAggregationNameが使われます
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 ## Default save folder
 Windows： c:\Users\\#{username}\\AppData\\LocalLow\\#{CompanyName}\\#{ProductName}\\#{SceneName}.xml
