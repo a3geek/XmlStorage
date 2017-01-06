@@ -19,7 +19,7 @@ void Start()
 
     Debug.Log(XmlStorage.Get("int1", 0)); // 1
     Debug.Log(XmlStorage.GetInt("int2", 0)); // 2
-    Debug.Log(XmlStorage.GetInt("int3", 0)); // 3
+    Debug.Log(XmlStorage.GetInt("int3", 0)); // 0
 }
 ````
 より詳しい使い方は[Example](Assets/XmlStorage/Example/)を参照してください。
