@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace XmlStorage.Components
 {
@@ -19,6 +20,11 @@ namespace XmlStorage.Components
         public string DirectoryPath { get; private set; }
         /// <summary>保存するデータ群</summary>
         public List<DataElement> Elements { get; private set; }
+        /// <summary>フルパス</summary>
+        public string FullPath
+        {
+            get { return this.DirectoryPath + Path.DirectorySeparatorChar + this.FileName; }
+        }
 
 
         /// <summary>

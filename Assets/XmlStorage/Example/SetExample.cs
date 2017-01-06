@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.IO;
 
 namespace XmlStorage.Examples
 {
@@ -15,7 +17,7 @@ namespace XmlStorage.Examples
         /// <summary><see cref="Vector3"/>の保存テスト</summary>
         private Vector3 vec3 = new Vector3(1f, 2f, 3f);
         /// <summary><see cref="Quaternion"/>の保存テスト</summary>
-        private Quaternion quaternion = new Quaternion();
+        private Quaternion quaternion = Quaternion.Euler(new Vector3(10f, 20f, 30f));
 
 
         /// <summary>
@@ -23,12 +25,20 @@ namespace XmlStorage.Examples
         /// </summary>
         public void Execute()
         {
-            this.quaternion.eulerAngles = new Vector3(10f, 20f, 30f);
-
             this.SetData2XmlStorage(1);
 
-            XmlStorage.ChangeAggregation("Test1");
-            this.SetData2XmlStorage(11);
+            if(Application.isEditor)
+            {
+                XmlStorage.ChangeAggregation("Test1");
+
+                XmlStorage.DirectoryPath =
+                    SceneManager.GetActiveScene().name == "XmlStorage" ?
+                    Path.GetDirectoryName(SceneManager.GetActiveScene().path) + Path.DirectorySeparatorChar + "SaveFiles" :
+                    Application.persistentDataPath;
+
+                XmlStorage.FileName = "XmlStorageExample";
+                this.SetData2XmlStorage(11);
+            }
 
             XmlStorage.ChangeAggregation("Test2");
             XmlStorage.FileName = "Test2";

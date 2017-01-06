@@ -220,7 +220,9 @@ namespace XmlStorage
             foreach(var filePath in filePaths)
             {
                 if(!File.Exists(filePath))
-                { continue; }
+                {
+                    continue;
+                }
 
                 using(var sr = new StreamReader(filePath, encode))
                 {
@@ -310,7 +312,7 @@ namespace XmlStorage
             {
                 if(!dic.ContainsKey(set.AggregationName))
                 {
-                    dic.Add(set.AggregationName, new Aggregation(set.Elements, set.AggregationName));
+                    dic.Add(set.AggregationName, new Aggregation(set.Elements, set.AggregationName, set.FullPath));
                 }
             }
 

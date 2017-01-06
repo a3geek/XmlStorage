@@ -35,31 +35,38 @@ namespace XmlStorage.Examples
              * (10.0, 20.0, 30.0)
              */
             Debug.Log("Default Aggregatpion");
+            Debug.Log("Directory Path : " + XmlStorage.DirectoryPath);
+            Debug.Log("File Name : " + XmlStorage.FileName);
             this.GetDataFromXmlStorage();
 
-            /*
-             * 11
-             * 1.111
-             * XmlStorage.Examples.ExampleController+Test
-             * "TestString"
-             * 0.1f
-             * 10.1f
-             * 
-             * 0
-             * ""
-             * 
-             * 0
-             * "del_tes2"
-             * 
-             * "lab-interactive@team-lab.com"
-             * 
-             * (0.1, 0.2)
-             * (1.0, 2.0, 3.0)
-             * (10.0, 20.0, 30.0)
-             */
-            Debug.Log("Test1 Aggregation");
-            XmlStorage.ChangeAggregation("Test1");
-            this.GetDataFromXmlStorage();
+            if(Application.isEditor)
+            {
+                /*
+                 * 11
+                 * 1.111
+                 * XmlStorage.Examples.ExampleController+Test
+                 * "TestString"
+                 * 0.1f
+                 * 10.1f
+                 * 
+                 * 0
+                 * ""
+                 * 
+                 * 0
+                 * "del_tes2"
+                 * 
+                 * "lab-interactive@team-lab.com"
+                 * 
+                 * (0.1, 0.2)
+                 * (1.0, 2.0, 3.0)
+                 * (10.0, 20.0, 30.0)
+                 */
+                Debug.Log("Test1 Aggregation");
+                XmlStorage.ChangeAggregation("Test1");
+                Debug.Log("Directory Path : " + XmlStorage.DirectoryPath);
+                Debug.Log("File Name : " + XmlStorage.FileName);
+                this.GetDataFromXmlStorage();
+            }
 
             /*
              * 111
@@ -83,6 +90,8 @@ namespace XmlStorage.Examples
              */
             Debug.Log("Test2 Aggregation");
             XmlStorage.ChangeAggregation("Test2");
+            Debug.Log("Directory Path : " + XmlStorage.DirectoryPath);
+            Debug.Log("File Name : " + XmlStorage.FileName);
             this.GetDataFromXmlStorage();
         }
 

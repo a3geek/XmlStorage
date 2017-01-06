@@ -67,6 +67,16 @@ namespace XmlStorage.Components
         /// <param name="aggregationName">集団名</param>
         /// <param name="isAllTypesSerialize">全ての型をシリアライズして保存するかどうか</param>
         public Aggregation(List<DataElement> elements, string aggregationName, bool isAllTypesSerialize = false)
+            : this(elements, aggregationName, string.Empty, isAllTypesSerialize) {; }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="elements">初期データ群</param>
+        /// <param name="aggregationName">集団名</param>
+        /// <param name="fullPath">保存ファイルのフルパス</param>
+        /// <param name="isAllTypesSerialize">全ての型をシリアライズして保存するかどうか</param>
+        public Aggregation(List<DataElement> elements, string aggregationName, string fullPath, bool isAllTypesSerialize = false)
         {
             this.IsAllTypesSerialize = isAllTypesSerialize;
 
@@ -76,9 +86,18 @@ namespace XmlStorage.Components
             }
             this.AggregationName = (string.IsNullOrEmpty(aggregationName) ? Guid.NewGuid().ToString() : aggregationName);
 
-            this.Extension = ".xml";
-            this.FileName = SceneManager.GetActiveScene().name + this.Extension;
-            this.DirectoryPath = Application.persistentDataPath;
+            if(string.IsNullOrEmpty(fullPath) == false && File.Exists(fullPath) == true)
+            {
+                this.Extension = Path.GetExtension(fullPath);
+                this.FileName = Path.GetFileName(fullPath);
+                this.DirectoryPath = Path.GetDirectoryName(fullPath);
+            }
+            else
+            {
+                this.Extension = ".xml";
+                this.FileName = SceneManager.GetActiveScene().name + this.Extension;
+                this.DirectoryPath = Application.persistentDataPath;
+            }
         }
 
         /// <summary>
