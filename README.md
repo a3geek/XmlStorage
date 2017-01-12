@@ -98,8 +98,8 @@ void Start()
     - XmlStorageは最初にFilePaths.txtを読み込み、保存されている全パスからXMLファイルを検索・読み込みを行います。
 
 ## API
-### XmlStorageクラス
-XmlStorageクラスはstaticクラスであり、全てのプロパティ・メソッド等はstatic宣言されています。  
+### `XmlStorage`クラス
+`XmlStorage`クラスはstaticクラスであり、全てのプロパティ・メソッド等はstatic宣言されています。  
 全てのプロパティ・メソッドは現在選択されている集団(`CurrentAggregationName`)に対して処理が行われます。  
 
 `<T>`は保存するデータの型を表しています。
