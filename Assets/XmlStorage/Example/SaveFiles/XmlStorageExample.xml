@@ -17,9 +17,9 @@
         <TypeName>System.Single</TypeName>
       </DataElement>
       <DataElement>
-        <Key>TestClass</Key>
+        <Key>Test1Class</Key>
         <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;Test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+&lt;Test1 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;integer&gt;1&lt;/integer&gt;
   &lt;str&gt;TestString&lt;/str&gt;
   &lt;list1&gt;
@@ -27,17 +27,35 @@
     &lt;float&gt;1.1&lt;/float&gt;
     &lt;float&gt;10.1&lt;/float&gt;
   &lt;/list1&gt;
-&lt;/Test&gt;</Value>
-        <TypeName>XmlStorage.Examples.ExampleController+Test</TypeName>
+&lt;/Test1&gt;</Value>
+        <TypeName>XmlStorage.Examples.ExampleController+Test1</TypeName>
+      </DataElement>
+      <DataElement>
+        <Key>Test2Class</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Test2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;vec2&gt;
+    &lt;x&gt;1&lt;/x&gt;
+    &lt;y&gt;2&lt;/y&gt;
+  &lt;/vec2&gt;
+  &lt;vec3&gt;
+    &lt;x&gt;1&lt;/x&gt;
+    &lt;y&gt;2&lt;/y&gt;
+    &lt;z&gt;3&lt;/z&gt;
+  &lt;/vec3&gt;
+&lt;/Test2&gt;</Value>
+        <TypeName>XmlStorage.Examples.ExampleController+Test2</TypeName>
       </DataElement>
       <DataElement>
         <Key>del_tes2</Key>
-        <Value xsi:type="xsd:string">del_tes2</Value>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;string&gt;del_tes2&lt;/string&gt;</Value>
         <TypeName>System.String</TypeName>
       </DataElement>
       <DataElement>
         <Key>address</Key>
-        <Value xsi:type="xsd:string">lab-interactive@team-lab.com</Value>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;string&gt;lab-interactive@team-lab.com&lt;/string&gt;</Value>
         <TypeName>System.String</TypeName>
       </DataElement>
       <DataElement>

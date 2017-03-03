@@ -1,4 +1,6 @@
-﻿namespace XmlStorage
+﻿using System;
+
+namespace XmlStorage
 {
     public static partial class XmlStorage
     {
@@ -14,6 +16,20 @@
         public static void Set<T>(string key, T value, string aggregationName = null)
         {
             Action4ChosenAggregation(aggregationName, agg => agg.Set(key, value));
+        }
+
+        /// <summary>
+        /// 任意の型のデータとキーをセットする
+        /// </summary>
+        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
+        /// <typeparam name="T">セットするデータの型(Serializable)</typeparam>
+        /// <param name="key">セットするデータのキー</param>
+        /// <param name="value">セットするデータ</param>
+        /// <param name="type">セットするデータの型情報</param>
+        /// <param name="aggregationName">データが所属する集団名</param>
+        public static void Set<T>(string key, T value, Type type, string aggregationName = null)
+        {
+            Action4ChosenAggregation(aggregationName, agg => agg.Set(key, value, type));
         }
 
         /// <summary>
@@ -73,11 +89,12 @@
         /// <typeparam name="T">取得するデータの型</typeparam>
         /// <param name="key">取得するデータのキー</param>
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <param name="type">取得するデータの型情報</param>
         /// <param name="aggregationName">データが所属する集団名</param>
         /// <returns>キーに対応するデータ</returns>
-        public static T Get<T>(string key, T defaultValue = default(T), string aggregationName = null)
+        public static T Get<T>(string key, T defaultValue = default(T), Type type = null, string aggregationName = null)
         {
-            return Action4ChosenAggregation(aggregationName, agg => agg.Get(key, defaultValue));
+            return Action4ChosenAggregation(aggregationName, agg => agg.Get(key, defaultValue, type ?? typeof(T)));
         }
 
         /// <summary>

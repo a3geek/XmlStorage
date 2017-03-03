@@ -186,18 +186,20 @@ namespace XmlStorage.Components
         {
             list.ForEach(e =>
             {
-                var vt = e.ValueType;
+                var type = e.ValueType;
 
-                if(!this.dictionary.ContainsKey(vt))
-                { this.dictionary[vt] = new Dictionary<string, object>(); }
-
-                if(this.IsAllTypesSerialize || !vt.IsSerializable)
+                if(!this.dictionary.ContainsKey(type))
                 {
-                    this.dictionary[vt][e.Key] = this.Deserialize(e.Value, vt);
+                    this.dictionary[type] = new Dictionary<string, object>();
+                }
+
+                if(this.IsSerializable(type))
+                {
+                    this.dictionary[type][e.Key] = this.Deserialize(e.Value, type);
                 }
                 else
                 {
-                    this.dictionary[vt][e.Key] = e.Value;
+                    this.dictionary[type][e.Key] = e.Value;
                 }
             });
         }
@@ -217,14 +219,8 @@ namespace XmlStorage.Components
             {
                 foreach(var e in pair.Value)
                 {
-                    if(this.IsAllTypesSerialize)
-                    {
-                        list.Add(this.Object2DataElement(e.Value, e.Key, pair.Key, true, encode));
-                    }
-                    else
-                    {
-                        list.Add(this.Object2DataElement(e.Value, e.Key, pair.Key, !e.Value.GetType().IsSerializable, encode));
-                    }
+                    var type = e.Value.GetType();
+                    list.Add(this.Object2DataElement(e.Value, e.Key, pair.Key, this.IsSerializable(type), encode));
                 }
             }
 
@@ -282,6 +278,16 @@ namespace XmlStorage.Components
             {
                 return serializer.Deserialize(sr);
             }
+        }
+
+        /// <summary>
+        /// <paramref name="type"/>がシリアライザブルかどうかを判断
+        /// </summary>
+        /// <param name="type">型情報</param>
+        /// <returns>シリアライズするかどうか</returns>
+        private bool IsSerializable(Type type)
+        {
+            return this.IsAllTypesSerialize || (type.IsClass | !type.IsSerializable);
         }
     }
 }

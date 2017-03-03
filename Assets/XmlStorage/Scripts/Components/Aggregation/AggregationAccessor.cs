@@ -18,6 +18,18 @@ namespace XmlStorage.Components
         }
 
         /// <summary>
+        /// 任意の型のデータとキーをセットする
+        /// </summary>
+        /// <typeparam name="T">セットするデータの型(Serializable)</typeparam>
+        /// <param name="key">セットするデータのキー</param>
+        /// <param name="value">セットするデータ</param>
+        /// <param name="type">セットするデータの型情報</param>
+        public void Set<T>(string key, T value, Type type)
+        {
+            this.SetValue(key, value, type);
+        }
+
+        /// <summary>
         /// float型のデータとキーをセットする
         /// </summary>
         /// <param name="key">セットするデータのキー</param>
@@ -77,16 +89,17 @@ namespace XmlStorage.Components
         #endregion
 
         #region "Getters"
-        /// /// <summary>
+        /// <summary>
         /// キーと対応する任意の型のデータを取得する
         /// </summary>
         /// <typeparam name="T">取得するデータの型</typeparam>
         /// <param name="key">取得するデータのキー</param>
+        /// <param name="type">データの型情報</param>
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <returns>キーに対応するデータ</returns>
-        public T Get<T>(string key, T defaultValue = default(T))
+        public T Get<T>(string key, T defaultValue = default(T), Type type = null)
         {
-            return this.GetValue(key, defaultValue, obj => (T)obj, typeof(T));
+            return this.GetValue(key, defaultValue, obj => (T)obj, type ?? typeof(T));
         }
 
         /// <summary>

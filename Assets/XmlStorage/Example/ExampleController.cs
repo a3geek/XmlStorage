@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace XmlStorage.Examples
 {
@@ -12,7 +13,8 @@ namespace XmlStorage.Examples
         /// <summary>
         /// クラスのインスタンス保存テスト用
         /// </summary>
-        public class Test
+        [Serializable]
+        public class Test1
         {
             /// <summary><see cref="int"/>型の保存テスト</summary>
             public int integer = 1;
@@ -22,6 +24,17 @@ namespace XmlStorage.Examples
             public List<float> list1 = new List<float>() {
                 0.1f, 1.1f, 10.1f
             };
+        }
+
+        /// <summary>
+        /// クラスのインスタンス保存テスト用
+        /// </summary>
+        public class Test2
+        {
+            /// <summary><see cref="Vector2"/>型の保存テスト</summary>
+            public Vector2 vec2 = new Vector2(1f, 2f);
+            /// <summary><see cref="Vector3"/>型の保存テスト</summary>
+            public Vector3 vec3 = new Vector3(1f, 2f, 3f);
         }
 
         /// <summary>

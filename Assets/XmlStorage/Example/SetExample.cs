@@ -11,7 +11,11 @@ namespace XmlStorage.Examples
     public class SetExample : MonoBehaviour
     {
         /// <summary>インスタンスの保存テスト</summary>
-        private ExampleController.Test test = new ExampleController.Test();
+        [SerializeField]
+        private ExampleController.Test1 test1 = new ExampleController.Test1();
+
+        /// <summary>インスタンスの保存テスト</summary>
+        private ExampleController.Test2 test2 = new ExampleController.Test2();
         /// <summary><see cref="Vector2"/>の保存テスト</summary>
         private Vector2 vec2 = new Vector2(0.1f, 0.2f);
         /// <summary><see cref="Vector3"/>の保存テスト</summary>
@@ -43,7 +47,7 @@ namespace XmlStorage.Examples
             XmlStorage.ChangeAggregation("Test2");
             XmlStorage.FileName = "Test2";
             this.SetData2XmlStorage(111);
-
+            
             XmlStorage.Save();
             Debug.Log("Finish");
         }
@@ -56,7 +60,8 @@ namespace XmlStorage.Examples
         {
             XmlStorage.SetInt("integer", value);
             XmlStorage.SetFloat("float", 1.111f);
-            XmlStorage.Set("TestClass", this.test);
+            XmlStorage.Set("Test1Class", this.test1);
+            XmlStorage.Set("Test2Class", this.test2);
 
             XmlStorage.SetInt("del_tes1", 2);
             XmlStorage.SetString("del_tes1", "del_tes1");
