@@ -6,20 +6,20 @@ XmlStorage
 XML形式でデータを保存するライブラリです。  
 
 Unityの[PlayerPrefs](https://docs.unity3d.com/jp/current/ScriptReference/PlayerPrefs.html)は、Windows上ではアプリケーション間でキー情報がコンフリクトしたり、レジストリに保存するために値の確認がし辛い等の問題があります。  
-それらの問題を解決し置き換えるのを目的として開発されたため、PlayerPrefsをXmlStorageに全置換すればそのまま動作します。
+それらの問題を解決し置き換えるのを目的として開発されたため、PlayerPrefsをStorageに全置換すればそのまま動作します。
 
 ## Usage
 サンプルコード
 ```` csharp
 void Start()
 {
-    XmlStorage.Set("int1", 1);
-    XmlStorage.SetInt("int2", 2);
-    XmlStorage.Save(); // ファイルに保存
+    Storage.Set("int1", 1);
+    Storage.SetInt("int2", 2);
+    Storage.Save(); // ファイルに保存
 
-    Debug.Log(XmlStorage.Get("int1", 0)); // 1
-    Debug.Log(XmlStorage.GetInt("int2", 0)); // 2
-    Debug.Log(XmlStorage.GetInt("int3", 0)); // 0
+    Debug.Log(Storage.Get("int1", 0)); // 1
+    Debug.Log(Storage.GetInt("int2", 0)); // 2
+    Debug.Log(Storage.GetInt("int3", 0)); // 0
 }
 ````
 より詳しい使い方は[Example](Assets/XmlStorage/Example/)を参照してください。
@@ -40,11 +40,11 @@ void Start()
     test.int1 = 100;
     test.str = "STR";
 
-    XmlStorage.Set("test", test);
-    XmlStorage.Save();
+    Storage.Set("test", test);
+    Storage.Save();
 
-    Debug.Log(XmlStorage.Get<Test>("test").int1); // 100
-    Debug.Log(XmlStorage.Get("test", new Test()).str); // "STR"
+    Debug.Log(Storage.Get<Test>("test").int1); // 100
+    Debug.Log(Storage.Get("test", new Test()).str); // "STR"
 }
 ````
 <br />
@@ -53,13 +53,13 @@ void Start()
 ```` csharp
 void Start()
 {
-    XmlStorage.Set("value", "str");
-    XmlStorage.Set("value", 10);
-    XmlStorage.Set("value", 11);
-    XmlStorage.Save();
+    Storage.Set("value", "str");
+    Storage.Set("value", 10);
+    Storage.Set("value", 11);
+    Storage.Save();
 
-    Debug.Log(XmlStorage.Get("value", "")); // str
-    Debug.Log(XmlStorage.Get("value", 0)); // 11
+    Debug.Log(Storage.Get("value", "")); // str
+    Debug.Log(Storage.Get("value", 0)); // 11
 }
 ````
 <br />
@@ -70,26 +70,26 @@ void Start()
 ```` csharp
 void Start()
 {
-    Debug.Log(XmlStorage.CurrentAggregationName); // Default
-    XmlStorage.Set("str", "str0");
-    XmlStorage.Set("int", 10);
+    Debug.Log(Storage.CurrentAggregationName); // Default
+    Storage.Set("str", "str0");
+    Storage.Set("int", 10);
 
-    Debug.Log(XmlStorage.Get("str", "")); // "str0"
-    Debug.Log(XmlStorage.Get("int", 0)); // 10
+    Debug.Log(Storage.Get("str", "")); // "str0"
+    Debug.Log(Storage.Get("int", 0)); // 10
     
-    XmlStorage.ChangeAggregation("Test");
-    Debug.Log(XmlStorage.CurrentAggregationName); // Test
+    Storage.ChangeAggregation("Test");
+    Debug.Log(Storage.CurrentAggregationName); // Test
 
-    XmlStorage.Set("str", "str1");
-    XmlStorage.Set("int", 100);
+    Storage.Set("str", "str1");
+    Storage.Set("int", 100);
 
-    Debug.Log(XmlStorage.Get("str", "")); // "str1"
-    Debug.Log(XmlStorage.Get("int", 0)); // 100
+    Debug.Log(Storage.Get("str", "")); // "str1"
+    Debug.Log(Storage.Get("int", 0)); // 100
 
-    XmlStorage.ChangeAggregation(XmlStorage.DefaultAggregationName);
-    Debug.Log(XmlStorage.CurrentAggregationName); // Default
-    Debug.Log(XmlStorage.Get("str", "")); // "str0"
-    Debug.Log(XmlStorage.Get("int", 0)); // 10
+    Storage.ChangeAggregation(Storage.DefaultAggregationName);
+    Debug.Log(Storage.CurrentAggregationName); // Default
+    Debug.Log(Storage.Get("str", "")); // "str0"
+    Debug.Log(Storage.Get("int", 0)); // 10
 }
 ````
 <br />
@@ -98,8 +98,8 @@ void Start()
     - XmlStorageは最初にFilePaths.txtを読み込み、保存されている全パスからXMLファイルを検索・読み込みを行います。
 
 ## API
-### `XmlStorage`クラス
-`XmlStorage`クラスはstaticクラスであり、全てのプロパティ・メソッド等はstatic宣言されています。  
+### `Storage`クラス
+`Storage`クラスはstaticクラスであり、全てのプロパティ・メソッド等はstatic宣言されています。  
 全てのプロパティ・メソッドは現在選択されている集団(`CurrentAggregationName`)に対して処理が行われます。  
 
 `<T>`は保存するデータの型を表しています。
