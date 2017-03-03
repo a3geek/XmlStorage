@@ -2,7 +2,7 @@
 
 namespace XmlStorage
 {
-    public static partial class XmlStorage
+    public static partial class Storage
     {
         #region "Setters"
         /// <summary>

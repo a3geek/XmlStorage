@@ -12,7 +12,7 @@ namespace XmlStorage
     /// <summary>
     /// セットしたデータ群をXML形式で保存する
     /// </summary>
-    public static partial class XmlStorage
+    public static partial class Storage
     {
         /// <summary>デフォルトの集団名</summary>
         public const string DefaultAggregationName = "Default";
@@ -68,7 +68,7 @@ namespace XmlStorage
 
 
         /// <summary>静的コンストラクタ</summary>
-        static XmlStorage()
+        static Storage()
         {
             aggregations = Load();
             CurrentAggregationName = DefaultAggregationName;

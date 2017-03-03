@@ -35,8 +35,8 @@ namespace XmlStorage.Examples
              * (10.0, 20.0, 30.0)
              */
             Debug.Log("Default Aggregatpion");
-            Debug.Log("Directory Path : " + XmlStorage.DirectoryPath);
-            Debug.Log("File Name : " + XmlStorage.FileName);
+            Debug.Log("Directory Path : " + Storage.DirectoryPath);
+            Debug.Log("File Name : " + Storage.FileName);
             this.GetDataFromXmlStorage();
 
             if(Application.isEditor)
@@ -62,9 +62,9 @@ namespace XmlStorage.Examples
                  * (10.0, 20.0, 30.0)
                  */
                 Debug.Log("Test1 Aggregation");
-                XmlStorage.ChangeAggregation("Test1");
-                Debug.Log("Directory Path : " + XmlStorage.DirectoryPath);
-                Debug.Log("File Name : " + XmlStorage.FileName);
+                Storage.ChangeAggregation("Test1");
+                Debug.Log("Directory Path : " + Storage.DirectoryPath);
+                Debug.Log("File Name : " + Storage.FileName);
                 this.GetDataFromXmlStorage();
             }
 
@@ -89,47 +89,47 @@ namespace XmlStorage.Examples
              * (10.0, 20.0, 30.0)
              */
             Debug.Log("Test2 Aggregation");
-            XmlStorage.ChangeAggregation("Test2");
-            Debug.Log("Directory Path : " + XmlStorage.DirectoryPath);
-            Debug.Log("File Name : " + XmlStorage.FileName);
+            Storage.ChangeAggregation("Test2");
+            Debug.Log("Directory Path : " + Storage.DirectoryPath);
+            Debug.Log("File Name : " + Storage.FileName);
             this.GetDataFromXmlStorage();
         }
 
         /// <summary>
-        /// <see cref="XmlStorage"/>から値を取得してログに出力する
+        /// <see cref="Storage"/>から値を取得してログに出力する
         /// </summary>
         private void GetDataFromXmlStorage()
         {
-            Debug.Log(XmlStorage.GetInt("integer", 0));
-            Debug.Log(XmlStorage.GetFloat("float", 0f));
-            Debug.Log(XmlStorage.Get<ExampleController.Test1>("Test1Class", null));
-            Debug.Log(XmlStorage.Get<ExampleController.Test1>("Test1Class", null).str);
-            Debug.Log(XmlStorage.Get<ExampleController.Test1>("Test1Class", null).list1.First());
-            Debug.Log(XmlStorage.Get<ExampleController.Test1>("Test1Class", null).list1.Last());
+            Debug.Log(Storage.GetInt("integer", 0));
+            Debug.Log(Storage.GetFloat("float", 0f));
+            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class", null));
+            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class", null).str);
+            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class", null).list1.First());
+            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class", null).list1.Last());
 
-            Debug.Log(XmlStorage.Get<ExampleController.Test2>("Test2Class", null));
-            Debug.Log(XmlStorage.Get<ExampleController.Test2>("Test2Class", null).vec2);
-            Debug.Log(XmlStorage.Get<ExampleController.Test2>("Test2Class", null).vec3);
-
-            Debug.Log("");
-
-            Debug.Log(XmlStorage.GetInt("del_tes1"));
-            Debug.Log(XmlStorage.GetString("del_tes1"));
+            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class", null));
+            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class", null).vec2);
+            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class", null).vec3);
 
             Debug.Log("");
 
-            Debug.Log(XmlStorage.GetInt("del_tes2"));
-            Debug.Log(XmlStorage.GetString("del_tes2"));
+            Debug.Log(Storage.GetInt("del_tes1"));
+            Debug.Log(Storage.GetString("del_tes1"));
 
             Debug.Log("");
 
-            Debug.Log(XmlStorage.Get<string>("address"));
+            Debug.Log(Storage.GetInt("del_tes2"));
+            Debug.Log(Storage.GetString("del_tes2"));
 
             Debug.Log("");
 
-            Debug.Log(XmlStorage.Get("vec2", Vector2.zero));
-            Debug.Log(XmlStorage.Get("vec3", Vector3.zero));
-            Debug.Log(XmlStorage.Get("qua", Quaternion.identity).eulerAngles);
+            Debug.Log(Storage.Get<string>("address"));
+
+            Debug.Log("");
+
+            Debug.Log(Storage.Get("vec2", Vector2.zero));
+            Debug.Log(Storage.Get("vec3", Vector3.zero));
+            Debug.Log(Storage.Get("qua", Quaternion.identity).eulerAngles);
 
             Debug.Log("");
             Debug.Log("");
