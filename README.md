@@ -166,6 +166,10 @@ aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 任意の型のデータとキーをセット  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
+#### `void Set<T>(string key, T value, Type type, string aggregationName = null)`
+任意の型のデータとキーをセット  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
 #### `void SetFloat(string key, float value, string aggregationName = null)`
 float型のデータとキーをセット  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
@@ -182,7 +186,7 @@ aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 bool型のデータとキーをセット  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
-#### `T Get<T>(string key, T defaultValue = default(T), string aggregationName = null)`
+#### `T Get<T>(string key, T defaultValue = default(T), Type type = null, string aggregationName = null)`
 キーと対応する任意の型のデータを取得  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
