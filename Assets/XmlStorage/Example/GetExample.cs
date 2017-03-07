@@ -104,7 +104,9 @@ namespace XmlStorage.Examples
             Debug.Log(Storage.GetFloat("float", 0f));
 
             Debug.Log(Storage.Get(typeof(object), "obj_int", 0));
+            Debug.Log(Storage.Get<object>("obj_int"));
             Debug.Log(Storage.Get(typeof(int), "obj_int", 0));
+            Debug.Log(Storage.Get<int>("obj_int"));
 
             Debug.Log("");
 

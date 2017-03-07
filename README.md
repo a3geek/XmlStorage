@@ -50,16 +50,23 @@ void Start()
 <br />
 
 - Keyに指定した文字列が同一でも、保存するデータの型(System.Type情報)が異なれば別データとして保存されます。
+    - 保存するデータの型情報を明示する事も出来ます。
 ```` csharp
 void Start()
 {
     Storage.Set("value", "str");
     Storage.Set("value", 10);
     Storage.Set("value", 11);
+    Storage.Set(typeof(object), "obj", 100);
     Storage.Save();
 
     Debug.Log(Storage.Get("value", "")); // str
     Debug.Log(Storage.Get("value", 0)); // 11
+
+    Debug.Log(Storage.Get(typeof(object), "obj", 0)); // 100
+    Debug.Log(Storage.Get<object>("obj")); // 100
+    Debug.Log(Storage.Get(typeof(int), "obj", 0)); // 0
+    Debug.Log(Storage.Get<int>("obj")); // 0
 }
 ````
 <br />
@@ -166,7 +173,7 @@ aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 任意の型のデータとキーをセット  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
-#### `void Set<T>(string key, T value, Type type, string aggregationName = null)`
+#### `void Set<T>(Type type, string key, T value, string aggregationName = null)`
 任意の型のデータとキーをセット  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
@@ -186,7 +193,11 @@ aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 bool型のデータとキーをセット  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
-#### `T Get<T>(string key, T defaultValue = default(T), Type type = null, string aggregationName = null)`
+#### `T Get<T>(string key, T defaultValue = default(T), string aggregationName = null)`
+キーと対応する任意の型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `T Get<T>(Type type, string key, T defaultValue = default(T), string aggregationName = null)`
 キーと対応する任意の型のデータを取得  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
