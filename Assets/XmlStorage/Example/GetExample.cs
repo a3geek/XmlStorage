@@ -102,14 +102,14 @@ namespace XmlStorage.Examples
         {
             Debug.Log(Storage.GetInt("integer", 0));
             Debug.Log(Storage.GetFloat("float", 0f));
-            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class", null));
-            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class", null).str);
-            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class", null).list1.First());
-            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class", null).list1.Last());
+            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class"));
+            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class").str);
+            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class").list1.First());
+            Debug.Log(Storage.Get<ExampleController.Test1>("Test1Class").list1.Last());
 
-            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class", null));
-            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class", null).vec2);
-            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class", null).vec3);
+            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class"));
+            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class").vec2);
+            Debug.Log(Storage.Get<ExampleController.Test2>("Test2Class").vec3);
 
             Debug.Log("");
 
