@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
+using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 using System.Text;
@@ -193,14 +194,7 @@ namespace XmlStorage.Components
                     this.dictionary[type] = new Dictionary<string, object>();
                 }
 
-                if(this.IsSerializable(type))
-                {
-                    this.dictionary[type][e.Key] = this.Deserialize(e.Value, type);
-                }
-                else
-                {
-                    this.dictionary[type][e.Key] = e.Value;
-                }
+                this.dictionary[type][e.Key] = this.Deserialize(type, e.Value);
             });
         }
 
@@ -259,24 +253,25 @@ namespace XmlStorage.Components
         /// <param name="value">デシリアライズするオブジェクト</param>
         /// <param name="type">オブジェクトの本来の型</param>
         /// <returns>デシリアライズした値</returns>
-        private object Deserialize(object value, Type type)
-        {
-            return this.Deserialize(value.ToString(), type);
-        }
-
-        /// <summary>
-        /// オブジェクトをデシリアライズする
-        /// </summary>
-        /// <param name="value">デシリアライズするオブジェクト</param>
-        /// <param name="type">オブジェクトの本来の型</param>
-        /// <returns>デシリアライズした値</returns>
-        private object Deserialize(string value, Type type)
+        private object Deserialize(Type type, object value)
         {
             var serializer = new XmlSerializer(type);
 
-            using(var sr = new StringReader(value))
+            using(var sr = new StringReader(value.ToString()))
             {
-                return serializer.Deserialize(sr);
+                if(this.IsSerializable(type) == false)
+                {
+                    return value;
+                }
+
+                try
+                {
+                    return serializer.Deserialize(sr);
+                }
+                catch
+                {
+                    return value;
+                }
             }
         }
 

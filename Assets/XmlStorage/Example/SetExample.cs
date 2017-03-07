@@ -60,6 +60,9 @@ namespace XmlStorage.Examples
         {
             Storage.SetInt("integer", value);
             Storage.SetFloat("float", 1.111f);
+
+            Storage.Set(typeof(object), "obj_int", 10);
+
             Storage.Set("Test1Class", this.test1);
             Storage.Set("Test2Class", this.test2);
 

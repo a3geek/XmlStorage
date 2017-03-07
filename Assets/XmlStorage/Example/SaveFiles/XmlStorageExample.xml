@@ -17,6 +17,11 @@
         <TypeName>System.Single</TypeName>
       </DataElement>
       <DataElement>
+        <Key>obj_int</Key>
+        <Value xsi:type="xsd:int">10</Value>
+        <TypeName>System.Object</TypeName>
+      </DataElement>
+      <DataElement>
         <Key>Test1Class</Key>
         <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;Test1 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
