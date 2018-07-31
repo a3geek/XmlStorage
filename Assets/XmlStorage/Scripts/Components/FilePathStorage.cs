@@ -12,13 +12,11 @@ namespace XmlStorage.Components
     public sealed class FilePathStorage
     {
         /// <summary>パスを保存するファイルの絶対パス</summary>
-        public string FullPath { get { return this.DirectoryPath + Path.DirectorySeparatorChar + this.FileName + this.Extension; } }
+        public string FullPath { get { return this.DirectoryPath + this.FileName; } }
         /// <summary>パスを保存するファイルを格納するフォルダ</summary>
         public string DirectoryPath { get; private set; }
         /// <summary>パスを保存するファイル名</summary>
         public string FileName { get; private set; }
-        /// <summary>パスを保存するファイルの拡張子</summary>
-        public string Extension { get; private set; }
 
         /// <summary>データを保存している全ファイルのパス</summary>
         private List<string> filePaths = new List<string>();
@@ -29,21 +27,12 @@ namespace XmlStorage.Components
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public FilePathStorage() : this(Application.persistentDataPath, "FilePaths", ".txt") {; }
-
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        /// <param name="directoryPath">パスを保存するファイルを格納するフォルダ</param>
-        /// <param name="fileName">パスを保存するファイル名</param>
-        /// <param name="extension">パスを保存するファイルの拡張子</param>
-        public FilePathStorage(string directoryPath, string fileName, string extension)
+        public FilePathStorage()
         {
-            this.DirectoryPath = directoryPath.TrimEnd(Path.DirectorySeparatorChar);
-            this.FileName = fileName.TrimEnd('.');
-            this.Extension = (extension.StartsWith(".") ? extension : "." + extension);
+            this.DirectoryPath = Consts.DefaultFilePathStoragesSaveFolder;
+            this.FileName = Consts.DefaultFilePathStoragesFileName;
         }
-
+        
         /// <summary>
         /// 保存するファイルパスを追加する
         /// </summary>
@@ -70,22 +59,14 @@ namespace XmlStorage.Components
         {
             this.filePaths.Clear();
         }
-
-        /// <summary>
-        /// ファイルパスを保存する
-        /// </summary>
-        public void Save()
-        {
-            this.Save(null);
-        }
-
+        
         /// <summary>
         /// ファイルパスを保存する
         /// </summary>
         /// <param name="filePaths">追加で保存するファイルパス</param>
-        public void Save(List<string> filePaths)
+        public void Save(List<string> filePaths = null)
         {
-            if(!Directory.Exists(this.DirectoryPath))
+            if(Directory.Exists(this.DirectoryPath) == false)
             {
                 Directory.CreateDirectory(this.DirectoryPath);
             }
@@ -101,18 +82,14 @@ namespace XmlStorage.Components
         /// ファイルパスを読み込む
         /// </summary>
         /// <returns>ファイルパス一覧</returns>
-        public List<string> Load()
+        public string[] Load()
         {
-            if(!Directory.Exists(this.DirectoryPath))
+            if(Directory.Exists(this.DirectoryPath) == false || File.Exists(this.FullPath) == false)
             {
-                return new List<string>();
-            }
-            else if(!File.Exists(this.FullPath))
-            {
-                return new List<string>();
+                return new string[0];
             }
 
-            return File.ReadAllLines(this.FullPath, this.encode).ToList();
+            return File.ReadAllLines(this.FullPath, this.encode);
         }
     }
 }

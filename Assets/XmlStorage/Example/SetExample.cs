@@ -29,7 +29,7 @@ namespace XmlStorage.Examples
         /// </summary>
         public void Execute()
         {
-            this.SetData2XmlStorage(1);
+            this.SetData(1);
 
             if(Application.isEditor)
             {
@@ -41,12 +41,12 @@ namespace XmlStorage.Examples
                     Application.persistentDataPath;
 
                 Storage.FileName = "XmlStorageExample";
-                this.SetData2XmlStorage(11);
+                this.SetData(11);
             }
 
             Storage.ChangeAggregation("Test2");
             Storage.FileName = "Test2";
-            this.SetData2XmlStorage(111);
+            this.SetData(111);
             
             Storage.Save();
             Debug.Log("Finish");
@@ -56,7 +56,7 @@ namespace XmlStorage.Examples
         /// <see cref="Storage"/>に値をセットする
         /// </summary>
         /// <param name="value"><see cref="int"/>型の保存テスト</param>
-        private void SetData2XmlStorage(int value)
+        private void SetData(int value)
         {
             Storage.SetInt("integer", value);
             Storage.SetFloat("float", 1.111f);

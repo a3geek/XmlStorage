@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace XmlStorage.Components
+namespace XmlStorage.Components.Data
 {
     /// <summary>
     /// データをファイルに保存する時のデータ形式
@@ -22,6 +22,7 @@ namespace XmlStorage.Components
         /// <summary>
         /// コンストラクタ
         /// </summary>
+        /// <remarks>シリアライズするのにデフォルトコンストラクタが必要</remarks>
         public DataElement() : this(Guid.NewGuid().ToString(), new object(), typeof(object).FullName) {; }
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace XmlStorage.Components
             this.TypeName = type;
         }
 
-        // http://ja.stackoverflow.com/questions/1552/type-gettypestring%E3%81%AE%E5%B8%B0%E3%82%8A%E5%80%A4%E3%81%8Cnull%E3%81%AB%E3%81%AA%E3%82%8B
+        // https://answers.unity.com/questions/206665/typegettypestring-does-not-work-in-unity.html
         /// <summary>
         /// 型名からType型に変換する
         /// </summary>

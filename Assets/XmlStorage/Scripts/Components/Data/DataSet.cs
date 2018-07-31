@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
-namespace XmlStorage.Components
+namespace XmlStorage.Components.Data
 {
+    using Utilities;
+
+    using Elements = List<DataElement>;
+
     /// <summary>
     /// データ群をファイルに保存する時のデータ形式
     /// </summary>
@@ -14,23 +17,22 @@ namespace XmlStorage.Components
         public string AggregationName { get; private set; }
         /// <summary>ファイル名</summary>
         public string FileName { get; private set; }
-        /// <summary>拡張子</summary>
-        public string Extension { get; private set; }
         /// <summary>フォルダ名</summary>
         public string DirectoryPath { get; private set; }
         /// <summary>保存するデータ群</summary>
-        public List<DataElement> Elements { get; private set; }
+        public Elements Elements { get; private set; }
         /// <summary>フルパス</summary>
         public string FullPath
         {
-            get { return this.DirectoryPath + Path.DirectorySeparatorChar + this.FileName; }
+            get { return this.DirectoryPath + this.FileName; }
         }
 
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public DataSet() : this("", "", "", "", new List<DataElement>()) {; }
+        /// <remarks>シリアライズするのにデフォルトコンストラクタが必要</remarks>
+        public DataSet() : this("", "", "", "", null) {; }
 
         /// <summary>
         /// コンストラクタ
@@ -40,13 +42,12 @@ namespace XmlStorage.Components
         /// <param name="extension">拡張子</param>
         /// <param name="directoryPath">フォルダ名</param>
         /// <param name="elements">保存するデータ群</param>
-        public DataSet(string aggregationName, string fileName, string extension, string directoryPath, List<DataElement> elements)
+        public DataSet(string aggregationName, string fileName, string extension, string directoryPath, Elements elements)
         {
             this.AggregationName = aggregationName;
-            this.FileName = fileName;
-            this.Extension = extension;
-            this.DirectoryPath = directoryPath;
-            this.Elements = (elements == null ? new List<DataElement>() : elements);
+            this.FileName = FileUtils.AdjustAsFileName(fileName, extension);
+            this.DirectoryPath = FileUtils.AdjustAsDirectoryPath(directoryPath);
+            this.Elements = (elements ?? new Elements());
         }
     }
 }

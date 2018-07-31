@@ -7,16 +7,15 @@ using System.Text;
 namespace XmlStorage
 {
     using Components;
-    using SerializeType = List<Components.DataSet>;
+    using Components.Aggregations;
+    using Components.Utilities;
+    using SerializeType = List<Components.Data.DataSet>;
 
     /// <summary>
     /// セットしたデータ群をXML形式で保存する
     /// </summary>
     public static partial class Storage
     {
-        /// <summary>デフォルトの集団名</summary>
-        public const string DefaultAggregationName = "Default";
-
         /// <summary><see cref="CurrentAggregation"/>がデータ群を保存する時のファイル名</summary>
         public static string FileName
         {
@@ -50,155 +49,52 @@ namespace XmlStorage
         {
             get; private set;
         }
-
-        /// <summary>データをXMLにシリアライズするためのシリアライザーインスタンス</summary>
-        private readonly static XmlSerializer serializer = new XmlSerializer(typeof(SerializeType));
-        /// <summary>ファイルに保存する時のエンコード情報</summary>
-        private readonly static UTF8Encoding encode = new UTF8Encoding(false);
+        /// <summary>データを保存している各ファイルの保存先を保存しているファイルのフルパス</summary>
+        public static string FilePathStoragesFullPath
+        {
+            get { return FilePathStorage.FullPath; }
+        }
+        
 
         /// <summary>現在選択されている集団</summary>
         private static Aggregation CurrentAggregation
         {
-            get { return aggregations[CurrentAggregationName]; }
+            get { return Aggregations[CurrentAggregationName]; }
         }
         /// <summary>集団群</summary>
-        private static Dictionary<string, Aggregation> aggregations = new Dictionary<string, Aggregation>();
+        private static Dictionary<string, Aggregation> Aggregations = new Dictionary<string, Aggregation>();
         /// <summary>全保存ファイルの管理</summary>
-        private static FilePathStorage filePathStorage = new FilePathStorage();
+        private static FilePathStorage FilePathStorage = new FilePathStorage();
 
 
         /// <summary>静的コンストラクタ</summary>
         static Storage()
         {
-            aggregations = Load();
-            CurrentAggregationName = DefaultAggregationName;
+            Aggregations = Load();
+            CurrentAggregationName = Consts.DefaultAggregationName;
         }
-
-        /// <summary>
-        /// 別の集団を選択する
-        /// <paramref name="aggregationName"/>集団が存在しない場合は新しく生成する
-        /// </summary>
-        /// <param name="aggregationName">集団名</param>
-        public static void ChangeAggregation(string aggregationName)
-        {
-            if(!aggregations.ContainsKey(aggregationName))
-            {
-                aggregations.Add(aggregationName, new Aggregation(null, aggregationName));
-            }
-
-            CurrentAggregationName = aggregationName;
-        }
-
-        /// <summary>
-        /// 集団を消去する
-        /// </summary>
-        /// <param name="aggregationName">集団名</param>
-        /// <returns>消去に成功したかどうか</returns>
-        public static bool DeleteAggregation(string aggregationName)
-        {
-            if(aggregationName == DefaultAggregationName)
-            {
-                return false;
-            }
-            else if(HasAggregation(aggregationName))
-            {
-                return aggregations.Remove(aggregationName);
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// 集団が存在するかどうか
-        /// </summary>
-        /// <param name="aggregationName">集団名</param>
-        /// <returns>存在するかどうか</returns>
-        public static bool HasAggregation(string aggregationName)
-        {
-            return (string.IsNullOrEmpty(aggregationName) ? false : aggregations.ContainsKey(aggregationName));
-        }
-
-        /// <summary>
-        /// セットした全てのデータを消去する
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        public static void DeleteAll(string aggregationName = null)
-        {
-            Action4ChosenAggregation(aggregationName, agg => agg.DeleteAll());
-        }
-
-        /// <summary>
-        /// キーと一致するデータを全て消去する
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">消去するデータのキー</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        /// <returns>消去に成功したかどうか</returns>
-        public static bool DeleteKey(string key, string aggregationName = null)
-        {
-            return Action4ChosenAggregation(aggregationName, agg => agg.DeleteKey(key));
-        }
-
-        /// <summary>
-        /// キーと型に一致するデータを消去する
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">消去するデータのキー</param>
-        /// <param name="type">消去するデータの型</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        /// <returns>消去に成功したかどうか</returns>
-        public static bool DeleteKey(string key, Type type, string aggregationName = null)
-        {
-            return Action4ChosenAggregation(aggregationName, agg => agg.DeleteKey(key, type));
-        }
-
-        /// <summary>
-        /// キーと一致するデータが一つでも存在するかどうかを検索する
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">検索するデータのキー</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        /// <returns>存在するかどうか</returns>
-        public static bool HasKey(string key, string aggregationName = null)
-        {
-            return Action4ChosenAggregation(aggregationName, agg => agg.HasKey(key));
-        }
-
-        /// <summary>
-        /// キーと型に一致するデータが存在するかどうかを検索する
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">検索するデータのキー</param>
-        /// <param name="type">検索するデータの型</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        /// <returns>存在するかどうか</returns>
-        public static bool HasKey(string key, Type type, string aggregationName = null)
-        {
-            return Action4ChosenAggregation(aggregationName, agg => agg.HasKey(key, type));
-        }
-
+        
         /// <summary>
         /// セットしたデータ群をXML形式でファイルに保存する
         /// </summary>
         /// <remarks>全ての集団のデータ群を保存する</remarks>
         public static void Save()
         {
-            var dic = Aggregations2Dictionary4FileControl(aggregations);
-            filePathStorage.ClearFilePaths();
+            var dic = Converter.AggregationsToDictionary(Aggregations, Consts.Encode);
+            FilePathStorage.ClearFilePaths();
 
             foreach(var pair in dic)
             {
-                using(var sw = new StreamWriter(pair.Key, false, encode))
+                using(var sw = new StreamWriter(pair.Key, false, Consts.Encode))
                 {
                     var serializer = new XmlSerializer(typeof(SerializeType));
                     serializer.Serialize(sw, pair.Value);
                 }
 
-                filePathStorage.AddFilePath(pair.Key);
+                FilePathStorage.AddFilePath(pair.Key);
             }
 
-            filePathStorage.Save();
+            FilePathStorage.Save();
         }
 
         /// <summary>
@@ -207,38 +103,37 @@ namespace XmlStorage
         /// <returns>読み込んだ情報</returns>
         private static Dictionary<string, Aggregation> Load()
         {
-            var aggs = new Dictionary<string, Aggregation>();
-            var filePaths = filePathStorage.Load();
-
-            if(filePaths.Count <= 0)
+            var aggs = new Dictionary<string, Aggregation>()
             {
-                aggs.Add(DefaultAggregationName, new Aggregation(null, DefaultAggregationName));
+                { Consts.DefaultAggregationName, new Aggregation(null, Consts.DefaultAggregationName) }
+            };
 
-                return aggs;
+            var flag = false;
+            foreach(var path in FilePathStorage.Load())
+            {
+                flag |= Converter.Deserialize(path, Consts.Encode, ref aggs);
             }
 
-            foreach(var filePath in filePaths)
+            if(flag == false)
             {
-                if(!File.Exists(filePath))
+                foreach(var path in SearchFiles())
                 {
-                    continue;
-                }
-
-                using(var sr = new StreamReader(filePath, encode))
-                {
-                    foreach(var pair in DataSetsList2Aggregations((SerializeType)serializer.Deserialize(sr)))
-                    {
-                        aggs.Add(pair.Key, pair.Value);
-                    }
+                    Converter.Deserialize(path, Consts.Encode, ref aggs);
                 }
             }
-
-            if(aggs.Count <= 0)
-            {
-                aggs.Add(DefaultAggregationName, new Aggregation(null, DefaultAggregationName));
-            }
-
+            
             return aggs;
+        }
+        
+        /// <summary>
+        /// デフォルトの保存先フォルダに指定の拡張子のファイルがないか検索する
+        /// </summary>
+        /// <returns>検索結果</returns>
+        private static string[] SearchFiles()
+        {
+            return Directory.GetFiles(
+                Consts.DefaultSaveDirectory, Consts.ExtensionSearchPattern, SearchOption.AllDirectories
+            );
         }
 
         /// <summary>
@@ -246,12 +141,12 @@ namespace XmlStorage
         /// </summary>
         /// <param name="aggregationName">集団名</param>
         /// <param name="action">処理内容</param>
-        private static void Action4ChosenAggregation(string aggregationName, Action<Aggregation> action)
+        private static void Action(string aggregationName, Action<Aggregation> action)
         {
-            Action4ChosenAggregation(aggregationName, agg =>
+            Func(aggregationName, agg =>
             {
                 action(agg);
-                return false;
+                return true;
             });
         }
 
@@ -262,61 +157,11 @@ namespace XmlStorage
         /// <param name="aggregationName">集団名</param>
         /// <param name="func">処理内容</param>
         /// <returns>返却値</returns>
-        private static T Action4ChosenAggregation<T>(string aggregationName, Func<Aggregation, T> func)
+        private static T Func<T>(string aggregationName, Func<Aggregation, T> func)
         {
-            if(HasAggregation(aggregationName))
-            {
-                return func(aggregations[aggregationName]);
-            }
-            else
-            {
-                return func(CurrentAggregation);
-            }
-        }
-
-        /// <summary>
-        /// 集団群をファイル保存用の情報群に変換する
-        /// </summary>
-        /// <param name="aggregations">集団群</param>
-        /// <returns>保存用に変換した情報群</returns>
-        private static Dictionary<string, SerializeType> Aggregations2Dictionary4FileControl(Dictionary<string, Aggregation> aggregations)
-        {
-            var dic = new Dictionary<string, SerializeType>();
-
-            foreach(var pair in aggregations)
-            {
-                var agg = pair.Value;
-                var dataset = new DataSet(agg.AggregationName, agg.FileName, agg.Extension, agg.DirectoryPath, agg.GetDataAsDataElements(encode));
-
-                if(!dic.ContainsKey(agg.FullPath))
-                {
-                    dic.Add(agg.FullPath, new SerializeType());
-                }
-
-                dic[agg.FullPath].Add(dataset);
-            }
-
-            return dic;
-        }
-
-        /// <summary>
-        /// 保存用の情報群から集団群に変換する
-        /// </summary>
-        /// <param name="sets">情報群</param>
-        /// <returns>集団群</returns>
-        private static Dictionary<string, Aggregation> DataSetsList2Aggregations(SerializeType sets)
-        {
-            var dic = new Dictionary<string, Aggregation>();
-
-            foreach(var set in sets)
-            {
-                if(!dic.ContainsKey(set.AggregationName))
-                {
-                    dic.Add(set.AggregationName, new Aggregation(set.Elements, set.AggregationName, set.FullPath));
-                }
-            }
-
-            return dic;
+            return HasAggregation(aggregationName) == true ?
+                func(Aggregations[aggregationName]) :
+                func(CurrentAggregation);
         }
     }
 }

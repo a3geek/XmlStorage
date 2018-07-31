@@ -14,6 +14,11 @@ namespace XmlStorage.Examples
         /// </summary>
         public void Execute()
         {
+            Debug.Log(Storage.HasAggregation("Default"));
+            Debug.Log(Storage.HasAggregation("Test1"));
+            Debug.Log(Storage.HasAggregation("Test2"));
+            Debug.Log("");
+
             /*
              * 1
              * 1.111
@@ -37,7 +42,7 @@ namespace XmlStorage.Examples
             Debug.Log("Default Aggregatpion");
             Debug.Log("Directory Path : " + Storage.DirectoryPath);
             Debug.Log("File Name : " + Storage.FileName);
-            this.GetDataFromXmlStorage();
+            this.GetData();
 
             if(Application.isEditor)
             {
@@ -65,7 +70,7 @@ namespace XmlStorage.Examples
                 Storage.ChangeAggregation("Test1");
                 Debug.Log("Directory Path : " + Storage.DirectoryPath);
                 Debug.Log("File Name : " + Storage.FileName);
-                this.GetDataFromXmlStorage();
+                this.GetData();
             }
 
             /*
@@ -92,13 +97,13 @@ namespace XmlStorage.Examples
             Storage.ChangeAggregation("Test2");
             Debug.Log("Directory Path : " + Storage.DirectoryPath);
             Debug.Log("File Name : " + Storage.FileName);
-            this.GetDataFromXmlStorage();
+            this.GetData();
         }
 
         /// <summary>
         /// <see cref="Storage"/>から値を取得してログに出力する
         /// </summary>
-        private void GetDataFromXmlStorage()
+        private void GetData()
         {
             Debug.Log(Storage.GetInt("integer", 0));
             Debug.Log(Storage.GetFloat("float", 0f));

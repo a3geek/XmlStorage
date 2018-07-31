@@ -42,7 +42,7 @@ namespace XmlStorage.Examples
         /// </summary>
         public enum ExampleMode
         {
-            Set = 0, Get
+            Set = 1, Get
         };
 
         /// <summary>

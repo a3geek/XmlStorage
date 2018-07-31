@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfDataSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DataSet>
-    <AggregationName>Test1</AggregationName>
-    <FileName>XmlStorageExample.xml</FileName>
-    <DirectoryPath>Assets\XmlStorage\Example\SaveFiles\</DirectoryPath>
+    <AggregationName>Test2</AggregationName>
+    <FileName>Test2.xml</FileName>
+    <DirectoryPath>C:\Users\kaoyama\DataStorage\Projects\teamLab\SketchSeries\XmlStorage\Assets\..\Saves\</DirectoryPath>
     <Elements>
       <DataElement>
         <Key>integer</Key>
-        <Value xsi:type="xsd:int">11</Value>
+        <Value xsi:type="xsd:int">111</Value>
         <TypeName>System.Int32</TypeName>
       </DataElement>
       <DataElement>
