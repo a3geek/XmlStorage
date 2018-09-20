@@ -53,8 +53,12 @@ namespace XmlStorage.Components.Aggregations.Accessors
         /// </summary>
         /// <param name="type">データの型情報</param>
         /// <returns>データの型と対応するキー</returns>
-        public override string [] GetKeys(Type type) {
-            return this.dictionary[type].Keys.ToArray();
+        public override string[] GetKeys(Type type)
+        {
+            if (HasType(type))
+                return this.dictionary[type].Keys.ToArray();
+            else
+                return null;
         }
 
         /// <summary>
