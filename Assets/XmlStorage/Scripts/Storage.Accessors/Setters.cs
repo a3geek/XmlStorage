@@ -45,18 +45,6 @@ namespace XmlStorage
         }
 
         /// <summary>
-        /// List float型のデータとキーをセットする
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">セットするデータのキー</param>
-        /// <param name="value">セットするデータ</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        public static void SetFloats(string key, List<float> value, string aggregationName = null)
-        {
-            Action(aggregationName, agg => agg.SetFloats(key, value));
-        }
-
-        /// <summary>
         /// int型のデータとキーをセットする
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
@@ -66,18 +54,6 @@ namespace XmlStorage
         public static void SetInt(string key, int value, string aggregationName = null)
         {
             Action(aggregationName, agg => agg.SetInt(key, value));
-        }
-
-        /// <summary>
-        /// List int型のデータとキーをセットする
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">セットするデータのキー</param>
-        /// <param name="value">セットするデータ</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        public static void SetInts(string key, List<int> value, string aggregationName = null)
-        {
-            Action(aggregationName, agg => agg.SetInts(key, value));
         }
 
         /// <summary>
@@ -93,18 +69,6 @@ namespace XmlStorage
         }
 
         /// <summary>
-        /// List string型のデータとキーをセットする
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">セットするデータのキー</param>
-        /// <param name="value">セットするデータ</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        public static void SetStrings(string key, List<string> value, string aggregationName = null)
-        {
-            Action(aggregationName, agg => agg.SetStrings(key, value));
-        }
-
-        /// <summary>
         /// bool型のデータとキーをセットする
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
@@ -114,18 +78,6 @@ namespace XmlStorage
         public static void SetBool(string key, bool value, string aggregationName = null)
         {
             Action(aggregationName, agg => agg.SetBool(key, value));
-        }
-
-        /// <summary>
-        /// List bool型のデータとキーをセットする
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">セットするデータのキー</param>
-        /// <param name="value">セットするデータ</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        public static void SetBools(string key, List<bool> value, string aggregationName = null)
-        {
-            Action(aggregationName, agg => agg.SetBools(key, value));
         }
     }
 }

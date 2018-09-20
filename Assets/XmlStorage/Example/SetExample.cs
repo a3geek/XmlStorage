@@ -83,10 +83,10 @@ namespace XmlStorage.Examples
             Storage.Set("qua", this.quaternion);
 
             ///List Example
-            Storage.SetInts("integer_list", new List<int>() { 2018, 9 });
-            Storage.SetFloats("float_list", new List<float>() { 0.5f, 1.5f });
-            Storage.SetStrings("string_list", new List<string>() { "Hello", "World" });
-            Storage.SetBools("bool_list", new List<bool>() { true, false });
+            Storage.Set("integer_list", new List<int>() { 2018, 9 });
+            Storage.Set("float_list", new List<float>() { 0.5f, 1.5f });
+            Storage.Set("string_list", new List<string>() { "Hello", "World" });
+            Storage.Set("bool_list", new List<bool>() { true, false });
 
             List<ExampleController.Test2> test2_list = new List<ExampleController.Test2>()
             {new ExampleController.Test2(), new ExampleController.Test2()};

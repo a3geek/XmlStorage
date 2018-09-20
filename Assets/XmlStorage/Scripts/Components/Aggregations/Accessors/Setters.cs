@@ -39,16 +39,6 @@ namespace XmlStorage.Components.Aggregations.Accessors
         }
 
         /// <summary>
-        /// List float型のデータとキーをセットする
-        /// </summary>
-        /// <param name="key">セットするデータのキー</param>
-        /// <param name="value">セットするデータ</param>
-        public void SetFloats(string key, List<float> value)
-        {
-            this.SetValue(key, value, typeof(List<float>));
-        }
-
-        /// <summary>
         /// int型のデータとキーをセットする
         /// </summary>
         /// <param name="key">セットするデータのキー</param>
@@ -56,16 +46,6 @@ namespace XmlStorage.Components.Aggregations.Accessors
         public void SetInt(string key, int value)
         {
             this.SetValue(key, value, typeof(int));
-        }
-
-        /// <summary>
-        /// List int型のデータとキーをセットする
-        /// </summary>
-        /// <param name="key">セットするデータのキー</param>
-        /// <param name="value">セットするデータ</param>
-        public void SetInts(string key, List<int> value)
-        {
-            this.SetValue(key, value, typeof(List<int>));
         }
 
         /// <summary>
@@ -79,16 +59,6 @@ namespace XmlStorage.Components.Aggregations.Accessors
         }
 
         /// <summary>
-        /// List string型のデータとキーをセットする
-        /// </summary>
-        /// <param name="key">セットするデータのキー</param>
-        /// <param name="value">セットするデータ</param>
-        public void SetStrings(string key, List<string> value)
-        {
-            this.SetValue(key, value, typeof(List<string>));
-        }
-
-        /// <summary>
         /// bool型のデータとキーをセットする
         /// </summary>
         /// <param name="key">セットするデータのキー</param>
@@ -96,16 +66,6 @@ namespace XmlStorage.Components.Aggregations.Accessors
         public void SetBool(string key, bool value)
         {
             this.SetValue(key, value, typeof(bool));
-        }
-
-        /// <summary>
-        /// List bool型のデータとキーをセットする
-        /// </summary>
-        /// <param name="key">セットするデータのキー</param>
-        /// <param name="value">セットするデータ</param>
-        public void SetBools(string key, List<bool> value)
-        {
-            this.SetValue(key, value, typeof(List<bool>));
         }
 
         /// <summary>
