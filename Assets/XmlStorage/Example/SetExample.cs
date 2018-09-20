@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Collections.Generic;
 
 namespace XmlStorage.Examples
 {
@@ -80,6 +81,16 @@ namespace XmlStorage.Examples
             Storage.Set("vec2", this.vec2);
             Storage.Set("vec3", this.vec3);
             Storage.Set("qua", this.quaternion);
+
+            ///List Example
+            Storage.SetInts("integer_list", new List<int>() { 2018, 9 });
+            Storage.SetFloats("float_list", new List<float>() { 0.5f, 1.5f });
+            Storage.SetStrings("string_list", new List<string>() { "Hello", "World" });
+            Storage.SetBools("bool_list", new List<bool>() { true, false });
+
+            List<ExampleController.Test2> test2_list = new List<ExampleController.Test2>()
+            {new ExampleController.Test2(), new ExampleController.Test2()};
+            Storage.Set("Test2Class_list", test2_list);
         }
     }
 }

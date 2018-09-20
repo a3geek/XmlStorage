@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
+using System;
 
 namespace XmlStorage.Examples
 {
@@ -38,6 +39,17 @@ namespace XmlStorage.Examples
              * (0.1, 0.2)
              * (1.0, 2.0, 3.0)
              * (10.0, 20.0, 30.0)
+             * 
+             * 2018
+             * 9
+             * 0.5
+             * 1.5
+             * Hello
+             * World
+             * True
+             * False
+             * (1.0 , 2.0)
+             * (1.0 , 2.0)
              */
             Debug.Log("Default Aggregatpion");
             Debug.Log("Directory Path : " + Storage.DirectoryPath);
@@ -65,6 +77,17 @@ namespace XmlStorage.Examples
                  * (0.1, 0.2)
                  * (1.0, 2.0, 3.0)
                  * (10.0, 20.0, 30.0)
+                 * 
+                 * 2018
+                 * 9
+                 * 0.5
+                 * 1.5
+                 * Hello
+                 * World
+                 * True
+                 * False
+                 * (1.0 , 2.0)
+                 * (1.0 , 2.0)
                  */
                 Debug.Log("Test1 Aggregation");
                 Storage.ChangeAggregation("Test1");
@@ -92,6 +115,17 @@ namespace XmlStorage.Examples
              * (0.1, 0.2)
              * (1.0, 2.0, 3.0)
              * (10.0, 20.0, 30.0)
+             * 
+             * 2018
+             * 9
+             * 0.5
+             * 1.5
+             * Hello
+             * World
+             * True
+             * False
+             * (1.0 , 2.0)
+             * (1.0 , 2.0)
              */
             Debug.Log("Test2 Aggregation");
             Storage.ChangeAggregation("Test2");
@@ -143,6 +177,31 @@ namespace XmlStorage.Examples
             Debug.Log(Storage.Get("vec2", Vector2.zero));
             Debug.Log(Storage.Get("vec3", Vector3.zero));
             Debug.Log(Storage.Get("qua", Quaternion.identity).eulerAngles);
+
+            Debug.Log("");
+
+            // List Example
+            Storage.GetInts("integer_list").ForEach(i => { Debug.Log(i); });
+            Storage.GetFloats("float_list").ForEach(i => { Debug.Log(i); });
+            Storage.GetStrings("string_list").ForEach(i => { Debug.Log(i); });
+            Storage.GetBools("bool_list").ForEach(i => { Debug.Log(i); });
+            Storage.Gets<ExampleController.Test2>("Test2Class_list").ForEach(i => { Debug.Log(i.vec2); });
+
+            Debug.Log("");
+
+            string[] string_keys = Storage.GetKeys(typeof(string));
+            for(var i=0; i< string_keys.Length; i++)
+            {
+                Debug.Log(string_keys[i]);
+            }
+
+            Debug.Log("");
+
+            Type[] types = Storage.GetTypes();
+            for (var i = 0; i < types.Length; i++)
+            {
+                Debug.Log(types[i]);
+            }
 
             Debug.Log("");
             Debug.Log("");

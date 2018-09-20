@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XmlStorage.Components.Aggregations.Accessors
 {
@@ -47,6 +48,24 @@ namespace XmlStorage.Components.Aggregations.Accessors
                 defaultValue;
         }
 
+        /// <summary>
+        /// データの型と対応するキーを取得する
+        /// </summary>
+        /// <param name="type">データの型情報</param>
+        /// <returns>データの型と対応するキー</returns>
+        public override string [] GetKeys(Type type) {
+            return this.dictionary[type].Keys.ToArray();
+        }
+
+        /// <summary>
+        /// データの型情報を取得する
+        /// </summary>
+        /// <returns>データの型情報</returns>
+        public override Type[] GetTypes()
+        {
+            return dictionary.Keys.ToArray();
+        }
+        
         /// <summary>
         /// セットした全てのデータを消去する
         /// </summary>
