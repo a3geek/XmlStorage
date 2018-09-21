@@ -201,20 +201,48 @@ aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 キーと対応する任意の型のデータを取得  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
+#### `List<T> Gets<T>(string key, List<T> defaultValue = default(List<T>), string aggregationName = null)`
+キーと対応する任意のList型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
 #### `float GetFloat(string key, float defaultValue = default(float), string aggregationName = null)`
 キーと対応するfloat型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `List<float> GetFloats(string key, List<float> defaultValue = default(List<float>), string aggregationName = null)`
+キーと対応するList float型のデータを取得  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `int GetInt(string key, int defaultValue = default(int), string aggregationName = null)`
 キーと対応するint型のデータを取得する  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
+#### `List<int> GetInts(string key, List<int> defaultValue = default(List<int>), string aggregationName = null)`
+キーと対応するList int型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
 #### `string GetString(string key, string defaultValue = "", string aggregationName = null)`
 キーと対応するstring型のデータを取得  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
+#### `List<string> GetStrings(string key, List<string> defaultValue = default(List<string>), string aggregationName = null)`
+キーと対応するList string型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
 #### `bool GetBool(string key, bool defaultValue = default(bool), string aggregationName = null)`
 キーと対応するbool型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `List<bool> GetBools(string key, List<bool> defaultValue = default(List<bool>), string aggregationName = null)`
+キーと対応するList bool型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `string [] GetKeys(Type type, string aggregationName = null)`
+データの型と対応するキーを取得する
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `Type[] GetTypes(string aggregationName = null)`
+データの型情報を取得する
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 ## Default save folder
