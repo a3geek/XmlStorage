@@ -89,23 +89,24 @@ namespace XmlStorage.Components.Utilities
         /// </summary>
         /// <param name="value">オブジェクト</param>
         /// <param name="key">データのキー</param>
-        /// <param name="type">データの型</param>
+        /// <param name="saveType">データの型</param>
         /// <param name="serialize">シリアライズするかどうか</param>
         /// <param name="encode">シリアライズ時のエンコード</param>
         /// <returns>保存時用の情報</returns>
-        public static DataElement Object2DataElement(object value, string key, Type type, Encoding encode = null, bool forceSerialize = false)
+        public static DataElement Object2DataElement(object value, string key, Type saveType, Encoding encode = null, bool forceSerialize = false)
         {
+            var type = value.GetType();
             if(IsNeedSerialization(type) == false && forceSerialize == false)
             {
-                return new DataElement(key, value, type);
+                return new DataElement(key, value, type, saveType);
             }
-
+            
             using(var sw = new FileUtils.EncodedStringWriter(encode))
             {
                 var serializer = new XmlSerializer(type);
                 serializer.Serialize(sw, value);
 
-                return new DataElement(key, sw.ToString(), type);
+                return new DataElement(key, sw.ToString(), type, saveType);
             }
         }
 
