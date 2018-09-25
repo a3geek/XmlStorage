@@ -201,6 +201,10 @@ aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 キーと対応する任意の型のデータを取得  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
+#### `List<T> Gets<T>(string key, List<T> defaultValue = default(List<T>), string aggregationName = null)`
+キーと対応する任意のList型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
 #### `float GetFloat(string key, float defaultValue = default(float), string aggregationName = null)`
 キーと対応するfloat型のデータを取得  
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
@@ -215,6 +219,30 @@ aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 #### `bool GetBool(string key, bool defaultValue = default(bool), string aggregationName = null)`
 キーと対応するbool型のデータを取得  
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `float [] GetFloats(float[] defaultValue = default(float[]), string aggregationName = null)`
+float型と対応するデータを取得する
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `int[] GetInts(int[] defaultValue = default(int[]), string aggregationName = null)`
+int型と対応するデータを取得する
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `string[] GetStrings(string[] defaultValue = default(string[]), string aggregationName = null)`
+string型と対応するデータを取得する
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `bool[] GetBools(bool[] defaultValue = default(bool[]), string aggregationName = null)`
+bool型と対応するデータを取得する 
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `string [] GetKeys(Type type, string aggregationName = null)`
+データの型と対応するキーを取得する
+aggregationNameがnullの時は、`CurrentAggregationName`が使われます
+
+#### `Type[] GetTypes(string aggregationName = null)`
+データの型情報を取得する
 aggregationNameがnullの時は、`CurrentAggregationName`が使われます
 
 ## Default save folder
