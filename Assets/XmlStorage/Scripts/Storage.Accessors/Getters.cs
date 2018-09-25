@@ -62,19 +62,6 @@ namespace XmlStorage
         }
 
         /// <summary>
-        /// キーと対応するList float型のデータを取得する
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">取得するデータのキー</param>
-        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        /// <returns>キーに対応するデータ</returns>
-        public static List<float> GetFloats(string key, List<float> defaultValue = default(List<float>), string aggregationName = null)
-        {
-            return Func(aggregationName, agg => agg.GetFloats(key, defaultValue));
-        }
-
-        /// <summary>
         /// キーと対応するint型のデータを取得する
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
@@ -85,19 +72,6 @@ namespace XmlStorage
         public static int GetInt(string key, int defaultValue = default(int), string aggregationName = null)
         {
             return Func(aggregationName, agg => agg.GetInt(key, defaultValue));
-        }
-
-        /// <summary>
-        /// キーと対応するList int型のデータを取得する
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">取得するデータのキー</param>
-        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        /// <returns>キーに対応するデータ</returns>
-        public static List<int> GetInts(string key, List<int> defaultValue = default(List<int>), string aggregationName = null)
-        {
-            return Func(aggregationName, agg => agg.GetInts(key, defaultValue));
         }
 
         /// <summary>
@@ -114,19 +88,6 @@ namespace XmlStorage
         }
 
         /// <summary>
-        /// キーと対応するList string型のデータを取得する
-        /// </summary>
-        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">取得するデータのキー</param>
-        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
-        /// <param name="aggregationName">データが所属する集団名</param>
-        /// <returns>キーに対応するデータ</returns>
-        public static List<string> GetStrings(string key, List<string> defaultValue = default(List<string>), string aggregationName = null)
-        {
-            return Func(aggregationName, agg => agg.GetStrings(key, defaultValue));
-        }
-
-        /// <summary>
         /// キーと対応するbool型のデータを取得する
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
@@ -140,18 +101,53 @@ namespace XmlStorage
         }
 
         /// <summary>
-        /// キーと対応するList bool型のデータを取得する
+        /// float型と対応するデータを取得する
         /// </summary>
         /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
-        /// <param name="key">取得するデータのキー</param>
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
         /// <param name="aggregationName">データが所属する集団名</param>
-        /// <returns>キーに対応するデータ</returns>
-        public static List<bool> GetBools(string key, List<bool> defaultValue = default(List<bool>), string aggregationName = null)
+        /// <returns>型に対応するデータ</returns>
+        public static float [] GetFloats(float[] defaultValue = default(float[]), string aggregationName = null)
         {
-            return Func(aggregationName, agg => agg.GetBools(key, defaultValue));
+            return Func(aggregationName, agg => agg.GetFloats(defaultValue));
         }
-        
+
+        /// <summary>
+        /// int型と対応するデータを取得する
+        /// </summary>
+        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <param name="aggregationName">データが所属する集団名</param>
+        /// <returns>型に対応するデータ</returns>
+        public static int[] GetInts(int[] defaultValue = default(int[]), string aggregationName = null)
+        {
+            return Func(aggregationName, agg => agg.GetInts(defaultValue));
+        }
+
+        /// <summary>
+        /// string型と対応するデータを取得する
+        /// </summary>
+        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <param name="aggregationName">データが所属する集団名</param>
+        /// <returns>型に対応するデータ</returns>
+        public static string[] GetStrings(string[] defaultValue = default(string[]), string aggregationName = null)
+        {
+            return Func(aggregationName, agg => agg.GetStrings(defaultValue));
+        }
+
+        /// <summary>
+        /// bool型と対応するデータを取得する
+        /// </summary>
+        /// <remarks><paramref name="aggregationName"/>がnullの時は、<see cref="CurrentAggregationName"/>が使われる</remarks>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <param name="aggregationName">データが所属する集団名</param>
+        /// <returns>型に対応するデータ</returns>
+        public static bool[] GetBools(bool[] defaultValue = default(bool[]), string aggregationName = null)
+        {
+            return Func(aggregationName, agg => agg.GetBools(defaultValue));
+        }
+
         /// <summary>
         /// データの型と対応するキーを取得する
         /// </summary>
@@ -159,7 +155,7 @@ namespace XmlStorage
         /// <param name="type">データの型情報</param>
         /// <param name="aggregationName">データが所属する集団名</param>
         /// <returns>データの型と対応するキー</returns>
-        public static string [] GetKeys(Type type, string aggregationName = null)
+        public static string[] GetKeys(Type type, string aggregationName = null)
         {
             return Func(aggregationName, agg => agg.GetKeys(type));
         }

@@ -54,17 +54,6 @@ namespace XmlStorage.Components.Aggregations.Accessors
         }
 
         /// <summary>
-        /// キーと対応するList float型のデータを取得する
-        /// </summary>
-        /// <param name="key">取得するデータのキー</param>
-        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
-        /// <returns>キーに対応するデータ</returns>
-        public List<float> GetFloats(string key, List<float> defaultValue = default(List<float>))
-        {
-            return this.GetValue(key, defaultValue, typeof(List<float>), null);
-        }
-
-        /// <summary>
         /// キーと対応するint型のデータを取得する
         /// </summary>
         /// <param name="key">取得するデータのキー</param>
@@ -73,17 +62,6 @@ namespace XmlStorage.Components.Aggregations.Accessors
         public int GetInt(string key, int defaultValue = default(int))
         {
             return this.GetValue(key, defaultValue, typeof(int), null);
-        }
-
-        /// <summary>
-        /// キーと対応するList int型のデータを取得する
-        /// </summary>
-        /// <param name="key">取得するデータのキー</param>
-        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
-        /// <returns>キーに対応するデータ</returns>
-        public List<int> GetInts(string key, List<int> defaultValue = default(List<int>))
-        {
-            return this.GetValue(key, defaultValue, typeof(List<int>), null);
         }
 
         /// <summary>
@@ -98,17 +76,6 @@ namespace XmlStorage.Components.Aggregations.Accessors
         }
 
         /// <summary>
-        /// キーと対応するList string型のデータを取得する
-        /// </summary>
-        /// <param name="key">取得するデータのキー</param>
-        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
-        /// <returns>キーに対応するデータ</returns>
-        public List<string> GetStrings(string key, List<string> defaultValue = default(List<string>))
-        {
-            return this.GetValue(key, defaultValue, typeof(List<string>), null);
-        }
-
-        /// <summary>
         /// キーと対応するbool型のデータを取得する
         /// </summary>
         /// <param name="key">取得するデータのキー</param>
@@ -120,14 +87,41 @@ namespace XmlStorage.Components.Aggregations.Accessors
         }
 
         /// <summary>
-        /// キーと対応するList bool型のデータを取得する
+        /// float型と対応するデータを取得する
         /// </summary>
-        /// <param name="key">取得するデータのキー</param>
         /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
-        /// <returns>キーに対応するデータ</returns>
-        public List<bool> GetBools(string key, List<bool> defaultValue = default(List<bool>))
+        /// <returns>型に対応するデータ</returns>
+        public float[] GetFloats(float[] defaultValue = default(float[]))
         {
-            return this.GetValue(key, defaultValue, typeof(List<bool>), null);
+            return this.GetValues(defaultValue, typeof(float));
+        }
+
+        /// <summary>
+        /// int型と対応するデータを取得する
+        /// </summary>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <returns>型に対応するデータ</returns>
+        public int[] GetInts(int[] defaultValue = default(int[]))
+        {
+            return this.GetValues(defaultValue, typeof(int));
+        }
+        /// <summary>
+        /// string型と対応するデータを取得する
+        /// </summary>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <returns>型に対応するデータ</returns>
+        public string[] GetStrings(string[] defaultValue = default(string[]))
+        {
+            return this.GetValues(defaultValue, typeof(string));
+        }
+        /// <summary>
+        /// bool型と対応するデータを取得する
+        /// </summary>
+        /// <param name="defaultValue">キーに対応するデータが存在しなかった時の返り値</param>
+        /// <returns>型に対応するデータ</returns>
+        public bool[] GetBools(bool[] defaultValue = default(bool[]))
+        {
+            return this.GetValues(defaultValue, typeof(bool));
         }
 
         /// <summary>
@@ -140,6 +134,15 @@ namespace XmlStorage.Components.Aggregations.Accessors
         /// <param name="converter">型変換処理</param>
         /// <returns>データ</returns>
         protected abstract T GetValue<T>(string key, T defaultValue, Type type = null, Func<object, T> converter = null);
+
+        /// <summary>
+        /// 型と対応するデータ Listを取得する
+        /// </summary>
+        /// <typeparam name="T">データの型</typeparam>
+        /// <param name="type">データの型情報</param>
+        /// <param name="defaultValue">データが存在しなかった時の返り値</param>
+        /// <returns>データ</returns>
+        protected abstract T[] GetValues<T>(T[] defaultValue, Type type);
 
         /// <summary>
         /// データの型と対応するキーを取得する

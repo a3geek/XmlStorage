@@ -181,11 +181,11 @@ namespace XmlStorage.Examples
             Debug.Log("");
 
             // List Example
-            Storage.GetInts("integer_list").ForEach(i => { Debug.Log(i); });
-            Storage.GetFloats("float_list").ForEach(i => { Debug.Log(i); });
-            Storage.GetStrings("string_list").ForEach(i => { Debug.Log(i); });
-            Storage.GetBools("bool_list").ForEach(i => { Debug.Log(i); });
-            Storage.Gets<ExampleController.Test2>("Test2Class_list").ForEach(i => { Debug.Log(i.vec2); });
+            float[] floatArr = Storage.GetFloats();
+            for(var i=0;i<floatArr.Length; i++)
+            {
+                Debug.Log(floatArr[i]);
+            }
 
             Debug.Log("");
 

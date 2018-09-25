@@ -82,12 +82,6 @@ namespace XmlStorage.Examples
             Storage.Set("vec3", this.vec3);
             Storage.Set("qua", this.quaternion);
 
-            ///List Example
-            Storage.Set("integer_list", new List<int>() { 2018, 9 });
-            Storage.Set("float_list", new List<float>() { 0.5f, 1.5f });
-            Storage.Set("string_list", new List<string>() { "Hello", "World" });
-            Storage.Set("bool_list", new List<bool>() { true, false });
-
             List<ExampleController.Test2> test2_list = new List<ExampleController.Test2>()
             {new ExampleController.Test2(), new ExampleController.Test2()};
             Storage.Set("Test2Class_list", test2_list);
