@@ -18,7 +18,6 @@ namespace XmlStorage.Components.Utilities
         /// <summary>データをXMLにシリアライズするためのシリアライザーインスタンス</summary>
         private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(SerializeType));
 
-
         /// <summary>
         /// 集団群をファイル保存用の情報群に変換する
         /// </summary>
