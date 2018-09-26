@@ -30,6 +30,7 @@ namespace XmlStorage.Examples
         /// </summary>
         public void Execute()
         {
+            Storage.Set(typeof(SetExample), "SetExample", 10);
             this.SetData(1);
 
             if(Application.isEditor)

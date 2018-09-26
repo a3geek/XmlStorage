@@ -20,6 +20,10 @@ namespace XmlStorage.Examples
             Debug.Log(Storage.HasAggregation("Test2"));
             Debug.Log("");
 
+            // 10
+            Debug.Log(Storage.Get(typeof(SetExample), "SetExample", 0));
+            Debug.Log("");
+
             /*
              * 1
              * 1.111
