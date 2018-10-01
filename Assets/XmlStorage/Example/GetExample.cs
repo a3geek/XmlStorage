@@ -44,16 +44,12 @@ namespace XmlStorage.Examples
              * (1.0, 2.0, 3.0)
              * (10.0, 20.0, 30.0)
              * 
+             * 111
              * 2018
-             * 9
-             * 0.5
-             * 1.5
-             * Hello
-             * World
-             * True
-             * False
-             * (1.0 , 2.0)
-             * (1.0 , 2.0)
+             * 10
+             * 
+             * "del_test2"
+             * "address"
              */
             Debug.Log("Default Aggregatpion");
             Debug.Log("Directory Path : " + Storage.DirectoryPath);
@@ -82,16 +78,12 @@ namespace XmlStorage.Examples
                  * (1.0, 2.0, 3.0)
                  * (10.0, 20.0, 30.0)
                  * 
+                 * 111
                  * 2018
-                 * 9
-                 * 0.5
-                 * 1.5
-                 * Hello
-                 * World
-                 * True
-                 * False
-                 * (1.0 , 2.0)
-                 * (1.0 , 2.0)
+                 * 10
+                 * 
+                 * "del_test2"
+                 * "address"
                  */
                 Debug.Log("Test1 Aggregation");
                 Storage.ChangeAggregation("Test1");
@@ -120,16 +112,12 @@ namespace XmlStorage.Examples
              * (1.0, 2.0, 3.0)
              * (10.0, 20.0, 30.0)
              * 
+             * 111
              * 2018
-             * 9
-             * 0.5
-             * 1.5
-             * Hello
-             * World
-             * True
-             * False
-             * (1.0 , 2.0)
-             * (1.0 , 2.0)
+             * 10
+             * 
+             * "del_test2"
+             * "address"
              */
             Debug.Log("Test2 Aggregation");
             Storage.ChangeAggregation("Test2");
@@ -185,10 +173,10 @@ namespace XmlStorage.Examples
             Debug.Log("");
 
             // List Example
-            float[] floatArr = Storage.GetFloats();
-            for(var i=0;i<floatArr.Length; i++)
+            int[] intArr = Storage.GetInts();
+            for(var i=0;i< intArr.Length; i++)
             {
-                Debug.Log(floatArr[i]);
+                Debug.Log(intArr[i]);
             }
 
             Debug.Log("");
@@ -207,7 +195,6 @@ namespace XmlStorage.Examples
                 Debug.Log(types[i]);
             }
 
-            Debug.Log("");
             Debug.Log("");
         }
     }

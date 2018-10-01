@@ -83,6 +83,10 @@ namespace XmlStorage.Examples
             Storage.Set("vec3", this.vec3);
             Storage.Set("qua", this.quaternion);
 
+            Storage.SetInt("int1", 2018);
+            Storage.SetInt("int2", 10);
+
+
             List<ExampleController.Test2> test2_list = new List<ExampleController.Test2>()
             {new ExampleController.Test2(), new ExampleController.Test2()};
             Storage.Set("Test2Class_list", test2_list);
