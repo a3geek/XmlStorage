@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDataSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DataSet>
+    <AggregationName>Default</AggregationName>
+    <FileName>XmlStorage.xml</FileName>
+    <DirectoryPath>C:\Users\kaoyama\DataStorage\Projects\teamLab\SketchSeries\XmlStorage\Assets\..\Saves\</DirectoryPath>
+    <Elements>
+      <DataElement>
+        <Key>SetExample</Key>
+        <Value xsi:type="xsd:int">10</Value>
+        <TypeName>System.Int32</TypeName>
+        <SaveTypeName>XmlStorage.Examples.SetExample</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>integer</Key>
+        <Value xsi:type="xsd:int">1</Value>
+        <TypeName>System.Int32</TypeName>
+        <SaveTypeName>System.Int32</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>int1</Key>
+        <Value xsi:type="xsd:int">2018</Value>
+        <TypeName>System.Int32</TypeName>
+        <SaveTypeName>System.Int32</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>int2</Key>
+        <Value xsi:type="xsd:int">10</Value>
+        <TypeName>System.Int32</TypeName>
+        <SaveTypeName>System.Int32</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>float</Key>
+        <Value xsi:type="xsd:float">1.111</Value>
+        <TypeName>System.Single</TypeName>
+        <SaveTypeName>System.Single</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>obj_int</Key>
+        <Value xsi:type="xsd:int">10</Value>
+        <TypeName>System.Int32</TypeName>
+        <SaveTypeName>System.Object</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>Test1Class</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Test1 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;integer&gt;1&lt;/integer&gt;
+  &lt;str&gt;TestString&lt;/str&gt;
+  &lt;list1&gt;
+    &lt;float&gt;0.1&lt;/float&gt;
+    &lt;float&gt;1.1&lt;/float&gt;
+    &lt;float&gt;10.1&lt;/float&gt;
+  &lt;/list1&gt;
+&lt;/Test1&gt;</Value>
+        <TypeName>XmlStorage.Examples.ExampleController+Test1</TypeName>
+        <SaveTypeName>XmlStorage.Examples.ExampleController+Test1</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>Test2Class</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Test2 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;vec2&gt;
+    &lt;x&gt;1&lt;/x&gt;
+    &lt;y&gt;2&lt;/y&gt;
+  &lt;/vec2&gt;
+  &lt;vec3&gt;
+    &lt;x&gt;1&lt;/x&gt;
+    &lt;y&gt;2&lt;/y&gt;
+    &lt;z&gt;3&lt;/z&gt;
+  &lt;/vec3&gt;
+&lt;/Test2&gt;</Value>
+        <TypeName>XmlStorage.Examples.ExampleController+Test2</TypeName>
+        <SaveTypeName>XmlStorage.Examples.ExampleController+Test2</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>del_tes2</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;string&gt;del_tes2&lt;/string&gt;</Value>
+        <TypeName>System.String</TypeName>
+        <SaveTypeName>System.String</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>address</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;string&gt;lab-interactive@team-lab.com&lt;/string&gt;</Value>
+        <TypeName>System.String</TypeName>
+        <SaveTypeName>System.String</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>vec2</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Vector2 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;x&gt;0.1&lt;/x&gt;
+  &lt;y&gt;0.2&lt;/y&gt;
+&lt;/Vector2&gt;</Value>
+        <TypeName>UnityEngine.Vector2</TypeName>
+        <SaveTypeName>UnityEngine.Vector2</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>vec3</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Vector3 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;x&gt;1&lt;/x&gt;
+  &lt;y&gt;2&lt;/y&gt;
+  &lt;z&gt;3&lt;/z&gt;
+&lt;/Vector3&gt;</Value>
+        <TypeName>UnityEngine.Vector3</TypeName>
+        <SaveTypeName>UnityEngine.Vector3</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>qua</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Quaternion xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;x&gt;0.127679437&lt;/x&gt;
+  &lt;y&gt;0.144878134&lt;/y&gt;
+  &lt;z&gt;0.239298329&lt;/z&gt;
+  &lt;w&gt;0.9515485&lt;/w&gt;
+  &lt;eulerAngles&gt;
+    &lt;x&gt;9.999999&lt;/x&gt;
+    &lt;y&gt;20.0000019&lt;/y&gt;
+    &lt;z&gt;30.0000019&lt;/z&gt;
+  &lt;/eulerAngles&gt;
+&lt;/Quaternion&gt;</Value>
+        <TypeName>UnityEngine.Quaternion</TypeName>
+        <SaveTypeName>UnityEngine.Quaternion</SaveTypeName>
+      </DataElement>
+    </Elements>
+  </DataSet>
+</ArrayOfDataSet>
