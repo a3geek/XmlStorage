@@ -19,10 +19,10 @@ namespace XmlStorage.Components.Data
         public string SaveTypeName { get; set; }
 
         /// <summary>データの型(RO)</summary>
-        public Type ValueType { get { return this.GetType(this.TypeName); } }
+        public Type ValueType => this.GetType(this.TypeName);
         /// <summary>保存型</summary>
-        public Type SaveType { get { return this.GetType(this.SaveTypeName); } }
-        
+        public Type SaveType => this.GetType(this.SaveTypeName);
+
 
         /// <summary>
         /// コンストラクタ
@@ -49,7 +49,7 @@ namespace XmlStorage.Components.Data
         {
             this.Set(key, value, type.FullName, saveType.FullName);
         }
-        
+
         /// <summary>
         /// メンバ変数の値を更新する
         /// </summary>

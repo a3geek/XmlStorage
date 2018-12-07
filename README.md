@@ -50,7 +50,7 @@ void Start()
 <br />
 
 - Keyに指定した文字列が同一でも、保存するデータの型(System.Type情報)が異なれば別データとして保存されます。
-    - 保存するデータの型情報を明示する事も出来ます。
+    - 保存するデータの型情報を明示する事もできます。
 ```` csharp
 void Start()
 {
@@ -71,8 +71,8 @@ void Start()
 ````
 <br />
 
-- 各データはAggregation(集団)に所属しており、所属する集団を指定する事が出来ます。
-  - 各集団毎に保存する『ファイル名』『フォルダパス』『拡張子』等を変更する事が出来ます。
+- 各データはAggregation(集団)に所属しており、所属する集団を指定する事ができます。
+  - 各集団毎に保存する『ファイル名』を変更する事ができます。
   - 各集団同士は独立しているので、キー情報はコンフリクトしません。
 ```` csharp
 void Start()
@@ -101,8 +101,24 @@ void Start()
 ````
 <br />
 
-- 全Aggregationの保存ファイルの絶対パスを、[Application.persistentDataPath](https://docs.unity3d.com/ja/current/ScriptReference/Application-persistentDataPath.html)フォルダ内のFilePaths.txtに保存してあります。
-    - XmlStorageは最初にFilePaths.txtを読み込み、保存されている全パスからXMLファイルを検索・読み込みを行います。
+- データの保存先のフォルダは、任意のタイミングで変更することができます。
+    - フォルダパスを変更した場合は`Storage.Load()`をよぶようにしてください。
+    - `Storage.Load()`をよばなかった場合は内部的なデータの初期化が行われないため、今までSetしてきたデータや集団情報もそのディレクトリに保存されます。
+```` csharp
+void Start()
+{
+    Storage.Set("test1", Vector2.zero); // Defaultの保存先に保存.
+    Storage.Save();
+
+    Storage.DirectoryPath = Application.dataPath + "/../Saves2/";   
+    Storage.Load();
+
+    Storage.Set("test2", Vector2.one); // 変更した保存先に保存.
+    Storage.Save(); // Sotrage.Loadをよばなかった場合、変更した保存先に"test1"も保存される。
+}
+````
+<br />
+    
 
 ## Default save folder
-[Application.dataPath](https://docs.unity3d.com/ja/current/ScriptReference/Application-dataPath.html) + "/" + ".." + "/" + "Saves/"
+[Application.dataPath](https://docs.unity3d.com/ja/current/ScriptReference/Application-dataPath.html) + "/../Saves/"

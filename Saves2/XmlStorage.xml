@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDataSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DataSet>
+    <AggregationName>Default</AggregationName>
+    <FileName>XmlStorage.xml</FileName>
+    <Elements>
+      <DataElement>
+        <Key>integer</Key>
+        <Value xsi:type="xsd:int">100</Value>
+        <TypeName>System.Int32</TypeName>
+        <SaveTypeName>System.Int32</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>float</Key>
+        <Value xsi:type="xsd:float">10.12345</Value>
+        <TypeName>System.Single</TypeName>
+        <SaveTypeName>System.Single</SaveTypeName>
+      </DataElement>
+      <DataElement>
+        <Key>del_test2</Key>
+        <Value xsi:type="xsd:string">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;string&gt;del_test2&lt;/string&gt;</Value>
+        <TypeName>System.String</TypeName>
+        <SaveTypeName>System.String</SaveTypeName>
+      </DataElement>
+    </Elements>
+  </DataSet>
+</ArrayOfDataSet>
