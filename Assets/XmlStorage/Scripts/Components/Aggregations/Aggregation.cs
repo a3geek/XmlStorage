@@ -103,6 +103,10 @@ namespace XmlStorage.Components.Aggregations
                 var type = e.ValueType;
                 var saveType = e.SaveType;
 
+                if(e.ValueType == null || saveType == null)
+                {
+                    continue;
+                }
                 if(this.dictionary.ContainsKey(saveType) == false)
                 {
                     this.dictionary[saveType] = new Dictionary<string, object>();

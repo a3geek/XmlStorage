@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace XmlStorage.Components.Data
@@ -126,24 +127,27 @@ namespace XmlStorage.Components.Data
             }
 
             // If the TypeName is a full name, then we can try loading the defining assembly directly
-            if(typeName.Contains("."))
+            if(typeName.Contains(".") == true)
             {
                 // Get the name of the assembly (Assumption is that we are using 
                 // fully-qualified type names)
                 var assemblyName = typeName.Substring(0, typeName.IndexOf('.'));
 
                 // Attempt to load the indicated Assembly
-                var assembly = Assembly.Load(assemblyName);
-                if(assembly == null)
+                try
+                {
+                    var assembly = Assembly.Load(assemblyName);
+
+                    // Ask that assembly to return the proper Type
+                    type = assembly.GetType(typeName);
+                    if(type != null)
+                    {
+                        return type;
+                    }
+                }
+                catch(SystemException e) when(e is FileNotFoundException || e is NullReferenceException)
                 {
                     return null;
-                }
-
-                // Ask that assembly to return the proper Type
-                type = assembly.GetType(typeName);
-                if(type != null)
-                {
-                    return type;
                 }
             }
 
@@ -153,18 +157,21 @@ namespace XmlStorage.Components.Data
 
             foreach(var assemblyName in referencedAssemblies)
             {
-                // Load the referenced assembly
-                var assembly = Assembly.Load(assemblyName);
-
-                if(assembly != null)
+                try
                 {
+                    // Load the referenced assembly
+                    var assembly = Assembly.Load(assemblyName);
+
                     // See if that assembly defines the named type
                     type = assembly.GetType(typeName);
-
                     if(type != null)
                     {
                         return type;
                     }
+                }
+                catch(SystemException e) when(e is FileNotFoundException || e is NullReferenceException)
+                {
+                    continue;
                 }
             }
 
