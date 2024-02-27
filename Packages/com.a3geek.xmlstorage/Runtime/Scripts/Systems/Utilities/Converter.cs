@@ -96,7 +96,7 @@ namespace XmlStorage.Systems.Utilities
             var type = value.GetType();
             if(IsNeedSerialization(type) == false && forceSerialize == false)
             {
-                return new DataElement(key, value, type, saveType);
+                return new DataElement(key, value, type);
             }
 
             using(var sw = new FileUtils.EncodedStringWriter(encode))
@@ -104,7 +104,7 @@ namespace XmlStorage.Systems.Utilities
                 var serializer = new XmlSerializer(type);
                 serializer.Serialize(sw, value);
 
-                return new DataElement(key, sw.ToString(), type, saveType);
+                return new DataElement(key, sw.ToString(), type);
             }
         }
 

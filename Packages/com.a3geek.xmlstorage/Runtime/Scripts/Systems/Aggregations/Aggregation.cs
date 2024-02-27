@@ -93,19 +93,19 @@ namespace XmlStorage.Systems.Aggregations
             for(var i = 0; i < list.Count; i++)
             {
                 var e = list[i];
-                var type = e.ValueType;
-                var saveType = e.SaveType;
+                var type = e.Type;
+                //var saveType = e.SaveType;
 
-                if(e.ValueType == null || saveType == null)
+                if(e.Type == null)
                 {
                     continue;
                 }
-                if(this.dictionary.ContainsKey(saveType) == false)
+                if(this.dictionary.ContainsKey(type) == false)
                 {
-                    this.dictionary[saveType] = new Dictionary<string, object>();
+                    this.dictionary[type] = new Dictionary<string, object>();
                 }
 
-                this.dictionary[saveType][e.Key] = Converter.Deserialize(type, e.Value, this.IsAllTypesSerialize);
+                this.dictionary[type][e.Key] = Converter.Deserialize(type, e.Value, this.IsAllTypesSerialize);
             }
         }
 
