@@ -8,139 +8,87 @@ namespace XmlStorage
     using Systems;
     using Systems.Aggregations;
     using Systems.Utilities;
+    using Data;
+    using Utils;
+    using Utils.Extensions;
+    using XmlStorage.XmlData;
+    using System.Runtime.CompilerServices;
+    using System.Linq;
 
-    using SerializeType = List<Systems.Data.DataSet>;
-
-    /// <summary>
-    /// セットしたデータ群をXML形式で保存する
-    /// </summary>
     public static partial class Storage
     {
-        /// <summary><see cref="CurrentAggregation"/>がデータ群を保存するファイルを置くフォルダ</summary>
-        public static string DirectoryPath
+        public static string[] DirectoryPaths
         {
-            get => Folder;
-            set => Folder = FileUtils.AdjustAsDirectoryPath(value, Folder, false);
-        }
-        /// <summary>現在選択されている集団名</summary>
-        public static string CurrentAggregationName
-        {
-            get; private set;
-        }
-        /// <summary>デフォルトの集団名</summary>
-        public static string DefaultAggregationName => XmlStorageConsts.DefaultAggregationName;
-        /// <summary>デフォルトの保存ディレクトリのフルパス</summary>
-        public static string DefaultSaveDirectory => XmlStorageConsts.DefaultSaveDirectory;
-        /// <summary>現在選択されている集団</summary>
-        public static Aggregation CurrentAggregation => Aggregations[CurrentAggregationName];
-
-        /// <summary>集団群</summary>
-        private static Dictionary<string, Aggregation> Aggregations
-        {
-            set => Aggs = value;
-            get
+            get => DirectoryPathsInternal;
+            set
             {
-                if(Aggs == null)
+                if(value == null || value.Length <= 0)
                 {
-                    Load();
+                    return;
                 }
 
-                return Aggs;
+                DirectoryPathsInternal = value;
             }
         }
+        public static string CurrentDataGroupName { get; private set; } = Consts.DataGroupName;
 
-        /// <summary>集団群</summary>
-        private static Dictionary<string, Aggregation> Aggs = null;
-        /// <summary>保存するファイルを格納するフォルダ</summary>
-        private static string Folder = DefaultSaveDirectory;
+        private static readonly DataGroups DataGroups = new();
+        private static string[] DirectoryPathsInternal = Consts.SaveDirectoryPaths;
 
 
-        /// <summary>静的コンストラクタ</summary>
-        static Storage()
-        {
-            CurrentAggregationName = DefaultAggregationName;
-        }
-
-        /// <summary>
-        /// セットしたデータ群をXML形式でファイルに保存する
-        /// </summary>
-        /// <remarks>全ての集団のデータ群を保存する</remarks>
         public static void Save()
         {
-            var dic = Converter.AggregationsToDictionary(Aggregations, XmlStorageConsts.Encode);
-
-            foreach(var pair in dic)
+            var fileGroups = DataGroups.GetFileGroups();
+            foreach(var (filePath, dataGroups) in fileGroups)
             {
-                using(var sw = new StreamWriter(pair.Key, false, XmlStorageConsts.Encode))
-                {
-                    var serializer = new XmlSerializer(typeof(SerializeType));
-                    serializer.Serialize(sw, pair.Value);
-                }
+                Serializer.Serialize(
+                    filePath,
+                    dataGroups.Select(dataGroup => DataGroup.ToXmlDataSet(dataGroup)).ToList()
+                );
             }
         }
 
-        /// <summary>
-        /// 保存したファイルから情報を読み込む
-        /// </summary>
-        /// <returns>読み込んだ情報</returns>
         public static void Load()
         {
-            var aggs = new Dictionary<string, Aggregation>()
-            {
-                [DefaultAggregationName] = new Aggregation(null, DefaultAggregationName)
-            };
+            var groups = new Dictionary<string, DataGroup>();
 
-            foreach(var path in SearchFiles())
+            foreach(var path in DirectoryPaths)
             {
-                Converter.Deserialize(path, XmlStorageConsts.Encode, ref aggs);
+                foreach(var (filePath, datasets) in XmlDataSets.Load(path))
+                {
+                    foreach(var dataset in datasets)
+                    {
+                        var group = DataGroup.FromXmlDataSet(filePath, dataset);
+
+                        if(groups.TryGetValue(group.GroupName, out var dataGroup))
+                        {
+                            dataGroup.Merge(group);
+                        }
+                        else
+                        {
+                            groups[group.GroupName] = group;
+                        }
+                    }
+                }
             }
 
-            Aggregations = aggs;
-            CurrentAggregationName = DefaultAggregationName;
+            DataGroups.Set(groups);
         }
 
-        /// <summary>
-        /// <see cref="DirectoryPath"/>に指定の拡張子のファイルがないか検索する
-        /// </summary>
-        /// <returns>検索結果</returns>
-        private static string[] SearchFiles()
-        {
-            if(Directory.Exists(DirectoryPath) == false)
-            {
-                Directory.CreateDirectory(DirectoryPath);
-            }
+        //private static void Action(string aggregationName, Action<Aggregation> action)
+        //{
+        //    Func(aggregationName, agg =>
+        //    {
+        //        action(agg);
+        //        return true;
+        //    });
+        //}
 
-            return Directory.GetFiles(
-                DirectoryPath, XmlStorageConsts.ExtensionSearchPattern, SearchOption.AllDirectories
-            );
-        }
-
-        /// <summary>
-        /// <paramref name="aggregationName"/>で指定した集団に対して処理を行う
-        /// </summary>
-        /// <param name="aggregationName">集団名</param>
-        /// <param name="action">処理内容</param>
-        private static void Action(string aggregationName, Action<Aggregation> action)
-        {
-            Func(aggregationName, agg =>
-            {
-                action(agg);
-                return true;
-            });
-        }
-
-        /// <summary>
-        /// <paramref name="aggregationName"/>で指定した集団に対して処理を行い値を返す
-        /// </summary>
-        /// <typeparam name="T">返す値の型</typeparam>
-        /// <param name="aggregationName">集団名</param>
-        /// <param name="func">処理内容</param>
-        /// <returns>返却値</returns>
-        private static T Func<T>(string aggregationName, Func<Aggregation, T> func)
-        {
-            return HasAggregation(aggregationName) == true ?
-                func(Aggregations[aggregationName]) :
-                func(CurrentAggregation);
-        }
+        //private static T Func<T>(string aggregationName, Func<Aggregation, T> func)
+        //{
+        //    return HasAggregation(aggregationName) == true ?
+        //        func(Aggregations[aggregationName]) :
+        //        func(CurrentAggregation);
+        //}
     }
 }

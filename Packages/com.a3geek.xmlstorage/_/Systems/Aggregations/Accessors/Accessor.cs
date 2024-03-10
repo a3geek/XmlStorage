@@ -72,7 +72,7 @@ namespace XmlStorage.Systems.Aggregations.Accessors
         /// <returns>データの型情報</returns>
         public override Type[] GetTypes()
             => this.dictionary.Keys.ToArray();
-
+        
         /// <summary>
         /// セットした全てのデータを消去する
         /// </summary>

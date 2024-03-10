@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace XmlStorage.Data
 {
     using XmlData;
     using XmlStorage.Utils.Extensions;
-    using Data = Dictionary<Type, Dictionary<string, object>>;
 
     public partial class DataGroup
     {
@@ -13,16 +12,13 @@ namespace XmlStorage.Data
         {
             var elements = new List<XmlDataElement>();
 
-            foreach(var (type, data) in this.data)
+            foreach(var (type, key, value) in this)
             {
-                foreach(var (key, value) in data)
-                {
-                    elements.Add(new XmlDataElement(
-                        key, Serializer.Serialize(type, value), type
-                    ));
-                }
+                elements.Add(new XmlDataElement(
+                    key, Serializer.Serialize(type, value), type
+                ));
             }
-
+            
             return elements;
         }
 
@@ -31,9 +27,9 @@ namespace XmlStorage.Data
             return new XmlDataSet(group.GroupName, group.GetXmlDataElements());
         }
 
-        public static DataGroup FromXmlDataSet(in XmlDataSet dataset, string fileName)
+        public static DataGroup FromXmlDataSet(string filePath, in XmlDataSet dataset)
         {
-            var data = new Data();
+            var data = new Dictionary<Type, Dictionary<string, object>>();
             foreach(var e in dataset.Elements)
             {
                 if(e.Type == null)
@@ -45,7 +41,7 @@ namespace XmlStorage.Data
                 d[e.Key] = Serializer.Deserialize(e.Type, e.Value);
             }
 
-            return new DataGroup(dataset.GroupName, data, fileName);
+            return new DataGroup(dataset.GroupName, filePath, data);
         }
     }
 }
