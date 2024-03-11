@@ -15,10 +15,10 @@ namespace XmlStorage.XmlData
         );
 
 
-        public static void Serialize(string filePath, List<XmlDataSet> xmlDataSets)
+        public static void Serialize(string filePath, XmlDataSets xmlDataSets)
         {
             using var sw = new StreamWriter(filePath, false, Consts.Encode);
-            XmlDataSetSerializer.Serialize(sw, new XmlDataSets(xmlDataSets));
+            XmlDataSetSerializer.Serialize(sw, xmlDataSets);
         }
 
         public static object Serialize(Type type, object value)
@@ -37,7 +37,6 @@ namespace XmlStorage.XmlData
 
         public static XmlDataSets Deserialize(string filePath)
         {
-            UnityEngine.Debug.Log($"Deserialize: {filePath}");
             using var sr = new StreamReader(filePath, Consts.Encode);
             return (XmlDataSets)XmlDataSetSerializer.Deserialize(sr);
         }

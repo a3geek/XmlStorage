@@ -14,6 +14,7 @@ namespace XmlStorage
     using XmlStorage.XmlData;
     using System.Runtime.CompilerServices;
     using System.Linq;
+    using System.Data;
 
     public static partial class Storage
     {
@@ -43,36 +44,40 @@ namespace XmlStorage
             {
                 Serializer.Serialize(
                     filePath,
-                    dataGroups.Select(dataGroup => DataGroup.ToXmlDataSet(dataGroup)).ToList()
+                    DataGroup.ToXmlDataSets(dataGroups)
                 );
             }
         }
 
         public static void Load()
         {
-            var groups = new Dictionary<string, DataGroup>();
-
+            var dataGroups = new Dictionary<string, DataGroup>();
             foreach(var path in DirectoryPaths)
             {
                 foreach(var (filePath, datasets) in XmlDataSets.Load(path))
                 {
-                    foreach(var dataset in datasets)
-                    {
-                        var group = DataGroup.FromXmlDataSet(filePath, dataset);
-
-                        if(groups.TryGetValue(group.GroupName, out var dataGroup))
-                        {
-                            dataGroup.Merge(group);
-                        }
-                        else
-                        {
-                            groups[group.GroupName] = group;
-                        }
-                    }
+                    var groups = DataGroup.FromXmlDataSets(filePath, datasets);
+                    Merge(dataGroups, groups);
                 }
             }
 
-            DataGroups.Set(groups);
+            UnityEngine.Debug.Log(dataGroups.Count);
+            DataGroups.Set(dataGroups);
+        }
+
+        private static void Merge(Dictionary<string, DataGroup> dataGroups, List<DataGroup> groups)
+        {
+            foreach(var group in groups)
+            {
+                if(dataGroups.TryGetValue(group.GroupName, out var dataGroup))
+                {
+                    dataGroup.Merge(group);
+                }
+                else
+                {
+                    dataGroups[group.GroupName] = group;
+                }
+            }
         }
 
         //private static void Action(string aggregationName, Action<Aggregation> action)

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace XmlStorage.Data
 {
+    using System.Xml.Linq;
     using Utils.Extensions;
 
     public class DataGroups
@@ -12,6 +13,18 @@ namespace XmlStorage.Data
         public void Set(Dictionary<string, DataGroup> dataGroups)
         {
             this.dataGroups = dataGroups;
+
+            UnityEngine.Debug.Log(dataGroups.Count);
+            foreach (var (name, group) in dataGroups)
+            {
+                UnityEngine.Debug.Log(name);
+                UnityEngine.Debug.Log(group.FullPath);
+                foreach(var (type, key, value) in group)
+                {
+                    UnityEngine.Debug.Log($"{type} {key} {value}");
+                }
+                UnityEngine.Debug.Log("");
+            }
         }
 
         public Dictionary<string, DataGroup> Get()

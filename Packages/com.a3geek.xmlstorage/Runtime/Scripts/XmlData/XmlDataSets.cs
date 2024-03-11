@@ -4,22 +4,23 @@ using System.Xml.Serialization;
 
 namespace XmlStorage.XmlData
 {
+    using System.Linq;
     using Utils;
 
     [XmlRoot("ArrayOfDataSet")]
     public sealed class XmlDataSets
     {
         [XmlArray("DataSet")]
-        private readonly List<XmlDataSet> xmlDataSets = new();
+        private readonly IEnumerable<XmlDataSet> xmlDataSets = Enumerable.Empty<XmlDataSet>();
 
 
         public XmlDataSets()
         {
         }
 
-        public XmlDataSets(List<XmlDataSet> datasets)
+        public XmlDataSets(IEnumerable<XmlDataSet> datasets)
         {
-            this.xmlDataSets = datasets ?? new();
+            this.xmlDataSets = datasets ?? Enumerable.Empty<XmlDataSet>();
         }
 
         public IEnumerator<XmlDataSet> GetEnumerator()
@@ -30,9 +31,9 @@ namespace XmlStorage.XmlData
             }
         }
 
-        public static implicit operator List<XmlDataSet>(XmlDataSets xmlDataSets)
+        public static explicit operator List<XmlDataSet>(XmlDataSets xmlDataSets)
         {
-            return xmlDataSets.xmlDataSets;
+            return new(xmlDataSets.xmlDataSets);
         }
 
         public static List<(string filePath, XmlDataSets datasets)> Load(string directoryPath)
@@ -41,6 +42,7 @@ namespace XmlStorage.XmlData
             {
                 return new();
             }
+            UnityEngine.Debug.Log(directoryPath);
 
             var datasets = new List<(string filePath, XmlDataSets dataset)>();
             var filePaths = Directory.GetFiles(
@@ -50,9 +52,18 @@ namespace XmlStorage.XmlData
             foreach(var filePath in filePaths)
             {
                 var xmlDataSets = Serializer.Deserialize(filePath);
+
+                var list = (List<XmlDataSet>)xmlDataSets;
+                UnityEngine.Debug.Log(filePath + " : " + list.Count);
+                foreach(var xmlDataSet in xmlDataSets)
+                {
+                    UnityEngine.Debug.Log(xmlDataSet.GroupName);
+                }
+
                 datasets.Add((filePath, xmlDataSets));
             }
 
+            UnityEngine.Debug.Log(datasets.Count);
             return datasets;
         }
     }
