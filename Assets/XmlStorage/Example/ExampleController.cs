@@ -86,6 +86,9 @@ namespace XmlStorage.Examples
 
         void Awake()
         {
+            //Storage.Test();
+            //Storage.Save();
+
             Storage.Load();
         //    SecondaryFolder =
         //        Directory.GetCurrentDirectory() + XmlStorageConsts.Separator + "Saves2" + XmlStorageConsts.Separator;

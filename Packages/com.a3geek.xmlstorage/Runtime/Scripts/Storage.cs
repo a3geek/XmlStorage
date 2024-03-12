@@ -11,10 +11,7 @@ namespace XmlStorage
     using Data;
     using Utils;
     using Utils.Extensions;
-    using XmlStorage.XmlData;
-    using System.Runtime.CompilerServices;
-    using System.Linq;
-    using System.Data;
+    using XmlData;
 
     public static partial class Storage
     {
@@ -61,7 +58,16 @@ namespace XmlStorage
                 }
             }
 
-            UnityEngine.Debug.Log(dataGroups.Count);
+            foreach(var (name, group) in dataGroups)
+            {
+                UnityEngine.Debug.Log($"{name} : {group.GroupName}, {group.FileName}, {group.FullPath}");
+                foreach(var (type, key, value) in group)
+                {
+                    UnityEngine.Debug.Log($"{type}, {key}, {value}");
+                }
+                UnityEngine.Debug.Log("");
+            }
+
             DataGroups.Set(dataGroups);
         }
 

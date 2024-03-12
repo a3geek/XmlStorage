@@ -5,12 +5,13 @@ using System.Xml.Serialization;
 namespace XmlStorage.XmlData
 {
     [Serializable]
+    [XmlRoot("DataSet")]
     public sealed class XmlDataSet
     {
         [XmlElement("AggregationName")]
-        public string GroupName { get; set; } = "";
+        public string GroupName = "";
         [XmlArray("Elements"), XmlArrayItem("DataElement")]
-        public List<XmlDataElement> Elements { get; set; } = new();
+        public List<XmlDataElement> Elements = new();
 
 
         public XmlDataSet() { }

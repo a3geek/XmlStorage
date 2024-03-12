@@ -1,17 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace XmlStorage.XmlData
 {
-    using System.Linq;
     using Utils;
 
+    [Serializable]
     [XmlRoot("ArrayOfDataSet")]
     public sealed class XmlDataSets
     {
-        [XmlArray("DataSet")]
-        private readonly IEnumerable<XmlDataSet> xmlDataSets = Enumerable.Empty<XmlDataSet>();
+        [XmlElement("DataSet")]
+        public List<XmlDataSet> DataSets = new();
 
 
         public XmlDataSets()
@@ -20,12 +22,12 @@ namespace XmlStorage.XmlData
 
         public XmlDataSets(IEnumerable<XmlDataSet> datasets)
         {
-            this.xmlDataSets = datasets ?? Enumerable.Empty<XmlDataSet>();
+            this.DataSets = datasets.ToList();
         }
 
         public IEnumerator<XmlDataSet> GetEnumerator()
         {
-            foreach(var xmlDataSet in this.xmlDataSets)
+            foreach(var xmlDataSet in this.DataSets)
             {
                 yield return xmlDataSet;
             }
@@ -33,7 +35,7 @@ namespace XmlStorage.XmlData
 
         public static explicit operator List<XmlDataSet>(XmlDataSets xmlDataSets)
         {
-            return new(xmlDataSets.xmlDataSets);
+            return new(xmlDataSets.DataSets);
         }
 
         public static List<(string filePath, XmlDataSets datasets)> Load(string directoryPath)
@@ -42,7 +44,6 @@ namespace XmlStorage.XmlData
             {
                 return new();
             }
-            UnityEngine.Debug.Log(directoryPath);
 
             var datasets = new List<(string filePath, XmlDataSets dataset)>();
             var filePaths = Directory.GetFiles(
@@ -52,18 +53,9 @@ namespace XmlStorage.XmlData
             foreach(var filePath in filePaths)
             {
                 var xmlDataSets = Serializer.Deserialize(filePath);
-
-                var list = (List<XmlDataSet>)xmlDataSets;
-                UnityEngine.Debug.Log(filePath + " : " + list.Count);
-                foreach(var xmlDataSet in xmlDataSets)
-                {
-                    UnityEngine.Debug.Log(xmlDataSet.GroupName);
-                }
-
                 datasets.Add((filePath, xmlDataSets));
             }
 
-            UnityEngine.Debug.Log(datasets.Count);
             return datasets;
         }
     }

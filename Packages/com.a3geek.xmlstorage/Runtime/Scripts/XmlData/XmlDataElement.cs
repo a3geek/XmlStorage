@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace XmlStorage.XmlData
 {
@@ -7,9 +8,12 @@ namespace XmlStorage.XmlData
     [Serializable]
     public sealed class XmlDataElement
     {
-        public string Key { get; set; } = "";
-        public object Value { get; set; } = null;
-        public string TypeName { get; set; } = "";
+        [XmlElement("Key")]
+        public string Key = "";
+        [XmlElement("Value")]
+        public object Value = null;
+        [XmlElement("TypeName")]
+        public string TypeName = "";
         public Type Type => this.type ??= this.TypeName.GetTypeAsTypeName();
 
         private Type type = null;
