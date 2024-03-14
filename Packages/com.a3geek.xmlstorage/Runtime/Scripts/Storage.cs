@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
 
 namespace XmlStorage
 {
-    using Systems;
-    using Systems.Aggregations;
-    using Systems.Utilities;
     using Data;
     using Utils;
     using Utils.Extensions;
@@ -15,12 +9,13 @@ namespace XmlStorage
 
     public static partial class Storage
     {
+        public static DataGroup CurrentDataGroup => DataGroups.Get(CurrentDataGroupName);
         public static string[] DirectoryPaths
         {
             get => DirectoryPathsInternal;
             set
             {
-                if(value == null || value.Length <= 0)
+                if((value?.Length ?? -1) <= 0)
                 {
                     return;
                 }
@@ -85,21 +80,5 @@ namespace XmlStorage
                 }
             }
         }
-
-        //private static void Action(string aggregationName, Action<Aggregation> action)
-        //{
-        //    Func(aggregationName, agg =>
-        //    {
-        //        action(agg);
-        //        return true;
-        //    });
-        //}
-
-        //private static T Func<T>(string aggregationName, Func<Aggregation, T> func)
-        //{
-        //    return HasAggregation(aggregationName) == true ?
-        //        func(Aggregations[aggregationName]) :
-        //        func(CurrentAggregation);
-        //}
     }
 }

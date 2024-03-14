@@ -3,7 +3,7 @@ using System.Text;
 
 namespace XmlStorage.Utils
 {
-    public class EncodedStringWriter : StringWriter
+    internal class EncodedStringWriter : StringWriter
     {
         public override Encoding Encoding => this.encoding;
 

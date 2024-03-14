@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace XmlStorage.Utils.Extensions
 {
-    public static class DictionaryExtensions
+    internal static class DictionaryExtensions
     {
         public static T2 GetOrAdd<T1, T2>(this IDictionary<T1, T2> dictionary, T1 key)
             where T2 : class, new()

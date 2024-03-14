@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace XmlStorage.Utils.Extensions
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         public static string AdjustAsFileName(this string fileName)
         {

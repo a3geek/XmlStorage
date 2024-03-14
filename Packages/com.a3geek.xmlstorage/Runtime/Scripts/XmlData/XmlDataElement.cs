@@ -6,7 +6,7 @@ namespace XmlStorage.XmlData
     using Utils.Extensions;
 
     [Serializable]
-    public sealed class XmlDataElement
+    internal sealed class XmlDataElement
     {
         [XmlElement("Key")]
         public string Key = "";

@@ -4,7 +4,7 @@ namespace XmlStorage.Data
 {
     using Utils.Extensions;
 
-    public class DataGroups
+    internal class DataGroups
     {
         private Dictionary<string, DataGroup> dataGroups = null;
 
@@ -12,6 +12,17 @@ namespace XmlStorage.Data
         public void Set(Dictionary<string, DataGroup> dataGroups)
         {
             this.dataGroups = dataGroups;
+        }
+
+        public DataGroup Get(string groupName)
+        {
+            if(!this.dataGroups.TryGetValue(groupName, out var group))
+            {
+                group = new DataGroup(groupName);
+                this.dataGroups[groupName] = group;
+            }
+
+            return group;
         }
 
         public Dictionary<string, DataGroup> Get()

@@ -7,7 +7,7 @@ namespace XmlStorage.XmlData
     using Utils;
     using Utils.Extensions;
 
-    public static class Serializer
+    internal static class Serializer
     {
         private static readonly XmlSerializer XmlDataSetSerializer = new(
             typeof(XmlDataSets), new XmlRootAttribute("ArrayOfDataSet")

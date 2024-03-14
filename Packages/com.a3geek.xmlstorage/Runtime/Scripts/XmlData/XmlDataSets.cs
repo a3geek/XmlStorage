@@ -10,7 +10,7 @@ namespace XmlStorage.XmlData
 
     [Serializable]
     [XmlRoot("ArrayOfDataSet")]
-    public sealed class XmlDataSets
+    internal sealed class XmlDataSets
     {
         [XmlElement("DataSet")]
         public List<XmlDataSet> DataSets = new();

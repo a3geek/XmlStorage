@@ -1,10 +1,11 @@
 using System.IO;
 using System.Text;
-using XmlStorage.Utils.Extensions;
 
 namespace XmlStorage.Utils
 {
-    public static class Consts
+    using Extensions;
+
+    internal static class Consts
     {
         public static readonly char Separator = Path.DirectorySeparatorChar;
         public static readonly string Extension = ".xml";
@@ -14,14 +15,20 @@ namespace XmlStorage.Utils
 
         public static readonly string SaveDirectoryName
             = "Saves".AdjustAsDirectoryPath(creatable: false);
-        public static readonly string[] SaveDirectoryPaths = new []
+        public static readonly string SaveFileName = nameof(XmlStorage) + Extension;
+        public static readonly string[] SaveDirectoryPaths = new[]
         {
+#if UNITY_EDITOR
+
+#else
             (SaveDirectoryOriginPath + ".." + Separator + SaveDirectoryName).AdjustAsDirectoryPath(creatable: false),
+            
+#endif
             (SaveDirectoryOriginPath + SaveDirectoryName).AdjustAsDirectoryPath(creatable: false)
         };
 
         private static readonly string SaveDirectoryOriginPath
-            = 
+            =
 #if UNITY_EDITOR
                 Directory.GetCurrentDirectory()
 #else
