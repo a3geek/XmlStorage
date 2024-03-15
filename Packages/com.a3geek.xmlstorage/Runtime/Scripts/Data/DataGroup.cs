@@ -41,7 +41,7 @@ namespace XmlStorage.Data
             this.data = data;
         }
 
-        internal void Update<T>(string key, T value)
+        internal void Update<T>(in string key, in T value)
         {
             var type = typeof(T);
             if(!this.data.ContainsKey(type))
@@ -52,7 +52,25 @@ namespace XmlStorage.Data
             this.data[type][key] = value;
         }
 
-        internal void Merge(DataGroup other)
+        internal bool TryGet<T>(in string key, out T value)
+        {
+            var type = typeof(T);
+            if(!this.data.TryGetValue(type, key, out var obj) || obj is not T t)
+            {
+                value = default;
+                return false;
+            }
+
+            value = t;
+            return true;
+        }
+
+        internal bool TryGet(Type type, out Dictionary<string, object> value)
+        {
+            return this.data.TryGetValue(type, out value);
+        }
+
+        internal void Merge(in DataGroup other)
         {
             foreach(var (type, key, value) in other)
             {
