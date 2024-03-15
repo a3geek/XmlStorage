@@ -66,7 +66,7 @@ namespace XmlStorage
             DataGroups.Set(dataGroups);
         }
 
-        private static void Merge(Dictionary<string, DataGroup> dataGroups, List<DataGroup> groups)
+        private static void Merge(Dictionary<string, DataGroup> dataGroups, in List<DataGroup> groups)
         {
             foreach(var group in groups)
             {

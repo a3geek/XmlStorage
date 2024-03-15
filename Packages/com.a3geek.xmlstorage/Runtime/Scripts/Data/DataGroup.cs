@@ -28,12 +28,12 @@ namespace XmlStorage.Data
         internal readonly Data data = new();
 
 
-        internal DataGroup(string groupName)
+        internal DataGroup(in string groupName)
         {
             this.GroupName = groupName;
         }
 
-        internal DataGroup(string groupName, string filePath, Data data)
+        internal DataGroup(in string groupName, in string filePath, Data data)
         {
             this.GroupName = groupName;
             this.directoryPath = Path.GetDirectoryName(filePath).AdjustAsDirectoryPath(creatable: true);
@@ -65,7 +65,7 @@ namespace XmlStorage.Data
             return true;
         }
 
-        internal bool TryGet(Type type, out Dictionary<string, object> value)
+        internal bool TryGet(in Type type, out Dictionary<string, object> value)
         {
             return this.data.TryGetValue(type, out value);
         }

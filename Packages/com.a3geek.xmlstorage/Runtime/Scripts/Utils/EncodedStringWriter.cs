@@ -14,7 +14,7 @@ namespace XmlStorage.Utils
         {
         }
 
-        public EncodedStringWriter(Encoding encoding) : this()
+        public EncodedStringWriter(in Encoding encoding) : this()
         {
             this.encoding = encoding ?? this.encoding;
         }

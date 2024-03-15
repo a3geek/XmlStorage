@@ -10,7 +10,7 @@ namespace XmlStorage.XmlData
 
     [Serializable]
     [XmlRoot("ArrayOfDataSet")]
-    internal sealed class XmlDataSets
+    public sealed class XmlDataSets
     {
         [XmlElement("DataSet")]
         public List<XmlDataSet> DataSets = new();
@@ -20,7 +20,7 @@ namespace XmlStorage.XmlData
         {
         }
 
-        public XmlDataSets(IEnumerable<XmlDataSet> datasets)
+        public XmlDataSets(in IEnumerable<XmlDataSet> datasets)
         {
             this.DataSets = datasets.ToList();
         }
@@ -33,12 +33,12 @@ namespace XmlStorage.XmlData
             }
         }
 
-        public static explicit operator List<XmlDataSet>(XmlDataSets xmlDataSets)
+        public static explicit operator List<XmlDataSet>(in XmlDataSets xmlDataSets)
         {
             return new(xmlDataSets.DataSets);
         }
 
-        public static List<(string filePath, XmlDataSets datasets)> Load(string directoryPath)
+        public static List<(string filePath, XmlDataSets datasets)> Load(in string directoryPath)
         {
             if(!Directory.Exists(directoryPath))
             {

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace XmlStorage.Examples
 {
-    using Systems;
 
     /// <summary>
     /// サンプル用コントローラー

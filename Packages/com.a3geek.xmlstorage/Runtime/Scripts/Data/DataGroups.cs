@@ -14,7 +14,7 @@ namespace XmlStorage.Data
             this.dataGroups = dataGroups;
         }
 
-        public DataGroup Get(string groupName)
+        public DataGroup Get(in string groupName)
         {
             if(!this.dataGroups.TryGetValue(groupName, out var group))
             {

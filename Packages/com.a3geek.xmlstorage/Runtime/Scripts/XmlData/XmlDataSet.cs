@@ -6,7 +6,7 @@ namespace XmlStorage.XmlData
 {
     [Serializable]
     [XmlRoot("DataSet")]
-    internal sealed class XmlDataSet
+    public sealed class XmlDataSet
     {
         [XmlElement("AggregationName")]
         public string GroupName = "";
@@ -16,7 +16,7 @@ namespace XmlStorage.XmlData
 
         public XmlDataSet() { }
 
-        public XmlDataSet(string groupName, List<XmlDataElement> elements)
+        public XmlDataSet(in string groupName, in List<XmlDataElement> elements)
         {
             this.GroupName = groupName;
             this.Elements = elements ?? new();

@@ -14,13 +14,13 @@ namespace XmlStorage.XmlData
         );
 
 
-        public static void Serialize(string filePath, XmlDataSets xmlDataSets)
+        public static void Serialize(in string filePath, in XmlDataSets xmlDataSets)
         {
             using var sw = new StreamWriter(filePath, false, Consts.Encode);
             XmlDataSetSerializer.Serialize(sw, xmlDataSets);
         }
 
-        public static object Serialize(Type type, object value)
+        public static object Serialize(in Type type, in object value)
         {
             if(!type.IsNeedSerialize())
             {
@@ -34,13 +34,13 @@ namespace XmlStorage.XmlData
             return sw.ToString();
         }
 
-        public static XmlDataSets Deserialize(string filePath)
+        public static XmlDataSets Deserialize(in string filePath)
         {
             using var sr = new StreamReader(filePath, Consts.Encode);
             return (XmlDataSets)XmlDataSetSerializer.Deserialize(sr);
         }
 
-        public static object Deserialize(Type type, object value)
+        public static object Deserialize(in Type type, in object value)
         {
             if(!type.IsNeedSerialize())
             {

@@ -1,19 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
-using System.Linq;
 
 namespace XmlStorage
 {
-    using Systems;
-    using Systems.Aggregations;
-    using Systems.Utilities;
-    using Data;
-    using Utils;
-    using Utils.Extensions;
-    using XmlData;
-
     public static partial class Storage
     {
         public static IEnumerable<Type> GetTypes()
@@ -82,7 +71,7 @@ namespace XmlStorage
         #endregion
 
         #region Getter
-        public static T Get<T>(in string key, T defaultValue = default)
+        public static T Get<T>(in string key, in T defaultValue = default)
         {
             return GetValue(key, defaultValue);
         }
@@ -102,12 +91,12 @@ namespace XmlStorage
             return GetValue(key, defaultValue);
         }
 
-        public static string GetString(in string key, string defaultValue = "")
+        public static string GetString(in string key, in string defaultValue = "")
         {
             return GetValue(key, defaultValue);
         }
 
-        private static T GetValue<T>(in string key, T defaultValue = default)
+        private static T GetValue<T>(in string key, in T defaultValue = default)
         {
             var group = CurrentDataGroup;
             return group.TryGet(key, out T value) ? value : defaultValue;

@@ -23,17 +23,17 @@ namespace XmlStorage.Data
             return elements;
         }
 
-        internal static XmlDataSets ToXmlDataSets(List<DataGroup> groups)
+        internal static XmlDataSets ToXmlDataSets(in List<DataGroup> groups)
         {
             return new XmlDataSets(groups.Select(group => ToXmlDataSet(group)));
         }
 
-        internal static XmlDataSet ToXmlDataSet(DataGroup group)
+        internal static XmlDataSet ToXmlDataSet(in DataGroup group)
         {
             return new XmlDataSet(group.GroupName, group.GetXmlDataElements());
         }
 
-        internal static List<DataGroup> FromXmlDataSets(string filePath, in XmlDataSets datasets)
+        internal static List<DataGroup> FromXmlDataSets(in string filePath, in XmlDataSets datasets)
         {
             var groups = new List<DataGroup>();
             foreach(var dataset in datasets)
@@ -44,7 +44,7 @@ namespace XmlStorage.Data
             return groups;
         }
 
-        internal static DataGroup FromXmlDataSet(string filePath, in XmlDataSet dataset)
+        internal static DataGroup FromXmlDataSet(in string filePath, in XmlDataSet dataset)
         {
             var data = new Dictionary<Type, Dictionary<string, object>>();
             foreach(var e in dataset.Elements)
