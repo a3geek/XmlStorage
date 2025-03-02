@@ -9,23 +9,23 @@ namespace XmlStorage.XmlData
     using Utils;
 
     [Serializable]
-    [XmlRoot("ArrayOfDataSet")]
-    public sealed class XmlDataSets
+    [XmlRoot("ArrayOfDataGroup")]
+    public sealed class XmlDataGroups
     {
-        [XmlElement("DataSet")]
-        public List<XmlDataSet> DataSets = new();
+        [XmlElement("DataGroup")]
+        public List<XmlDataGroup> DataSets = new();
 
 
-        public XmlDataSets()
+        public XmlDataGroups()
         {
         }
 
-        public XmlDataSets(in IEnumerable<XmlDataSet> datasets)
+        public XmlDataGroups(in IEnumerable<XmlDataGroup> datasets)
         {
             this.DataSets = datasets.ToList();
         }
 
-        public IEnumerator<XmlDataSet> GetEnumerator()
+        public IEnumerator<XmlDataGroup> GetEnumerator()
         {
             foreach(var xmlDataSet in this.DataSets)
             {
@@ -33,19 +33,19 @@ namespace XmlStorage.XmlData
             }
         }
 
-        public static explicit operator List<XmlDataSet>(in XmlDataSets xmlDataSets)
+        public static explicit operator List<XmlDataGroup>(in XmlDataGroups xmlDataSets)
         {
             return new(xmlDataSets.DataSets);
         }
 
-        public static List<(string filePath, XmlDataSets datasets)> Load(in string directoryPath)
+        public static List<(string filePath, XmlDataGroups datasets)> Load(in string directoryPath)
         {
             if(!Directory.Exists(directoryPath))
             {
                 return new();
             }
 
-            var datasets = new List<(string filePath, XmlDataSets dataset)>();
+            var datasets = new List<(string filePath, XmlDataGroups dataset)>();
             var filePaths = Directory.GetFiles(
                 directoryPath, Consts.FileSearchPattern, SearchOption.AllDirectories
             );

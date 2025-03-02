@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
+using XmlStorage.Data;
+using XmlStorage.Utils;
+using XmlStorage.XmlData;
 
 namespace XmlStorage
 {
-    using Data;
-    using Utils;
-    using Utils.Extensions;
-    using XmlData;
-
     public static partial class Storage
     {
         public static DataGroup CurrentDataGroup => DataGroups.Get(CurrentDataGroupName);
@@ -36,7 +34,7 @@ namespace XmlStorage
             {
                 Serializer.Serialize(
                     filePath,
-                    DataGroup.ToXmlDataSets(dataGroups)
+                    XmlDataCoordinator.ToXmlDataSets(dataGroups)
                 );
             }
         }
@@ -46,21 +44,11 @@ namespace XmlStorage
             var dataGroups = new Dictionary<string, DataGroup>();
             foreach(var path in DirectoryPaths)
             {
-                foreach(var (filePath, datasets) in XmlDataSets.Load(path))
+                foreach(var (filePath, datasets) in XmlDataGroups.Load(path))
                 {
-                    var groups = DataGroup.FromXmlDataSets(filePath, datasets);
+                    var groups = XmlDataCoordinator.FromXmlDataSets(filePath, datasets);
                     Merge(dataGroups, groups);
                 }
-            }
-
-            foreach(var (name, group) in dataGroups)
-            {
-                UnityEngine.Debug.Log($"{name} : {group.GroupName}, {group.FileName}, {group.FullPath}");
-                foreach(var (type, key, value) in group)
-                {
-                    UnityEngine.Debug.Log($"{type}, {key}, {value}");
-                }
-                UnityEngine.Debug.Log("");
             }
 
             DataGroups.Set(dataGroups);
@@ -72,7 +60,7 @@ namespace XmlStorage
             {
                 if(dataGroups.TryGetValue(group.GroupName, out var dataGroup))
                 {
-                    dataGroup.Merge(group);
+                    dataGroup.GetData().Merge(group.GetData());
                 }
                 else
                 {

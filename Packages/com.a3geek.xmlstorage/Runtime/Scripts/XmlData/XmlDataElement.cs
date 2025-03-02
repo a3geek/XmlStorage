@@ -25,15 +25,15 @@ namespace XmlStorage.XmlData
         {
             if(string.IsNullOrEmpty(key))
             {
-                throw new ArgumentNullException("key", "Key cannot be null or empty.");
+                throw new ArgumentNullException(nameof(key), "Key cannot be null or empty.");
             }
             if(type == null)
             {
-                throw new ArgumentNullException("type", "Type cannnot be null.");
+                throw new ArgumentNullException(nameof(type), "Type cannot be null.");
             }
 
             this.Key = key;
-            this.Value = value ?? throw new ArgumentNullException("value", "Value cannot be null.");
+            this.Value = value ?? throw new ArgumentNullException(nameof(value), "Value cannot be null.");
             this.TypeName = type.FullName;
         }
     }

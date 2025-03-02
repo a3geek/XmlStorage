@@ -5,21 +5,21 @@ using System.Xml.Serialization;
 namespace XmlStorage.XmlData
 {
     [Serializable]
-    [XmlRoot("DataSet")]
-    public sealed class XmlDataSet
+    [XmlRoot("DataGroup")]
+    public sealed class XmlDataGroup
     {
-        [XmlElement("AggregationName")]
+        [XmlElement("GroupName")]
         public string GroupName = "";
         [XmlArray("Elements"), XmlArrayItem("DataElement")]
         public List<XmlDataElement> Elements = new();
 
 
-        public XmlDataSet() { }
+        public XmlDataGroup() { }
 
-        public XmlDataSet(in string groupName, in List<XmlDataElement> elements)
+        public XmlDataGroup(in string groupName, in List<XmlDataElement> elements)
         {
             this.GroupName = groupName;
-            this.Elements = elements ?? new();
+            this.Elements = elements ?? new List<XmlDataElement>();
         }
     }
 }

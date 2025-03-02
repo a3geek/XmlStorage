@@ -10,11 +10,11 @@ namespace XmlStorage.XmlData
     internal static class Serializer
     {
         private static readonly XmlSerializer XmlDataSetSerializer = new(
-            typeof(XmlDataSets), new XmlRootAttribute("ArrayOfDataSet")
+            typeof(XmlDataGroups), new XmlRootAttribute("ArrayOfDataSet")
         );
 
 
-        public static void Serialize(in string filePath, in XmlDataSets xmlDataSets)
+        public static void Serialize(in string filePath, in XmlDataGroups xmlDataSets)
         {
             using var sw = new StreamWriter(filePath, false, Consts.Encode);
             XmlDataSetSerializer.Serialize(sw, xmlDataSets);
@@ -34,10 +34,10 @@ namespace XmlStorage.XmlData
             return sw.ToString();
         }
 
-        public static XmlDataSets Deserialize(in string filePath)
+        public static XmlDataGroups Deserialize(in string filePath)
         {
             using var sr = new StreamReader(filePath, Consts.Encode);
-            return (XmlDataSets)XmlDataSetSerializer.Deserialize(sr);
+            return (XmlDataGroups)XmlDataSetSerializer.Deserialize(sr);
         }
 
         public static object Deserialize(in Type type, in object value)

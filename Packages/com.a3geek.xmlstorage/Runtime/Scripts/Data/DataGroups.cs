@@ -1,38 +1,39 @@
 using System.Collections.Generic;
+using XmlStorage.Utils.Extensions;
 
 namespace XmlStorage.Data
 {
-    using Utils.Extensions;
-
     internal class DataGroups
     {
-        private Dictionary<string, DataGroup> dataGroups = null;
+        private Dictionary<string, DataGroup> dataGroups = new();
 
 
-        public void Set(Dictionary<string, DataGroup> dataGroups)
+        public void Set(in Dictionary<string, DataGroup> dataGroups)
         {
             this.dataGroups = dataGroups;
         }
 
         public DataGroup Get(in string groupName)
         {
-            if(!this.dataGroups.TryGetValue(groupName, out var group))
+            if(this.dataGroups.TryGetValue(groupName, out var group))
             {
-                group = new DataGroup(groupName);
-                this.dataGroups[groupName] = group;
+                return group;
             }
-
+            
+            group = new DataGroup(groupName);
+            this.dataGroups[groupName] = group;
+            
             return group;
         }
 
         public Dictionary<string, DataGroup> Get()
         {
-            if(dataGroups == null)
+            if(this.dataGroups == null)
             {
                 Storage.Load();
             }
 
-            return dataGroups;
+            return this.dataGroups;
         }
 
         public Dictionary<string, List<DataGroup>> GetFileGroups()
