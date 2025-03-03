@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
 using XmlStorage.Utils;
 using XmlStorage.Utils.Extensions;
+using XmlStorage.XmlData;
 
 namespace XmlStorage.Data
 {
@@ -16,12 +15,12 @@ namespace XmlStorage.Data
             set
             {
                 var name = value.AdjustAsFileName();
-                this.fileName = string.IsNullOrEmpty(name) ? this.FileName : name;
+                this.fileName = string.IsNullOrEmpty(name) ? this.fileName : name;
             }
         }
         public string GroupName { get; }
         public string FullPath => this.directoryPath + this.FileName;
-        
+
         private string fileName = Const.SaveFileName;
         private readonly string directoryPath = Storage.DirectoryPaths[0];
         private readonly Data data = new();
@@ -32,12 +31,18 @@ namespace XmlStorage.Data
             this.GroupName = groupName;
         }
 
-        internal DataGroup(in string groupName, in string filePath, Dictionary<Type, Dictionary<string, object>> data)
+        internal DataGroup(in string groupName, in string filePath) : this(groupName)
         {
-            this.GroupName = groupName;
             this.directoryPath = Path.GetDirectoryName(filePath).AdjustAsDirectoryPath(creatable: true);
             this.fileName = Path.GetFileName(filePath).AdjustAsFileName();
-            this.data = new Data(data);
+        }
+
+        internal DataGroup(in XmlDataGroup xmlDataGroup, in string filePath) : this(xmlDataGroup.GroupName, filePath)
+        {
+            foreach (var e in xmlDataGroup.Elements.Where(e => e.ValueType != null))
+            {
+                this.data.Update(e.Key, e.ValueType, e.DeserializeValue);
+            }
         }
 
         internal Data GetData()

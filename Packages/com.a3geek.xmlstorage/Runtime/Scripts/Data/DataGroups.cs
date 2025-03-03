@@ -1,59 +1,86 @@
 using System.Collections.Generic;
-using XmlStorage.Utils.Extensions;
+using XmlStorage.XmlData;
 
 namespace XmlStorage.Data
 {
-    internal class DataGroups
+    internal sealed class DataGroups
     {
-        private Dictionary<string, DataGroup> groups = new();
+        private readonly Dictionary<string, DataGroup> groups = null; // Key: GroupName
 
 
-        public void Set(in Dictionary<string, DataGroup> groups)
+        public DataGroups() : this(new Dictionary<string, DataGroup>()) { }
+
+        public DataGroups(in Dictionary<string, DataGroup> groups)
         {
             this.groups = groups;
         }
 
+        public DataGroups(in string filePath, in XmlDataGroups xmlDataGroups) : this()
+        {
+            foreach (var xmlDataGroup in xmlDataGroups)
+            {
+                this.groups[xmlDataGroup.GroupName] = new DataGroup(xmlDataGroup, filePath);
+            }
+        }
+
         public DataGroup Get(in string groupName)
         {
-            if(this.groups.TryGetValue(groupName, out var group))
+            if (this.groups.TryGetValue(groupName, out var group))
             {
                 return group;
             }
-            
+
             group = new DataGroup(groupName);
             this.groups[groupName] = group;
-            
+
             return group;
         }
-
-        public Dictionary<string, DataGroup> Get()
+        
+        public void Merge(in string filePath, in XmlDataGroups xmlDataGroups)
         {
-            if(this.groups == null)
+            foreach (var xmlDataGroup in xmlDataGroups)
             {
-                Storage.Load();
+                if (this.groups.TryGetValue(xmlDataGroup.GroupName, out var group))
+                {
+                    group.GetData().Merge(dataGroup);
+                }
+                else
+                {
+                    this.groups[xmlDataGroup.GroupName] = dataGroup;
+                }
             }
-
-            return this.groups;
+            
+            foreach (var (groupName, dataGroup) in other)
+            {
+                if (this.groups.TryGetValue(groupName, out var group))
+                {
+                    group.GetData().Merge(dataGroup);
+                }
+                else
+                {
+                    this.groups[groupName] = dataGroup;
+                }
+            }
         }
 
-        public Dictionary<string, List<DataGroup>> GetFileGroups()
+        public void Merge(in DataGroups other)
         {
-            var dataGroups = this.Get();
-            var fileGroups = new Dictionary<string, List<DataGroup>>();
-
-            foreach(var (_, dataGroup) in dataGroups)
+            foreach (var (groupName, dataGroup) in other)
             {
-                var list = fileGroups.GetOrAdd(dataGroup.FullPath);
-                list.Add(dataGroup);
+                if (this.groups.TryGetValue(groupName, out var group))
+                {
+                    group.GetData().Merge(dataGroup);
+                }
+                else
+                {
+                    this.groups[groupName] = dataGroup;
+                }
             }
-
-            return fileGroups;
         }
-
+        
         public IEnumerator<(string groupName, DataGroup dataGroup)> GetEnumerator()
         {
-            var groups = this.Get();
-            foreach(var (groupName, dataGroup) in groups)
+            foreach (var (groupName, dataGroup) in this.groups)
             {
                 yield return (groupName, dataGroup);
             }

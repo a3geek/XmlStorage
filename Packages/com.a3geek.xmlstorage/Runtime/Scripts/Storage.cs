@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using XmlStorage.Data;
 using XmlStorage.Utils;
+using XmlStorage.Utils.Extensions;
 using XmlStorage.XmlData;
 
 namespace XmlStorage
 {
     public static partial class Storage
     {
-        public static DataGroup CurrentDataGroup => DataGroups.Get(CurrentDataGroupName);
+        public static DataGroup CurrentDataGroup => GetDataGroups().Get(CurrentDataGroupName);
         public static string[] DirectoryPaths
         {
             get => DirectoryPathsInternal;
             set
             {
-                if((value?.Length ?? -1) <= 0)
+                if ((value?.Length ?? -1) <= 0)
                 {
                     return;
                 }
@@ -23,17 +24,23 @@ namespace XmlStorage
         }
         public static string CurrentDataGroupName { get; private set; } = Const.DataGroupName;
 
-        private static readonly DataGroups DataGroups = new();
+        private static DataGroups DataGroupsInternal = null;
         private static string[] DirectoryPathsInternal = Const.SaveDirectoryPaths;
 
 
         public static void Save()
         {
-            var fileGroups = DataGroups.GetFileGroups();
-            foreach(var (filePath, dataGroups) in fileGroups)
+            var dic = new Dictionary<string, List<DataGroup>>();
+            foreach (var (_, dataGroup) in GetDataGroups())
+            {
+                var list = dic.GetOrAdd(dataGroup.FullPath);
+                list.Add(dataGroup);
+            }
+
+            foreach (var (fullPath, dataGroups) in dic)
             {
                 Serializer.Serialize(
-                    filePath,
+                    fullPath,
                     XmlDataCoordinator.ToXmlDataGroups(dataGroups)
                 );
             }
@@ -41,33 +48,26 @@ namespace XmlStorage
 
         public static void Load()
         {
-            var dataGroups = new Dictionary<string, DataGroup>();
-            foreach(var path in DirectoryPaths)
+            var dataGroups = new DataGroups();
+            foreach (var path in DirectoryPaths)
             {
-                foreach(var (filePath, datasets) in XmlDataGroups.Load(path))
+                foreach (var (filePath, xmlDataGroups) in XmlDataGroups.Load(path))
                 {
-                    var groups = XmlDataCoordinator.FromXmlDataSets(filePath, datasets);
-                    Merge(dataGroups, groups);
+                    dataGroups.Merge(new DataGroups(filePath, xmlDataGroups));
                 }
             }
 
-            DataGroups.Set(dataGroups);
+            DataGroupsInternal = dataGroups;
         }
 
-        private static void Merge(Dictionary<string, DataGroup> dataGroups, in List<DataGroup> groups)
+        internal static DataGroups GetDataGroups()
         {
-            foreach(var group in groups)
+            if (DataGroupsInternal == null)
             {
-                if(dataGroups.TryGetValue(group.GroupName, out var dataGroup))
-                {
-                    dataGroup.GetData().Merge(group.GetData());
-                }
-                else
-                {
-                    dataGroups[group.GroupName] = group;
-                }
+                Load();
             }
+
+            return DataGroupsInternal;
         }
     }
 }
-

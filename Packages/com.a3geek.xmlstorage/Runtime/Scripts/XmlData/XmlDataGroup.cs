@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace XmlStorage.XmlData
@@ -19,7 +20,12 @@ namespace XmlStorage.XmlData
         public XmlDataGroup(in string groupName, in List<XmlDataElement> elements)
         {
             this.GroupName = groupName;
-            this.Elements = elements ?? new List<XmlDataElement>();
+            this.Elements = elements;
+        }
+
+        public IEnumerable<XmlDataElement> GetValidElements()
+        {
+            return this.Elements.Where(e => e.ValueType != null);
         }
     }
 }

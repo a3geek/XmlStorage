@@ -8,6 +8,7 @@ namespace XmlStorage.XmlData
     internal sealed class XmlDataElement
     {
         public Type ValueType => this.type ??= this.TypeName.GetTypeAsTypeName();
+        public object DeserializeValue => Serializer.Deserialize(this.ValueType, this.Value);
         [XmlElement("Key")]
         public string Key = "";
         [XmlElement("Value")]
@@ -22,11 +23,11 @@ namespace XmlStorage.XmlData
 
         public XmlDataElement(in string key, in object value, in Type type)
         {
-            if(string.IsNullOrEmpty(key))
+            if (string.IsNullOrEmpty(key))
             {
                 throw new ArgumentNullException(nameof(key), "Key cannot be null or empty.");
             }
-            if(type == null)
+            if (type == null)
             {
                 throw new ArgumentNullException(nameof(type), "Type cannot be null.");
             }

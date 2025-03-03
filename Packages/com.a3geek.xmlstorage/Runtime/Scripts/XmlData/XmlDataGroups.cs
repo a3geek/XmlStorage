@@ -12,7 +12,7 @@ namespace XmlStorage.XmlData
     internal sealed class XmlDataGroups
     {
         public const string XmlRootName = "ArrayOfDataGroup";
-        
+
         [XmlElement("DataGroup")]
         public List<XmlDataGroup> Groups = new();
 
@@ -37,7 +37,7 @@ namespace XmlStorage.XmlData
         public static List<(string filePath, XmlDataGroups dataGroups)> Load(in string directoryPath)
         {
             var dataGroups = new List<(string filePath, XmlDataGroups dataGroups)>();
-            if(!Directory.Exists(directoryPath))
+            if (!Directory.Exists(directoryPath))
             {
                 return dataGroups;
             }
@@ -45,7 +45,7 @@ namespace XmlStorage.XmlData
             var filePaths = Directory.GetFiles(
                 directoryPath, Const.FileSearchPattern, SearchOption.AllDirectories
             );
-            foreach(var filePath in filePaths)
+            foreach (var filePath in filePaths)
             {
                 dataGroups.Add((filePath, Serializer.Deserialize(filePath)));
             }

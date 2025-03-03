@@ -21,7 +21,7 @@ namespace XmlStorage.XmlData
 
         public static object Serialize(in Type type, in object value)
         {
-            if(!type.IsNeedSerialize())
+            if (!type.IsNeedSerialize())
             {
                 return value;
             }
@@ -41,7 +41,7 @@ namespace XmlStorage.XmlData
 
         public static object Deserialize(in Type type, in object value)
         {
-            if(!type.IsNeedSerialize())
+            if (!type.IsNeedSerialize())
             {
                 return value;
             }
