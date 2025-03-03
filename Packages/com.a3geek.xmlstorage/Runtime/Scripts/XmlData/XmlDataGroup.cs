@@ -6,7 +6,7 @@ namespace XmlStorage.XmlData
 {
     [Serializable]
     [XmlRoot("DataGroup")]
-    public sealed class XmlDataGroup
+    internal sealed class XmlDataGroup
     {
         [XmlElement("GroupName")]
         public string GroupName = "";

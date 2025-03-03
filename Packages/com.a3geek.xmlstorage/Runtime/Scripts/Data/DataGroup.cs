@@ -22,7 +22,7 @@ namespace XmlStorage.Data
         public string GroupName { get; }
         public string FullPath => this.directoryPath + this.FileName;
         
-        private string fileName = Consts.SaveFileName;
+        private string fileName = Const.SaveFileName;
         private readonly string directoryPath = Storage.DirectoryPaths[0];
         private readonly Data data = new();
 

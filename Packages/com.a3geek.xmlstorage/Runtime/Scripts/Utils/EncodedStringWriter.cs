@@ -10,9 +10,7 @@ namespace XmlStorage.Utils
         protected readonly Encoding encoding = Encoding.UTF8;
 
 
-        public EncodedStringWriter() : base()
-        {
-        }
+        public EncodedStringWriter() { }
 
         public EncodedStringWriter(in Encoding encoding) : this()
         {

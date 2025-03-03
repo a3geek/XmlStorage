@@ -9,12 +9,12 @@ namespace XmlStorage
 {
     internal static class XmlDataCoordinator
     {
-        internal static XmlDataGroups ToXmlDataSets(in List<DataGroup> groups)
+        internal static XmlDataGroups ToXmlDataGroups(in List<DataGroup> groups)
         {
-            return new XmlDataGroups(groups.Select(group => ToXmlDataSet(group)));
+            return new XmlDataGroups(groups.Select(group => ToXmlDataGroup(group)));
         }
 
-        internal static XmlDataGroup ToXmlDataSet(in DataGroup group)
+        internal static XmlDataGroup ToXmlDataGroup(in DataGroup group)
         {
             return new XmlDataGroup(group.GroupName, GetXmlDataElements(group));
         }
@@ -24,29 +24,29 @@ namespace XmlStorage
             var groups = new List<DataGroup>();
             foreach(var dataset in datasets)
             {
-                groups.Add(FromXmlDataSet(filePath, dataset));
+                groups.Add(FromXmlDataGroup(filePath, dataset));
             }
 
             return groups;
         }
 
-        internal static DataGroup FromXmlDataSet(in string filePath, in XmlDataGroup dataset)
+        internal static DataGroup FromXmlDataGroup(in string filePath, in XmlDataGroup dataGroup)
         {
             var data = new Dictionary<Type, Dictionary<string, object>>();
-            foreach(var e in dataset.Elements)
+            foreach(var e in dataGroup.Elements)
             {
-                if(e.Type == null)
+                if(e.ValueType == null)
                 {
                     continue;
                 }
 
-                var d = data.GetOrAdd(e.Type);
-                d[e.Key] = Serializer.Deserialize(e.Type, e.Value);
+                var d = data.GetOrAdd(e.ValueType);
+                d[e.Key] = Serializer.Deserialize(e.ValueType, e.Value);
             }
 
-            return new DataGroup(dataset.GroupName, filePath, data);
+            return new DataGroup(dataGroup.GroupName, filePath, data);
         }
-        
+
         private static List<XmlDataElement> GetXmlDataElements(in DataGroup group)
         {
             var elements = new List<XmlDataElement>();
@@ -54,10 +54,11 @@ namespace XmlStorage
             foreach(var (type, key, value) in group.GetData())
             {
                 elements.Add(new XmlDataElement(
-                    key, Serializer.Serialize(type, value), type
-                ));
+                        key, Serializer.Serialize(type, value), type
+                    )
+                );
             }
-            
+
             return elements;
         }
     }

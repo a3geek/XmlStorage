@@ -10,7 +10,9 @@ namespace XmlStorage.Utils.Extensions
         {
             return string.IsNullOrEmpty(fileName)
                 ? ""
-                : fileName.EndsWith(Consts.Extension) ? fileName : (fileName + Consts.Extension);
+                : fileName.EndsWith(Const.Extension)
+                    ? fileName
+                    : (fileName + Const.Extension);
         }
 
         public static string AdjustAsDirectoryPath(this string directoryPath, bool creatable = true)
@@ -26,39 +28,60 @@ namespace XmlStorage.Utils.Extensions
                 Directory.CreateDirectory(path);
             }
 
-            return path.EndsWith(Consts.Separator)
+            return path.EndsWith(Const.Separator)
                 ? path
-                : (path + Consts.Separator);
+                : (path + Const.Separator);
         }
 
         public static string AdjustSeparateCharAsPath(this string path)
         {
             return string.IsNullOrEmpty(path)
                 ? ""
-                : path.Replace('\\', '/').Replace('/', Consts.Separator);
+                : path.Replace('\\', '/').Replace('/', Const.Separator);
+        }
+
+        public static Type GetTypeAsTypeName(this string typeName)
+        {
+            return GetType(typeName, 0);
         }
 
         // https://answers.unity.com/questions/206665/typegettypestring-does-not-work-in-unity.html
-        public static Type GetTypeAsTypeName(this string typeName)
+        private static Type GetType(in string typeName, int tryCount)
         {
-            var type = Type.GetType(typeName);
-            if(type != null)
+            switch(tryCount)
             {
-                return type;
+                case 0:
+                {
+                    var type = Type.GetType(typeName);
+                    return type ?? GetType(typeName, 1);
+                }
+                case 1:
+                {
+                    var type = FindByAssemblyName(typeName);
+                    return type ?? GetType(typeName, 2);
+                }
+                case 2:
+                {
+                    var type = FindFromAssemblies(typeName);
+                    return type ?? GetType(typeName, 3);
+                }
             }
 
-            if(typeName.Contains("."))
+            return null;
+
+            static Type FindByAssemblyName(in string typeName)
             {
-                var assemblyName = typeName[..typeName.IndexOf('.')];
+                if(!typeName.Contains("."))
+                {
+                    return null;
+                }
+
                 try
                 {
+                    var assemblyName = typeName[..typeName.IndexOf('.')];
                     var assembly = Assembly.Load(assemblyName);
 
-                    type = assembly.GetType(typeName);
-                    if(type != null)
-                    {
-                        return type;
-                    }
+                    return assembly.GetType(typeName);
                 }
                 catch
                 {
@@ -66,26 +89,29 @@ namespace XmlStorage.Utils.Extensions
                 }
             }
 
-            var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
-            foreach(var assemblyName in referencedAssemblies)
+            static Type FindFromAssemblies(in string typeName)
             {
-                try
+                var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+                foreach(var assemblyName in referencedAssemblies)
                 {
-                    var assembly = Assembly.Load(assemblyName);
-
-                    type = assembly.GetType(typeName);
-                    if(type != null)
+                    try
                     {
-                        return type;
+                        var assembly = Assembly.Load(assemblyName);
+
+                        var type = assembly.GetType(typeName);
+                        if(type != null)
+                        {
+                            return type;
+                        }
+                    }
+                    catch
+                    {
+                        continue;
                     }
                 }
-                catch
-                {
-                    continue;
-                }
-            }
 
-            return null;
+                return null;
+            }
         }
     }
 }

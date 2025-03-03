@@ -21,10 +21,10 @@ namespace XmlStorage
                 DirectoryPathsInternal = value;
             }
         }
-        public static string CurrentDataGroupName { get; private set; } = Consts.DataGroupName;
+        public static string CurrentDataGroupName { get; private set; } = Const.DataGroupName;
 
         private static readonly DataGroups DataGroups = new();
-        private static string[] DirectoryPathsInternal = Consts.SaveDirectoryPaths;
+        private static string[] DirectoryPathsInternal = Const.SaveDirectoryPaths;
 
 
         public static void Save()
@@ -34,7 +34,7 @@ namespace XmlStorage
             {
                 Serializer.Serialize(
                     filePath,
-                    XmlDataCoordinator.ToXmlDataSets(dataGroups)
+                    XmlDataCoordinator.ToXmlDataGroups(dataGroups)
                 );
             }
         }
@@ -70,3 +70,4 @@ namespace XmlStorage
         }
     }
 }
+

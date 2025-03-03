@@ -5,35 +5,35 @@ namespace XmlStorage.Data
 {
     internal class DataGroups
     {
-        private Dictionary<string, DataGroup> dataGroups = new();
+        private Dictionary<string, DataGroup> groups = new();
 
 
-        public void Set(in Dictionary<string, DataGroup> dataGroups)
+        public void Set(in Dictionary<string, DataGroup> groups)
         {
-            this.dataGroups = dataGroups;
+            this.groups = groups;
         }
 
         public DataGroup Get(in string groupName)
         {
-            if(this.dataGroups.TryGetValue(groupName, out var group))
+            if(this.groups.TryGetValue(groupName, out var group))
             {
                 return group;
             }
             
             group = new DataGroup(groupName);
-            this.dataGroups[groupName] = group;
+            this.groups[groupName] = group;
             
             return group;
         }
 
         public Dictionary<string, DataGroup> Get()
         {
-            if(this.dataGroups == null)
+            if(this.groups == null)
             {
                 Storage.Load();
             }
 
-            return this.dataGroups;
+            return this.groups;
         }
 
         public Dictionary<string, List<DataGroup>> GetFileGroups()
@@ -52,8 +52,8 @@ namespace XmlStorage.Data
 
         public IEnumerator<(string groupName, DataGroup dataGroup)> GetEnumerator()
         {
-            var dataGroups = this.Get();
-            foreach(var (groupName, dataGroup) in dataGroups)
+            var groups = this.Get();
+            foreach(var (groupName, dataGroup) in groups)
             {
                 yield return (groupName, dataGroup);
             }

@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Xml.Serialization;
+using XmlStorage.Utils.Extensions;
 
 namespace XmlStorage.XmlData
 {
-    using Utils.Extensions;
-
     [Serializable]
-    public sealed class XmlDataElement
+    internal sealed class XmlDataElement
     {
+        public Type ValueType => this.type ??= this.TypeName.GetTypeAsTypeName();
         [XmlElement("Key")]
         public string Key = "";
         [XmlElement("Value")]
         public object Value = null;
         [XmlElement("TypeName")]
         public string TypeName = "";
-        public Type Type => this.type ??= this.TypeName.GetTypeAsTypeName();
 
         private Type type = null;
 
