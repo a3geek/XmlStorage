@@ -3,13 +3,14 @@ using System.IO;
 using System.Xml.Serialization;
 using XmlStorage.Utils;
 using XmlStorage.Utils.Extensions;
+using XmlStorage.XmlData.Models;
 
 namespace XmlStorage.XmlData
 {
     internal static class Serializer
     {
         private static readonly XmlSerializer XmlDataGroupsSerializer = new(
-            typeof(XmlDataGroups), new XmlRootAttribute(XmlDataGroups.XmlRootName)
+            typeof(XmlDataGroups), new XmlRootAttribute(XmlDataGroupsModel.XmlRootName)
         );
 
 
@@ -33,10 +34,10 @@ namespace XmlStorage.XmlData
             return sw.ToString();
         }
 
-        public static XmlDataGroups Deserialize(in string filePath)
+        public static XmlDataGroupsModel Deserialize(in string filePath)
         {
             using var sr = new StreamReader(filePath, Const.Encode);
-            return (XmlDataGroups)XmlDataGroupsSerializer.Deserialize(sr);
+            return (XmlDataGroupsModel)XmlDataGroupsSerializer.Deserialize(sr);
         }
 
         public static object Deserialize(in Type type, in object value)

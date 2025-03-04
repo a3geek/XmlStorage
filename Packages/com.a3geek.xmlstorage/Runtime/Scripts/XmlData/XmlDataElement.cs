@@ -1,40 +1,24 @@
-﻿using System;
-using System.Xml.Serialization;
+using System;
 using XmlStorage.Utils.Extensions;
+using XmlStorage.XmlData.Models;
 
 namespace XmlStorage.XmlData
 {
-    [Serializable]
     internal sealed class XmlDataElement
     {
-        public Type ValueType => this.type ??= this.TypeName.GetTypeAsTypeName();
-        public object DeserializeValue => Serializer.Deserialize(this.ValueType, this.Value);
-        [XmlElement("Key")]
-        public string Key = "";
-        [XmlElement("Value")]
-        public object Value = null;
-        [XmlElement("TypeName")]
-        public string TypeName = "";
-
-        private Type type = null;
+        public readonly string Key = null;
+        public readonly object Value = null;
+        public readonly Type ValueType = null;
 
 
-        public XmlDataElement() { }
-
-        public XmlDataElement(in string key, in object value, in Type type)
+        public XmlDataElement(in XmlDataElementModel model)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key), "Key cannot be null or empty.");
-            }
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type), "Type cannot be null.");
-            }
+            this.Key = model.Key;
 
-            this.Key = key;
-            this.Value = value ?? throw new ArgumentNullException(nameof(value), "Value cannot be null.");
-            this.TypeName = type.FullName;
+            if (model.TypeName.TryGetTypeAsTypeName(out this.ValueType))
+            {
+                this.Value = Serializer.Deserialize(this.ValueType, model.Value);
+            }
         }
     }
 }

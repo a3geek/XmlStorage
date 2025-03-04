@@ -1,31 +1,29 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
+using XmlStorage.XmlData.Models;
 
 namespace XmlStorage.XmlData
 {
-    [Serializable]
-    [XmlRoot("DataGroup")]
     internal sealed class XmlDataGroup
     {
-        [XmlElement("GroupName")]
-        public string GroupName = "";
-        [XmlArray("Elements"), XmlArrayItem("DataElement")]
-        public List<XmlDataElement> Elements = new();
+        public readonly string GroupName = null;
+        public readonly IEnumerable<XmlDataElement> Elements = null;
 
 
-        public XmlDataGroup() { }
-
-        public XmlDataGroup(in string groupName, in List<XmlDataElement> elements)
+        public XmlDataGroup(in XmlDataGroupModel model)
         {
-            this.GroupName = groupName;
-            this.Elements = elements;
+            this.GroupName = model.GroupName;
+            this.Elements = model.Elements
+                .Select(e => new XmlDataElement(e))
+                .Where(e => e.ValueType != null);
         }
 
-        public IEnumerable<XmlDataElement> GetValidElements()
+        public IEnumerator<XmlDataElement> GetEnumerator()
         {
-            return this.Elements.Where(e => e.ValueType != null);
+            foreach (var element in this.Elements)
+            {
+                yield return element;
+            }
         }
     }
 }

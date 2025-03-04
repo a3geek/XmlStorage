@@ -40,6 +40,8 @@ namespace XmlStorage.Data
         {
             foreach (var xmlDataGroup in xmlDataGroups)
             {
+                var dataGroup = new DataGroup(xmlDataGroup, filePath);
+                
                 if (this.groups.TryGetValue(xmlDataGroup.GroupName, out var group))
                 {
                     group.GetData().Merge(dataGroup);
@@ -49,18 +51,18 @@ namespace XmlStorage.Data
                     this.groups[xmlDataGroup.GroupName] = dataGroup;
                 }
             }
-            
-            foreach (var (groupName, dataGroup) in other)
-            {
-                if (this.groups.TryGetValue(groupName, out var group))
-                {
-                    group.GetData().Merge(dataGroup);
-                }
-                else
-                {
-                    this.groups[groupName] = dataGroup;
-                }
-            }
+            //
+            // foreach (var (groupName, dataGroup) in other)
+            // {
+            //     if (this.groups.TryGetValue(groupName, out var group))
+            //     {
+            //         group.GetData().Merge(dataGroup);
+            //     }
+            //     else
+            //     {
+            //         this.groups[groupName] = dataGroup;
+            //     }
+            // }
         }
 
         public void Merge(in DataGroups other)

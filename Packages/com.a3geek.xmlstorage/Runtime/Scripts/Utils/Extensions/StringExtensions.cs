@@ -17,13 +17,13 @@ namespace XmlStorage.Utils.Extensions
 
         public static string AdjustAsDirectoryPath(this string directoryPath, bool creatable = true)
         {
-            if(string.IsNullOrEmpty(directoryPath))
+            if (string.IsNullOrEmpty(directoryPath))
             {
                 return null;
             }
 
             var path = directoryPath.AdjustSeparateCharAsPath();
-            if(Directory.Exists(path) == false && creatable == true)
+            if (Directory.Exists(path) == false && creatable == true)
             {
                 Directory.CreateDirectory(path);
             }
@@ -40,15 +40,16 @@ namespace XmlStorage.Utils.Extensions
                 : path.Replace('\\', '/').Replace('/', Const.Separator);
         }
 
-        public static Type GetTypeAsTypeName(this string typeName)
+        public static bool TryGetTypeAsTypeName(this string typeName, out Type type)
         {
-            return GetType(typeName, 0);
+            type = GetType(typeName, 0);
+            return type != null;
         }
 
         // https://answers.unity.com/questions/206665/typegettypestring-does-not-work-in-unity.html
         private static Type GetType(in string typeName, int tryCount)
         {
-            switch(tryCount)
+            switch (tryCount)
             {
                 case 0:
                 {
@@ -71,7 +72,7 @@ namespace XmlStorage.Utils.Extensions
 
             static Type FindByAssemblyName(in string typeName)
             {
-                if(!typeName.Contains("."))
+                if (!typeName.Contains("."))
                 {
                     return null;
                 }
@@ -92,14 +93,14 @@ namespace XmlStorage.Utils.Extensions
             static Type FindFromAssemblies(in string typeName)
             {
                 var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
-                foreach(var assemblyName in referencedAssemblies)
+                foreach (var assemblyName in referencedAssemblies)
                 {
                     try
                     {
                         var assembly = Assembly.Load(assemblyName);
 
                         var type = assembly.GetType(typeName);
-                        if(type != null)
+                        if (type != null)
                         {
                             return type;
                         }

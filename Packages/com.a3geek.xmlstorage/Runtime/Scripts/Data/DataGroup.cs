@@ -41,7 +41,7 @@ namespace XmlStorage.Data
         {
             foreach (var e in xmlDataGroup.Elements.Where(e => e.ValueType != null))
             {
-                this.data.Update(e.Key, e.ValueType, e.DeserializeValue);
+                this.data.Update(e.Key, e.ValueType, e.Value);
             }
         }
 
