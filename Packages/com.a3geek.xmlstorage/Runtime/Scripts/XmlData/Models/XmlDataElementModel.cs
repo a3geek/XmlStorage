@@ -16,20 +16,27 @@ namespace XmlStorage.XmlData.Models
 
         public XmlDataElementModel() { }
 
-        public XmlDataElementModel(in string key, in object value, in Type type)
+        public XmlDataElementModel(XmlDataElement element)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key), "Key cannot be null or empty.");
-            }
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type), "Type cannot be null.");
-            }
-
-            this.Key = key;
-            this.Value = value ?? throw new ArgumentNullException(nameof(value), "Value cannot be null.");
-            this.TypeName = type.FullName;
+            this.Key = element.Key;
+            this.Value = element.Value;
+            this.TypeName = element.ValueType.FullName;
         }
+
+        // public XmlDataElementModel(in string key, in object value, in Type type)
+        // {
+        //     if (string.IsNullOrEmpty(key))
+        //     {
+        //         throw new ArgumentNullException(nameof(key), "Key cannot be null or empty.");
+        //     }
+        //     if (type == null)
+        //     {
+        //         throw new ArgumentNullException(nameof(type), "Type cannot be null.");
+        //     }
+        //
+        //     this.Key = key;
+        //     this.Value = value ?? throw new ArgumentNullException(nameof(value), "Value cannot be null.");
+        //     this.TypeName = type.FullName;
+        // }
     }
 }

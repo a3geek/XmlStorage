@@ -16,10 +16,14 @@ namespace XmlStorage.XmlData.Models
 
         public XmlDataGroupModel() { }
 
-        public XmlDataGroupModel(in string groupName, in List<XmlDataElementModel> elements)
+        public XmlDataGroupModel(in string groupName, in IEnumerable<XmlDataElement> elements)
         {
             this.GroupName = groupName;
-            this.Elements = elements;
+            
+            foreach (var e in elements)
+            {
+                this.Elements.Add(new XmlDataElementModel(e));
+            }
         }
     }
 }

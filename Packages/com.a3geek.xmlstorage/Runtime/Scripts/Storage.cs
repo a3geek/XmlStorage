@@ -53,7 +53,7 @@ namespace XmlStorage
             {
                 foreach (var (filePath, xmlDataGroups) in XmlDataGroups.Load(path))
                 {
-                    dataGroups.Merge(new DataGroups(filePath, xmlDataGroups));
+                    dataGroups.Merge(filePath, xmlDataGroups);
                 }
             }
 

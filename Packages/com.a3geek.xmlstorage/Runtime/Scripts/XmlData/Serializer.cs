@@ -9,15 +9,15 @@ namespace XmlStorage.XmlData
 {
     internal static class Serializer
     {
-        private static readonly XmlSerializer XmlDataGroupsSerializer = new(
-            typeof(XmlDataGroups), new XmlRootAttribute(XmlDataGroupsModel.XmlRootName)
+        private static readonly XmlSerializer XmlSerializer = new(
+            typeof(XmlDataGroupsModel), new XmlRootAttribute(XmlDataGroupsModel.XmlRootName)
         );
 
 
-        public static void Serialize(in string filePath, in XmlDataGroups xmlDataGroups)
+        public static void Serialize(in string filePath, in XmlDataGroupsModel xmlDataGroups)
         {
             using var sw = new StreamWriter(filePath, false, Const.Encode);
-            XmlDataGroupsSerializer.Serialize(sw, xmlDataGroups);
+            XmlSerializer.Serialize(sw, xmlDataGroups);
         }
 
         public static object Serialize(in Type type, in object value)
@@ -37,7 +37,7 @@ namespace XmlStorage.XmlData
         public static XmlDataGroupsModel Deserialize(in string filePath)
         {
             using var sr = new StreamReader(filePath, Const.Encode);
-            return (XmlDataGroupsModel)XmlDataGroupsSerializer.Deserialize(sr);
+            return (XmlDataGroupsModel)XmlSerializer.Deserialize(sr);
         }
 
         public static object Deserialize(in Type type, in object value)
@@ -53,3 +53,4 @@ namespace XmlStorage.XmlData
         }
     }
 }
+

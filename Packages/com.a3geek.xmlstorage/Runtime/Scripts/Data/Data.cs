@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using XmlStorage.Utils.Extensions;
+using XmlStorage.XmlData;
 
 namespace XmlStorage.Data
 {
@@ -8,13 +9,6 @@ namespace XmlStorage.Data
     {
         public readonly Dictionary<Type, Dictionary<string, object>> data = new();
 
-
-        public Data() { }
-
-        public Data(in Dictionary<Type, Dictionary<string, object>> data)
-        {
-            this.data = data;
-        }
 
         public void Update<T>(in string key, in T value)
         {
@@ -45,12 +39,12 @@ namespace XmlStorage.Data
         //     return this.data.TryGetValue(type, out value);
         // }
 
-        public void Merge(in DataGroup other)
+        public void Merge(in XmlDataGroup other)
         {
-            foreach (var (type, key, value) in other.GetData())
+            foreach (var e in other)
             {
-                var dic = this.data.GetOrAdd(type);
-                dic.TryAdd(key, value);
+                var dic = this.data.GetOrAdd(e.ValueType);
+                dic.TryAdd(e.Key, e.Value);
             }
         }
 
