@@ -57,7 +57,7 @@ namespace XmlStorage
             DataGroupsInternal = dataGroups;
         }
 
-        internal static DataGroups GetDataGroups()
+        private static DataGroups GetDataGroups()
         {
             if (DataGroupsInternal == null)
             {

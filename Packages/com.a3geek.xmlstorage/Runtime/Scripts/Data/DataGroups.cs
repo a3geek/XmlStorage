@@ -15,14 +15,6 @@ namespace XmlStorage.Data
             this.groups = groups;
         }
 
-        public DataGroups(in string filePath, in XmlDataGroups xmlDataGroups) : this()
-        {
-            foreach (var xmlDataGroup in xmlDataGroups)
-            {
-                this.groups[xmlDataGroup.GroupName] = new DataGroup(xmlDataGroup, filePath);
-            }
-        }
-
         public DataGroup Get(in string groupName)
         {
             if (this.groups.TryGetValue(groupName, out var group))

@@ -63,13 +63,5 @@ namespace XmlStorage.Data
             this.builder.Clear();
             return this.builder.Append(key).Append("_").Append(valueType.FullName).ToString();
         }
-
-        public IEnumerator<(string key, object value, Type valueType)> GetEnumerator()
-        {
-            foreach (var (_, e) in this.data)
-            {
-                yield return (e.Key, e.Value, e.ValueType);
-            }
-        }
     }
 }
