@@ -37,70 +37,89 @@ namespace XmlStorage
         //     group.GetData().data.Clear();
         // }
         //
-        // #region "Setter"
-        // public static void Set<T>(in string key, in T value)
-        // {
-        //     SetValue(key, value);
-        // }
-        //
-        // public static void SetInt(in string key, int value)
-        // {
-        //     SetValue(key, value);
-        // }
-        //
-        // public static void SetFloat(in string key, float value)
-        // {
-        //     SetValue(key, value);
-        // }
-        //
-        // public static void SetBool(in string key, bool value)
-        // {
-        //     SetValue(key, value);
-        // }
-        //
-        // public static void SetString(in string key, in string value)
-        // {
-        //     SetValue(key, value);
-        // }
-        //
-        // private static void SetValue<T>(in string key, in T value)
-        // {
-        //     var group = CurrentDataGroup;
-        //     group.GetData().Update(key, value);
-        // }
-        // #endregion
-        //
-        // #region "Getter"
-        // public static T Get<T>(in string key, in T defaultValue = default)
-        // {
-        //     return GetValue(key, defaultValue);
-        // }
-        //
-        // public static int GetInt(in string key, int defaultValue = 0)
-        // {
-        //     return GetValue(key, defaultValue);
-        // }
-        //
-        // public static float GetFloat(in string key, float defaultValue = 0f)
-        // {
-        //     return GetValue(key, defaultValue);
-        // }
-        //
-        // public static bool GetBool(in string key, bool defaultValue = false)
-        // {
-        //     return GetValue(key, defaultValue);
-        // }
-        //
-        // public static string GetString(in string key, in string defaultValue = "")
-        // {
-        //     return GetValue(key, defaultValue);
-        // }
-        //
-        // private static T GetValue<T>(in string key, in T defaultValue = default)
-        // {
-        //     var group = CurrentDataGroup;
-        //     return group.GetData().TryGet(key, out T value) ? value : defaultValue;
-        // }
-        // #endregion
+        #region "Setter"
+        public static void Set<T>(in string key, in T value)
+        {
+            SetValue(key, value, typeof(T));
+        }
+        
+        public static void SetInt(in string key, int value)
+        {
+            SetValue(key, value, typeof(int));
+        }
+        
+        public static void SetFloat(in string key, float value)
+        {
+            SetValue(key, value, typeof(float));
+        }
+        
+        public static void SetBool(in string key, bool value)
+        {
+            SetValue(key, value, typeof(bool));
+        }
+        
+        public static void SetString(in string key, in string value)
+        {
+            SetValue(key, value, typeof(string));
+        }
+        
+        private static void SetValue<T>(in string key, in T value, in Type valueType)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentException("Key cannot be null or empty.", nameof(key));
+            }
+            if (valueType == null)
+            {
+                throw new ArgumentNullException(nameof(valueType), "ValueType cannot be null.");
+            }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value), "Value cannot be null.");
+            }
+            
+            var group = CurrentDataGroup;
+            group.GetData().Update(key, value, valueType);
+        }
+        #endregion
+        
+        #region "Getter"
+        public static T Get<T>(in string key, in T defaultValue = default)
+        {
+            return GetValue(key, defaultValue);
+        }
+        
+        public static int GetInt(in string key, int defaultValue = 0)
+        {
+            return GetValue(key, defaultValue);
+        }
+        
+        public static float GetFloat(in string key, float defaultValue = 0f)
+        {
+            return GetValue(key, defaultValue);
+        }
+        
+        public static bool GetBool(in string key, bool defaultValue = false)
+        {
+            return GetValue(key, defaultValue);
+        }
+        
+        public static string GetString(in string key, in string defaultValue = "")
+        {
+            return GetValue(key, defaultValue);
+        }
+        
+        private static T GetValue<T>(in string key, in T defaultValue, in Type valueType)
+        {
+            var group = CurrentDataGroup;
+            if (group.GetData().TryGet(key, valueType, out var data))
+            {
+                return (T)data;
+            }
+            return  ? value : defaultValue;
+            
+            // return group.GetData().TryGet(key, out T value) ? value : defaultValue;
+        }
+        #endregion
     }
 }

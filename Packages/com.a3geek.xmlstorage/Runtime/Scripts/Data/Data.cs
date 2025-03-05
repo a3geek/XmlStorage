@@ -1,62 +1,67 @@
 using System;
 using System.Collections.Generic;
-using XmlStorage.Utils.Extensions;
+using System.Text;
 using XmlStorage.XmlData;
 
 namespace XmlStorage.Data
 {
     internal sealed class Data
     {
-        public readonly Dictionary<Type, Dictionary<string, object>> data = new();
+        private readonly StringBuilder builder = new();
+        private readonly Dictionary<string, DataElement> data = new();  // Key: key + "_" + valueType.FullName
 
 
-        public void Update<T>(in string key, in T value)
+        public void Update<T>(in string key, in T value, in Type valueType)
         {
-            this.Update(key, typeof(T), value);
+            var globalKey = this.GetGlobalKey(key, valueType);
+            if (this.TryGet(globalKey, out var element))
+            {
+                element.Value = value;
+            }
+            else
+            {
+                this.data.Add(globalKey, new DataElement(key, value, valueType));
+            }
         }
 
-        public void Update<T>(in string key, in Type valueType, in T value)
+        public IEnumerable<DataElement> GetDataElements()
         {
-            var data = this.data.GetOrAdd(valueType);
-            data[key] = value;
+            return this.data.Values;
         }
 
-        // internal bool TryGet<T>(in string key, out T value)
-        // {
-        //     var type = typeof(T);
-        //     if(!this.data.TryGetValue(type, key, out var obj) || obj is not T t)
-        //     {
-        //         value = default;
-        //         return false;
-        //     }
-        //
-        //     value = t;
-        //     return true;
-        // }
-        //
-        // internal bool TryGet(in Type type, out Dictionary<string, object> value)
-        // {
-        //     return this.data.TryGetValue(type, out value);
-        // }
+        public bool TryGet(in string key, in Type valueType, out DataElement result)
+        {
+            return this.TryGet(this.GetGlobalKey(key, valueType), out result);
+        }
 
+        private bool TryGet(in string globalKey, out DataElement result)
+        {
+            return this.data.TryGetValue(globalKey, out result);
+        }
+        
+        private string GetGlobalKey(in string key, in Type valueType)
+        {
+            this.builder.Clear();
+            return this.builder.Append(key).Append("_").Append(valueType.FullName).ToString();
+        }
+        
         public void Merge(in XmlDataGroup other)
         {
             foreach (var e in other)
             {
-                var dic = this.data.GetOrAdd(e.ValueType);
-                dic.TryAdd(e.Key, e.Value);
+                this.Update(e.Key, e.Value, e.ValueType);
             }
         }
 
-        public IEnumerator<(Type type, string key, object value)> GetEnumerator()
-        {
-            foreach (var (type, data) in this.data)
-            {
-                foreach (var (key, value) in data)
-                {
-                    yield return (type, key, value);
-                }
-            }
-        }
+        // public IEnumerator<(Type type, string key, object value)> GetEnumerator()
+        // {
+        //     foreach (var (type, data) in this.data)
+        //     {
+        //         foreach (var (key, value) in data)
+        //         {
+        //             yield return (type, key, value);
+        //         }
+        //     }
+        // }
     }
 }

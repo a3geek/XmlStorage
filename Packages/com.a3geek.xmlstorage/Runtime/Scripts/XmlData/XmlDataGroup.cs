@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using XmlStorage.Data;
 using XmlStorage.XmlData.Models;
 
 namespace XmlStorage.XmlData
@@ -9,6 +10,15 @@ namespace XmlStorage.XmlData
         public readonly string GroupName = null;
         public readonly IEnumerable<XmlDataElement> Elements = null;
 
+
+        public XmlDataGroup(in DataGroup group)
+        {
+            this.GroupName = group.GroupName;
+            this.Elements = group
+                .GetData()
+                .GetDataElements()
+                .Select(e => new XmlDataElement(e));
+        }
 
         public XmlDataGroup(in XmlDataGroupModel model)
         {

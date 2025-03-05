@@ -39,10 +39,7 @@ namespace XmlStorage
 
             foreach (var (fullPath, dataGroups) in dic)
             {
-                Serializer.Serialize(
-                    fullPath,
-                    XmlDataCoordinator.ToXmlDataGroups(dataGroups)
-                );
+                XmlDataGroups.Save(fullPath, dataGroups);
             }
         }
 

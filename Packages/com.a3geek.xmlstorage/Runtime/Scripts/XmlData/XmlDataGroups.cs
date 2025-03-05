@@ -6,15 +6,16 @@ using XmlStorage.Utils;
 using XmlStorage.XmlData;
 using XmlStorage.XmlData.Models;
 
-namespace XmlStorage
+namespace XmlStorage.XmlData
 {
     internal sealed class XmlDataGroups
     {
         private readonly IEnumerable<XmlDataGroup> Groups = null;
 
 
-        public XmlDataGroups(DataGroups dataGroups)
+        public XmlDataGroups(in IEnumerable<DataGroup> dataGroups)
         {
+            this.Groups = dataGroups.Select(e => new XmlDataGroup(e));
         }
 
         public XmlDataGroups(in XmlDataGroupsModel model)
@@ -32,12 +33,13 @@ namespace XmlStorage
 
         public static void Save(in string fullPath, in List<DataGroup> dataGroups)
         {
+            var group = new XmlDataGroups(dataGroups);
             Serializer.Serialize(
                 fullPath,
-                new XmlDataGroupsModel(dataGroups)
+                new XmlDataGroupsModel(group.Groups)
             );
         }
-        
+
         public static List<(string filePath, XmlDataGroups dataGroups)> Load(in string directoryPath)
         {
             var dataGroups = new List<(string filePath, XmlDataGroups dataGroups)>();
@@ -45,7 +47,7 @@ namespace XmlStorage
             {
                 return dataGroups;
             }
-            
+
             var filePaths = Directory.GetFiles(
                 directoryPath, Const.FileSearchPattern, SearchOption.AllDirectories
             );
