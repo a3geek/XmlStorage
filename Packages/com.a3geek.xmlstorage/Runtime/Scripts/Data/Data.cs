@@ -34,6 +34,25 @@ namespace XmlStorage.Data
             return this.TryGet(this.GetGlobalKey(key, valueType), out result);
         }
 
+        public bool Delete(in string key, in Type valueType)
+        {
+            var globalKey = this.GetGlobalKey(key, valueType);
+            return this.data.Remove(globalKey);
+        }
+        
+        public void DeleteAll()
+        {
+            this.data.Clear();
+        }
+        
+        public void Merge(in XmlDataGroup other)
+        {
+            foreach (var e in other)
+            {
+                this.Update(e.Key, e.Value, e.ValueType);
+            }
+        }
+        
         private bool TryGet(in string globalKey, out DataElement result)
         {
             return this.data.TryGetValue(globalKey, out result);
@@ -44,24 +63,13 @@ namespace XmlStorage.Data
             this.builder.Clear();
             return this.builder.Append(key).Append("_").Append(valueType.FullName).ToString();
         }
-        
-        public void Merge(in XmlDataGroup other)
+
+        public IEnumerator<(string key, object value, Type valueType)> GetEnumerator()
         {
-            foreach (var e in other)
+            foreach (var (_, e) in this.data)
             {
-                this.Update(e.Key, e.Value, e.ValueType);
+                yield return (e.Key, e.Value, e.ValueType);
             }
         }
-
-        // public IEnumerator<(Type type, string key, object value)> GetEnumerator()
-        // {
-        //     foreach (var (type, data) in this.data)
-        //     {
-        //         foreach (var (key, value) in data)
-        //         {
-        //             yield return (type, key, value);
-        //         }
-        //     }
-        // }
     }
 }

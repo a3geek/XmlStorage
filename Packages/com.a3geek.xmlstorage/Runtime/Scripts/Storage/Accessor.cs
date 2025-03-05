@@ -5,38 +5,24 @@ namespace XmlStorage
 {
     public static partial class Storage
     {
-        // public static IEnumerable<Type> GetTypes()
-        // {
-        //     var group = CurrentDataGroup;
-        //     return group.GetData().data.Keys;
-        // }
-        //
-        // public static IEnumerable<string> GetKeys(in Type type)
-        // {
-        //     var group = CurrentDataGroup;
-        //     return group.GetData().TryGet(type, out var dictionary)
-        //         ? dictionary.Keys
-        //         : Array.Empty<string>();
-        // }
-        //
-        // public static bool HasKey(in Type type, in string key)
-        // {
-        //     var group = CurrentDataGroup;
-        //     return group.GetData().TryGet(type, out var dictionary) && dictionary.ContainsKey(key);
-        // }
-        //
-        // public static bool Delete(in Type type, in string key)
-        // {
-        //     var group = CurrentDataGroup;
-        //     return group.GetData().TryGet(type, out var dictionary) && dictionary.Remove(key);
-        // }
-        //
-        // public static void DeleteAll()
-        // {
-        //     var group = CurrentDataGroup;
-        //     group.GetData().data.Clear();
-        // }
-        //
+        public static bool HasKey(in string key, in Type type)
+        {
+            var group = CurrentDataGroup;
+            return group.GetData().TryGet(key, type, out _);
+        }
+        
+        public static bool Delete(in string key, in Type type)
+        {
+            var group = CurrentDataGroup;
+            return group.GetData().Delete(key, type);
+        }
+        
+        public static void DeleteAll()
+        {
+            var group = CurrentDataGroup;
+            group.GetData().DeleteAll();
+        }
+        
         #region "Setter"
         public static void Set<T>(in string key, in T value)
         {
@@ -86,39 +72,38 @@ namespace XmlStorage
         #region "Getter"
         public static T Get<T>(in string key, in T defaultValue = default)
         {
-            return GetValue(key, defaultValue);
+            return GetValue(key, defaultValue, typeof(T));
         }
         
         public static int GetInt(in string key, int defaultValue = 0)
         {
-            return GetValue(key, defaultValue);
+            return GetValue(key, defaultValue, typeof(int));
         }
         
         public static float GetFloat(in string key, float defaultValue = 0f)
         {
-            return GetValue(key, defaultValue);
+            return GetValue(key, defaultValue, typeof(float));
         }
         
         public static bool GetBool(in string key, bool defaultValue = false)
         {
-            return GetValue(key, defaultValue);
+            return GetValue(key, defaultValue, typeof(bool));
         }
         
         public static string GetString(in string key, in string defaultValue = "")
         {
-            return GetValue(key, defaultValue);
+            return GetValue(key, defaultValue, typeof(string));
         }
         
         private static T GetValue<T>(in string key, in T defaultValue, in Type valueType)
         {
             var group = CurrentDataGroup;
-            if (group.GetData().TryGet(key, valueType, out var data))
+            if (!group.GetData().TryGet(key, valueType, out var data))
             {
-                return (T)data;
+                return defaultValue;
             }
-            return  ? value : defaultValue;
             
-            // return group.GetData().TryGet(key, out T value) ? value : defaultValue;
+            return data.Value is T v ? v : defaultValue;
         }
         #endregion
     }
