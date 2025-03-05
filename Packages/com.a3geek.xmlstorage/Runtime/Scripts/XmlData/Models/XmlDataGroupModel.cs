@@ -6,7 +6,7 @@ namespace XmlStorage.XmlData.Models
 {
     [Serializable]
     [XmlRoot("DataGroup")]
-    internal sealed class XmlDataGroupModel
+    public sealed class XmlDataGroupModel
     {
         [XmlElement("GroupName")]
         public string GroupName = "";
@@ -16,7 +16,7 @@ namespace XmlStorage.XmlData.Models
 
         public XmlDataGroupModel() { }
 
-        public XmlDataGroupModel(in string groupName, in IEnumerable<XmlDataElement> elements)
+        internal XmlDataGroupModel(in string groupName, in IEnumerable<XmlDataElement> elements)
         {
             this.GroupName = groupName;
             

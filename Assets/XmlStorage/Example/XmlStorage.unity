@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 70941bcbf2f34f748b51472b2a39272f,
+  m_LightingDataAsset: {fileID: 112000000, guid: 0ad1ad7c4dc1a1f43a2616b0aeda8fb6,
     type: 2}
   m_LightingSettings: {fileID: 1057559254}
 --- !u!196 &4
@@ -187,7 +187,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10
   field of view: 60
   orthographic: 0
   orthographic size: 5

@@ -12,9 +12,7 @@ namespace XmlStorage.Utils.Extensions
             }
 
             value = new();
-            dictionary[key] = value;
-
-            return value;
+            return dictionary[key] = value;
         }
     }
 }

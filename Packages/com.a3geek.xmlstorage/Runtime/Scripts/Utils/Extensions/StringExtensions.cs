@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace XmlStorage.Utils.Extensions
 {
@@ -8,11 +9,12 @@ namespace XmlStorage.Utils.Extensions
     {
         public static string AdjustAsFileName(this string fileName)
         {
-            return string.IsNullOrEmpty(fileName)
-                ? ""
-                : fileName.EndsWith(Const.Extension)
-                    ? fileName
-                    : (fileName + Const.Extension);
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return string.Empty;
+            }
+            
+            return fileName.EndsWith(Const.Extension) ? fileName : fileName + Const.Extension;
         }
 
         public static string AdjustAsDirectoryPath(this string directoryPath, bool creatable = true)
@@ -23,21 +25,17 @@ namespace XmlStorage.Utils.Extensions
             }
 
             var path = directoryPath.AdjustSeparateCharAsPath();
-            if (Directory.Exists(path) == false && creatable == true)
+            if (creatable && Directory.Exists(path) == false)
             {
                 Directory.CreateDirectory(path);
             }
 
-            return path.EndsWith(Const.Separator)
-                ? path
-                : (path + Const.Separator);
+            return path.EndsWith(Const.Separator) ? path : path + Const.Separator;
         }
 
         public static string AdjustSeparateCharAsPath(this string path)
         {
-            return string.IsNullOrEmpty(path)
-                ? ""
-                : path.Replace('\\', '/').Replace('/', Const.Separator);
+            return string.IsNullOrEmpty(path) ? string.Empty : path.Replace('\\', '/').Replace('/', Const.Separator);
         }
 
         public static bool TryGetTypeAsTypeName(this string typeName, out Type type)

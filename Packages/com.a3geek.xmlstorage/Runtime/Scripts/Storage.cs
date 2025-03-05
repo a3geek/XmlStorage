@@ -30,17 +30,17 @@ namespace XmlStorage
 
         public static void Save()
         {
-            var dic = new Dictionary<string, List<DataGroup>>();
-            foreach (var (_, dataGroup) in GetDataGroups())
-            {
-                var list = dic.GetOrAdd(dataGroup.FullPath);
-                list.Add(dataGroup);
-            }
-
-            foreach (var (fullPath, dataGroups) in dic)
-            {
-                XmlDataGroups.Save(fullPath, dataGroups);
-            }
+            // var dic = new Dictionary<string, List<DataGroup>>();
+            // foreach (var (_, dataGroup) in GetDataGroups())
+            // {
+            //     var list = dic.GetOrAdd(dataGroup.SaveFilePath.FullPath);
+            //     list.Add(dataGroup);
+            // }
+            //
+            // foreach (var (fullPath, dataGroups) in dic)
+            // {
+            //     XmlDataGroups.Save(fullPath, fullPath, dataGroups);
+            // }
         }
 
         public static void Load()
@@ -48,9 +48,9 @@ namespace XmlStorage
             var dataGroups = new DataGroups();
             foreach (var path in DirectoryPaths)
             {
-                foreach (var (filePath, xmlDataGroups) in XmlDataGroups.Load(path))
+                foreach (var xmlDataGroups in XmlDataGroups.Load(path))
                 {
-                    dataGroups.Merge(filePath, xmlDataGroups);
+                    dataGroups.Merge(xmlDataGroups);
                 }
             }
 

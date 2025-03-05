@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace XmlStorage.XmlData.Models
 {
     [Serializable]
-    internal sealed class XmlDataElementModel
+    public sealed class XmlDataElementModel
     {
         [XmlElement("Key")]
         public string Key = "";
@@ -16,10 +16,10 @@ namespace XmlStorage.XmlData.Models
 
         public XmlDataElementModel() { }
 
-        public XmlDataElementModel(XmlDataElement element)
+        internal XmlDataElementModel(XmlDataElement element)
         {
             this.Key = element.Key;
-            this.Value = element.Value;
+            this.Value = Serializer.Serialize(element.ValueType, element.Value);
             this.TypeName = element.ValueType.FullName;
         }
     }

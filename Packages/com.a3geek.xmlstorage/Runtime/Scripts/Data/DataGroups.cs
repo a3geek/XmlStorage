@@ -15,6 +15,11 @@ namespace XmlStorage.Data
             this.groups = groups;
         }
 
+        public IEnumerable<DataGroup> Get()
+        {
+            return this.groups.Values;
+        }
+
         public DataGroup Get(in string groupName)
         {
             if (this.groups.TryGetValue(groupName, out var group))
@@ -28,7 +33,7 @@ namespace XmlStorage.Data
             return group;
         }
         
-        public void Merge(in string filePath, in XmlDataGroups xmlDataGroups)
+        public void Merge(in XmlDataGroups xmlDataGroups)
         {
             foreach (var xmlDataGroup in xmlDataGroups)
             {
@@ -38,7 +43,7 @@ namespace XmlStorage.Data
                 }
                 else
                 {
-                    this.groups[xmlDataGroup.GroupName] = new DataGroup(xmlDataGroup, filePath);
+                    this.groups[xmlDataGroup.GroupName] = new DataGroup(xmlDataGroup);
                 }
             }
         }

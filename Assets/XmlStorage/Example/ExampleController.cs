@@ -4,13 +4,11 @@ using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
 
+#pragma warning disable 0414
+
 namespace XmlStorage.Examples
 {
-
-    /// <summary>
-    /// サンプル用コントローラー
-    /// </summary>
-    [AddComponentMenu("")]
+    [Serializable]
     public class ExampleController : MonoBehaviour
     {
         ///// <summary>
@@ -82,24 +80,51 @@ namespace XmlStorage.Examples
         ///// <summary>データゲット用コンポーネント</summary>
         //public GetExample get = null;
 
+        [Serializable]
+        public class Test
+        {
+            public int v1 = 0;
+            public int v2 = 0;
+
+            [SerializeField]
+            private float v3 = 0f;
+            [SerializeField]
+            private Vector3[] v4 = Array.Empty<Vector3>();
+        }
+
+        [SerializeField]
+        private Test test = new();
+        [SerializeField]
+        private Test test2 = new();
+        
 
         void Awake()
         {
             //Storage.Test();
             //Storage.Save();
+            
+            Storage.Set(nameof(Test), this.test);
+            var test = Storage.Get<Test>(nameof(Test));
+            this.test2 = test;
+            Storage.Save();
 
+            this.test2 = new();
+            
             Storage.Load();
-        //    SecondaryFolder =
-        //        Directory.GetCurrentDirectory() + XmlStorageConsts.Separator + "Saves2" + XmlStorageConsts.Separator;
+             test = Storage.Get<Test>(nameof(Test));
+            this.test2 = test;
 
-        //    if(this.set == null)
-        //    {
-        //        this.set = this.GetComponentInChildren<SetExample>();
-        //    }
-        //    if(this.get == null)
-        //    {
-        //        this.get = this.GetComponentInChildren<GetExample>();
-        //    }
+            //    SecondaryFolder =
+            //        Directory.GetCurrentDirectory() + XmlStorageConsts.Separator + "Saves2" + XmlStorageConsts.Separator;
+
+            //    if(this.set == null)
+            //    {
+            //        this.set = this.GetComponentInChildren<SetExample>();
+            //    }
+            //    if(this.get == null)
+            //    {
+            //        this.get = this.GetComponentInChildren<GetExample>();
+            //    }
         }
 
         //void Start()
@@ -116,3 +141,4 @@ namespace XmlStorage.Examples
     }
 }
 
+#pragma warning restore 0414

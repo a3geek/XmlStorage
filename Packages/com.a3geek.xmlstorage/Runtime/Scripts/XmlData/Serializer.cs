@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using XmlStorage.Utils;
@@ -12,6 +13,7 @@ namespace XmlStorage.XmlData
         private static readonly XmlSerializer XmlSerializer = new(
             typeof(XmlDataGroupsModel), new XmlRootAttribute(XmlDataGroupsModel.XmlRootName)
         );
+        private static readonly Dictionary<Type, XmlSerializer> XmlSerializers = new();
 
 
         public static void Serialize(in string filePath, in XmlDataGroupsModel xmlDataGroups)
@@ -28,7 +30,7 @@ namespace XmlStorage.XmlData
             }
 
             using var sw = new EncodedStringWriter(Const.Encode);
-            var serializer = new XmlSerializer(type);
+            var serializer = GetXmlSerializer(type);
             serializer.Serialize(sw, value);
 
             return sw.ToString();
@@ -48,9 +50,20 @@ namespace XmlStorage.XmlData
             }
 
             using var sr = new StringReader(value.ToString());
-            var serializer = new XmlSerializer(type);
+            var serializer = GetXmlSerializer(type);
             return serializer.Deserialize(sr);
+        }
+
+        private static XmlSerializer GetXmlSerializer(Type type)
+        {
+            if (XmlSerializers.TryGetValue(type, out var serializer))
+            {
+                return serializer;
+            }
+            
+            serializer = new XmlSerializer(type);
+            XmlSerializers.Add(type, serializer);
+            return serializer;
         }
     }
 }
-

@@ -8,21 +8,24 @@ namespace XmlStorage.XmlData
     internal sealed class XmlDataGroup
     {
         public readonly string GroupName = null;
+        public readonly DataGroup.FilePath SaveFilePath = null;
         public readonly IEnumerable<XmlDataElement> Elements = null;
 
 
         public XmlDataGroup(in DataGroup group)
         {
             this.GroupName = group.GroupName;
+            this.SaveFilePath = group.SaveFilePath;
             this.Elements = group
                 .GetData()
                 .GetDataElements()
                 .Select(e => new XmlDataElement(e));
         }
 
-        public XmlDataGroup(in XmlDataGroupModel model)
+        public XmlDataGroup(in string filePath, in XmlDataGroupModel model)
         {
             this.GroupName = model.GroupName;
+            this.SaveFilePath = new DataGroup.FilePath(filePath);
             this.Elements = model.Elements
                 .Select(e => new XmlDataElement(e))
                 .Where(e => e.ValueType != null);

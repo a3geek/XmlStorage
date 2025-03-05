@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using XmlStorage.XmlData;
+using XmlStorage.Utils.Extensions;
 
 namespace XmlStorage.Data
 {
     internal sealed class Data
     {
         private readonly StringBuilder builder = new();
-        private readonly Dictionary<string, DataElement> data = new();  // Key: key + "_" + valueType.FullName
+        private readonly Dictionary<string, DataElement> data = new(); // Key: key + "_" + valueType.FullName
 
 
         public void Update<T>(in string key, in T value, in Type valueType)
@@ -39,12 +40,12 @@ namespace XmlStorage.Data
             var globalKey = this.GetGlobalKey(key, valueType);
             return this.data.Remove(globalKey);
         }
-        
+
         public void DeleteAll()
         {
             this.data.Clear();
         }
-        
+
         public void Merge(in XmlDataGroup other)
         {
             foreach (var e in other)
@@ -52,16 +53,15 @@ namespace XmlStorage.Data
                 this.Update(e.Key, e.Value, e.ValueType);
             }
         }
-        
+
         private bool TryGet(in string globalKey, out DataElement result)
         {
             return this.data.TryGetValue(globalKey, out result);
         }
-        
+
         private string GetGlobalKey(in string key, in Type valueType)
         {
-            this.builder.Clear();
-            return this.builder.Append(key).Append("_").Append(valueType.FullName).ToString();
+            return this.builder.ToString(key, "_", valueType.FullName);
         }
     }
 }
