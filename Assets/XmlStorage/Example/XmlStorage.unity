@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 0ad1ad7c4dc1a1f43a2616b0aeda8fb6,
+  m_LightingDataAsset: {fileID: 112000000, guid: cb22b25d1d8a4b14db438dccd5a25866,
     type: 2}
   m_LightingSettings: {fileID: 1057559254}
 --- !u!196 &4
@@ -130,7 +130,6 @@ GameObject:
   m_Component:
   - component: {fileID: 67376471}
   - component: {fileID: 67376470}
-  - component: {fileID: 67376468}
   - component: {fileID: 67376467}
   m_Layer: 0
   m_Name: Main Camera
@@ -141,14 +140,6 @@ GameObject:
   m_IsActive: 1
 --- !u!81 &67376467
 AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 67376466}
-  m_Enabled: 1
---- !u!124 &67376468
-Behaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -200,7 +191,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -328,6 +319,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f945dc5cbb055824caae304f2da1e83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  test:
+    v1: 1
+    v2: 2.222
+    v3:
+    - {x: 0.1, y: 0.2, z: 0.3}
+    - {x: -0.1, y: -0.2, z: 0}
+    v4: 4
+  test2:
+    v1: 0
+    v2: 0
+    v3: []
+    v4: 0
+  test3:
+    v1: 0
+    v2: 0
+    v3: []
+    v4: 0
 --- !u!1 &1236181147
 GameObject:
   m_ObjectHideFlags: 0

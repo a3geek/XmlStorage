@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Xml.Serialization;
 using UnityEngine;
 
@@ -84,18 +85,19 @@ namespace XmlStorage.Examples
         public class Test
         {
             public int v1 = 0;
-            public int v2 = 0;
+            public float v2 = 0f;
+            public Vector3[] v3 = Array.Empty<Vector3>();
 
             [SerializeField]
-            private float v3 = 0f;
-            [SerializeField]
-            private Vector3[] v4 = Array.Empty<Vector3>();
+            private int v4 = 0;
         }
 
         [SerializeField]
         private Test test = new();
         [SerializeField]
         private Test test2 = new();
+        [SerializeField]
+        private Test test3 = new();
         
 
         void Awake()
@@ -108,11 +110,8 @@ namespace XmlStorage.Examples
             this.test2 = test;
             Storage.Save();
 
-            this.test2 = new();
-            
             Storage.Load();
-             test = Storage.Get<Test>(nameof(Test));
-            this.test2 = test;
+            this.test3 = Storage.Get<Test>(nameof(Test));
 
             //    SecondaryFolder =
             //        Directory.GetCurrentDirectory() + XmlStorageConsts.Separator + "Saves2" + XmlStorageConsts.Separator;

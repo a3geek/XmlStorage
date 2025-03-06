@@ -21,7 +21,7 @@ namespace XmlStorage.Data
             }
             else
             {
-                this.data.Add(globalKey, new DataElement(key, value, valueType));
+                this.data[globalKey] = new DataElement(key, value, valueType);
             }
         }
 
