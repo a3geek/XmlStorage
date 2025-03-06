@@ -13,7 +13,7 @@ namespace XmlStorage.Utils.Extensions
             {
                 return string.Empty;
             }
-            
+
             return fileName.EndsWith(Const.Extension) ? fileName : fileName + Const.Extension;
         }
 
@@ -45,47 +45,33 @@ namespace XmlStorage.Utils.Extensions
         }
 
         // https://answers.unity.com/questions/206665/typegettypestring-does-not-work-in-unity.html
-        private static Type GetType(in string typeName, int tryCount)
+        private static Type GetType(in string typeName, uint tryCount)
         {
-            switch (tryCount)
+            try
             {
-                case 0:
+                return tryCount switch
                 {
-                    var type = Type.GetType(typeName);
-                    return type ?? GetType(typeName, 1);
-                }
-                case 1:
-                {
-                    var type = FindByAssemblyName(typeName);
-                    return type ?? GetType(typeName, 2);
-                }
-                case 2:
-                {
-                    var type = FindFromAssemblies(typeName);
-                    return type ?? GetType(typeName, 3);
-                }
+                    0 => Type.GetType(typeName) ?? GetType(typeName, 1),
+                    1 => FindFromAssemblyName(typeName) ?? GetType(typeName, 2),
+                    2 => FindFromAssemblies(typeName) ?? GetType(typeName, 3),
+                    _ => null
+                };
+            }
+            catch
+            {
+                return GetType(typeName, tryCount + 1);
             }
 
-            return null;
-
-            static Type FindByAssemblyName(in string typeName)
+            static Type FindFromAssemblyName(in string typeName)
             {
                 if (!typeName.Contains("."))
                 {
                     return null;
                 }
 
-                try
-                {
-                    var assemblyName = typeName[..typeName.IndexOf('.')];
-                    var assembly = Assembly.Load(assemblyName);
-
-                    return assembly.GetType(typeName);
-                }
-                catch
-                {
-                    return null;
-                }
+                var assemblyName = typeName[..typeName.IndexOf('.')];
+                var assembly = Assembly.Load(assemblyName);
+                return assembly.GetType(typeName);
             }
 
             static Type FindFromAssemblies(in string typeName)
@@ -93,19 +79,11 @@ namespace XmlStorage.Utils.Extensions
                 var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
                 foreach (var assemblyName in referencedAssemblies)
                 {
-                    try
+                    var assembly = Assembly.Load(assemblyName);
+                    var type = assembly.GetType(typeName);
+                    if (type != null)
                     {
-                        var assembly = Assembly.Load(assemblyName);
-
-                        var type = assembly.GetType(typeName);
-                        if (type != null)
-                        {
-                            return type;
-                        }
-                    }
-                    catch
-                    {
-                        continue;
+                        return type;
                     }
                 }
 

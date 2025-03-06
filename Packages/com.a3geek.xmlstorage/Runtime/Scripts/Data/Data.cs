@@ -25,7 +25,7 @@ namespace XmlStorage.Data
             }
         }
 
-        public IEnumerable<DataElement> GetDataElements()
+        public IEnumerable<DataElement> GetElements()
         {
             return this.data.Values;
         }

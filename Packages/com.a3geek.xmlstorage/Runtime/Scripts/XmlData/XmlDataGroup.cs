@@ -8,7 +8,7 @@ namespace XmlStorage.XmlData
     internal sealed class XmlDataGroup
     {
         public readonly string GroupName = null;
-        public readonly DataGroup.FilePath SaveFilePath = null;
+        public readonly FilePath SaveFilePath = null;
         public readonly IEnumerable<XmlDataElement> Elements = null;
 
 
@@ -18,14 +18,14 @@ namespace XmlStorage.XmlData
             this.SaveFilePath = group.SaveFilePath;
             this.Elements = group
                 .GetData()
-                .GetDataElements()
+                .GetElements()
                 .Select(e => new XmlDataElement(e));
         }
 
         public XmlDataGroup(in string filePath, in XmlDataGroupModel model)
         {
             this.GroupName = model.GroupName;
-            this.SaveFilePath = new DataGroup.FilePath(filePath);
+            this.SaveFilePath = new FilePath(filePath);
             this.Elements = model.Elements
                 .Select(e => new XmlDataElement(e))
                 .Where(e => e.ValueType != null);

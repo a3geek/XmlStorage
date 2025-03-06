@@ -30,17 +30,7 @@ namespace XmlStorage
 
         public static void Save()
         {
-            // var dic = new Dictionary<string, List<DataGroup>>();
-            // foreach (var (_, dataGroup) in GetDataGroups())
-            // {
-            //     var list = dic.GetOrAdd(dataGroup.SaveFilePath.FullPath);
-            //     list.Add(dataGroup);
-            // }
-            //
-            // foreach (var (fullPath, dataGroups) in dic)
-            // {
-            //     XmlDataGroups.Save(fullPath, fullPath, dataGroups);
-            // }
+            XmlDataGroups.Save(GetDataGroups());
         }
 
         public static void Load()

@@ -12,18 +12,5 @@ namespace XmlStorage.XmlData.Models
 
         [XmlElement("DataGroup")]
         public List<XmlDataGroupModel> Groups = new();
-        
-
-        public XmlDataGroupsModel() { }
-        
-        // internal XmlDataGroupsModel(in IEnumerable<XmlDataGroup> dataGroups)
-        // {
-        //     foreach (var dataGroup in dataGroups)
-        //     {
-        //         this.Groups.Add(new XmlDataGroupModel(
-        //             dataGroup.GroupName, dataGroup.Elements
-        //         ));
-        //     }
-        // }
     }
 }

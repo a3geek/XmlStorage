@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using XmlStorage.Data;
 using XmlStorage.Utils;
-using XmlStorage.Utils.Extensions;
 using XmlStorage.XmlData.Models;
 
 namespace XmlStorage.XmlData
@@ -30,29 +29,46 @@ namespace XmlStorage.XmlData
                 yield return group;
             }
         }
-        
+
         public static void Save(in DataGroups dataGroups)
         {
             var xmlDataGroups = new XmlDataGroups(dataGroups);
-            var dic = new Dictionary<string, XmlDataGroupsModel>();
-            
-            
-            // foreach (var dataGroup in dataGroups)
-            // {
-            //     var model = dic.GetOrAdd(dataGroup.SaveFilePath.FullPath);
-            //     model.Groups.Add(new XmlDataGroupModel(dataGroup.GroupName, dataGroup.));
-            // }
-            //
-            // if (!Directory.Exists(directoryPath))
-            // {
-            //     Directory.CreateDirectory(directoryPath);
-            // }
-            //
-            // var group = new XmlDataGroups(dataGroups);
-            // Serializer.Serialize(
-            //     directoryPath + fileName,
-            //     new XmlDataGroupsModel(group.Groups)
-            // );
+            var dic = new Dictionary<FilePath, XmlDataGroupsModel>();
+
+            foreach (var group in xmlDataGroups)
+            {
+                XmlDataGroupsModel model = null;
+                foreach (var (filePath, xmlDataGroupsModel) in dic)
+                {
+                    if (!filePath.IsEquals(group.SaveFilePath))
+                    {
+                        continue;
+                    }
+                    
+                    model = xmlDataGroupsModel;
+                }
+
+                if (model == null)
+                {
+                    model = new XmlDataGroupsModel();
+                    dic[group.SaveFilePath] = model;
+                }
+
+                model.Groups.Add(new XmlDataGroupModel(group));
+            }
+
+            foreach (var (filePath, xmlDataGroupsModel) in dic)
+            {
+                if (!Directory.Exists(filePath.DirectoryPath))
+                {
+                    Directory.CreateDirectory(filePath.DirectoryPath);
+                }
+                
+                Serializer.Serialize(
+                    filePath.FullPath,
+                    xmlDataGroupsModel
+                );
+            }
         }
 
         public static IEnumerable<XmlDataGroups> Load(in string directoryPath)
@@ -61,7 +77,7 @@ namespace XmlStorage.XmlData
             {
                 return Enumerable.Empty<XmlDataGroups>();
             }
-            
+
             var dataGroups = new List<XmlDataGroups>();
             var filePaths = Directory.GetFiles(
                 directoryPath, Const.FileSearchPattern, SearchOption.AllDirectories
