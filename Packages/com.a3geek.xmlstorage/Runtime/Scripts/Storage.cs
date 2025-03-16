@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using XmlStorage.Data;
+﻿using XmlStorage.Data;
 using XmlStorage.Utils;
-using XmlStorage.Utils.Extensions;
 using XmlStorage.XmlData;
 
 namespace XmlStorage
@@ -22,7 +20,7 @@ namespace XmlStorage
                 DirectoryPathsInternal = value;
             }
         }
-        public static string CurrentDataGroupName { get; private set; } = Const.DataGroupName;
+        public static string CurrentDataGroupName { get; set; } = Const.DataGroupName;
 
         private static DataGroups DataGroupsInternal = null;
         private static string[] DirectoryPathsInternal = Const.SaveDirectoryPaths;

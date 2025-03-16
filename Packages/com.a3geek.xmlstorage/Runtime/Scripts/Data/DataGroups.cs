@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using XmlStorage.Utils;
 using XmlStorage.XmlData;
 
 namespace XmlStorage.Data
@@ -22,6 +23,11 @@ namespace XmlStorage.Data
 
         public DataGroup Get(in string groupName)
         {
+            if (string.IsNullOrEmpty(groupName))
+            {
+                return this.Get(Const.DataGroupName);
+            }
+            
             if (this.groups.TryGetValue(groupName, out var group))
             {
                 return group;
