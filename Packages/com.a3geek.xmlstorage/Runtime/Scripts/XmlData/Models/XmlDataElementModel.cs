@@ -3,20 +3,20 @@
 namespace XmlStorage.XmlData.Models
 {
     [Serializable]
-    public sealed class XmlDataElementModel
+    public class XmlDataElementModel
     {
-        public string Key = "";
-        public object Value = null;
-        public string TypeName = "";
+        public string Key;
+        public object Value;
+        public string TypeName;
 
 
-        public XmlDataElementModel() { }
+        public XmlDataElementModel() : this(string.Empty, null, null) { }
 
-        internal XmlDataElementModel(XmlDataElement element)
+        internal XmlDataElementModel(string key, object value, Type valueType)
         {
-            this.Key = element.Key;
-            this.Value = Serializer.Serialize(element.ValueType, element.Value);
-            this.TypeName = element.ValueType.AssemblyQualifiedName;
+            this.Key = key;
+            this.Value = value;
+            this.TypeName = valueType?.AssemblyQualifiedName ?? string.Empty;
         }
     }
 }

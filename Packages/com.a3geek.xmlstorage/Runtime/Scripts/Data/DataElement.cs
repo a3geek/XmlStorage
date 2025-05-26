@@ -9,7 +9,7 @@ namespace XmlStorage.Data
         public readonly Type ValueType = null;
 
 
-        public DataElement(in string key, in object value, in Type valueType)
+        public DataElement(string key, object value, Type valueType)
         {
             this.Key = key;
             this.Value = value;

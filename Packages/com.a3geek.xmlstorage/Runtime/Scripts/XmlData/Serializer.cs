@@ -11,7 +11,7 @@ namespace XmlStorage.XmlData
     internal static class Serializer
     {
         private static readonly XmlSerializer XmlSerializer = new(
-            typeof(XmlDataGroupsModel), new XmlRootAttribute(XmlDataGroupsModel.XmlRootName)
+            typeof(XmlDataGroupsModel)
         );
         private static readonly Dictionary<Type, XmlSerializer> XmlSerializers = new();
 

@@ -1,35 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace XmlStorage.XmlData.Models
 {
     [Serializable]
-    public sealed class XmlDataGroupModel
+    public class XmlDataGroupModel
     {
-        public string GroupName = "";
-        public List<XmlDataElementModel> Elements = new();
+        public string GroupName;
+        public XmlDataElementModel[] Elements;
 
-
-        public XmlDataGroupModel() { }
         
-        internal XmlDataGroupModel(XmlDataGroup group)
-        {
-            this.GroupName = group.GroupName;
-            
-            foreach (var e in group.Elements)
-            {
-                this.Elements.Add(new XmlDataElementModel(e));
-            }
-        }
+        public XmlDataGroupModel() : this(string.Empty, null) { }
 
-        internal XmlDataGroupModel(in string groupName, in IEnumerable<XmlDataElement> elements)
+        internal XmlDataGroupModel(string groupName, XmlDataElementModel[] elements)
         {
             this.GroupName = groupName;
-            
-            foreach (var e in elements)
-            {
-                this.Elements.Add(new XmlDataElementModel(e));
-            }
+            this.Elements = elements ?? Array.Empty<XmlDataElementModel>();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace XmlStorage.Data
         private readonly Dictionary<string, DataElement> data = new(); // Key: key + "_" + valueType.FullName
 
 
-        public void Update<T>(in string key, in T value, in Type valueType)
+        public void Update<T>(string key, in T value, Type valueType)
         {
             var globalKey = this.GetGlobalKey(key, valueType);
             if (this.TryGet(globalKey, out var element))
@@ -25,17 +25,17 @@ namespace XmlStorage.Data
             }
         }
 
-        public IEnumerable<DataElement> GetElements()
+        public Dictionary<string, DataElement>.ValueCollection GetElements()
         {
             return this.data.Values;
         }
 
-        public bool TryGet(in string key, in Type valueType, out DataElement result)
+        public bool TryGet(string key, Type valueType, out DataElement result)
         {
             return this.TryGet(this.GetGlobalKey(key, valueType), out result);
         }
 
-        public bool Delete(in string key, in Type valueType)
+        public bool Delete(string key, Type valueType)
         {
             var globalKey = this.GetGlobalKey(key, valueType);
             return this.data.Remove(globalKey);
@@ -46,20 +46,12 @@ namespace XmlStorage.Data
             this.data.Clear();
         }
 
-        public void Merge(in XmlDataGroup other)
-        {
-            foreach (var e in other)
-            {
-                this.Update(e.Key, e.Value, e.ValueType);
-            }
-        }
-
-        private bool TryGet(in string globalKey, out DataElement result)
+        private bool TryGet(string globalKey, out DataElement result)
         {
             return this.data.TryGetValue(globalKey, out result);
         }
 
-        private string GetGlobalKey(in string key, in Type valueType)
+        private string GetGlobalKey(string key, in Type valueType)
         {
             return this.builder.ToString(key, "_", valueType.FullName);
         }
