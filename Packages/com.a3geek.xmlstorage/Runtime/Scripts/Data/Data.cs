@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using XmlStorage.XmlData;
 using XmlStorage.Utils.Extensions;
 
 namespace XmlStorage.Data
@@ -12,7 +11,7 @@ namespace XmlStorage.Data
         private readonly Dictionary<string, DataElement> data = new(); // Key: key + "_" + valueType.FullName
 
 
-        public void Update<T>(string key, in T value, Type valueType)
+        public void Update<T>(string key, T value, Type valueType)
         {
             var globalKey = this.GetGlobalKey(key, valueType);
             if (this.TryGet(globalKey, out var element))
@@ -51,7 +50,7 @@ namespace XmlStorage.Data
             return this.data.TryGetValue(globalKey, out result);
         }
 
-        private string GetGlobalKey(string key, in Type valueType)
+        private string GetGlobalKey(string key, Type valueType)
         {
             return this.builder.ToString(key, "_", valueType.FullName);
         }

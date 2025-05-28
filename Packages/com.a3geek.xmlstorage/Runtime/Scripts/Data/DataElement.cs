@@ -4,9 +4,9 @@ namespace XmlStorage.Data
 {
     internal sealed class DataElement
     {
-        public readonly string Key = null;
-        public object Value = null;
-        public readonly Type ValueType = null;
+        public readonly string Key;
+        public object Value;
+        public readonly Type ValueType;
 
 
         public DataElement(string key, object value, Type valueType)

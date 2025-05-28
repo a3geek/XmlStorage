@@ -1,21 +1,36 @@
+using System;
 using XmlStorage.Data;
 using XmlStorage.Utils.Extensions;
-using XmlStorage.XmlData.Models;
 
 namespace XmlStorage.XmlData
 {
-    internal sealed class XmlDataElement : XmlDataElementModel
+    [Serializable]
+    public class XmlDataElement
     {
-        public XmlDataElement(in DataElement element) : base(element.Key, element.Value, element.ValueType) { }
+        public string Key;
+        public object Value;
+        public string TypeName;
 
-        public XmlDataElement(in XmlDataElementModel model)
+
+        public XmlDataElement() { }
+
+        internal XmlDataElement(DataElement element)
         {
-            this.Key = model.Key;
-            this.TypeName = model.TypeName;
+            this.Key = element.Key;
+            this.Value = element.Value;
+            this.TypeName = element.ValueType.AssemblyQualifiedName;
+        }
 
-            this.Value = model.TypeName.TryGetTypeAsTypeName(out var valurType)
-                ? Serializer.Deserialize(valurType, model.Value)
-                : null;
+        internal bool TryGetDataElementTuple(out (string key, object value, Type valueType) tuple)
+        {
+            if (!this.TypeName.TryGetTypeAsTypeName(out var type))
+            {
+                tuple = default;
+                return false;
+            }
+
+            tuple = (this.Key, Serializer.Deserialize(type, this.Value), type);
+            return true;
         }
     }
 }

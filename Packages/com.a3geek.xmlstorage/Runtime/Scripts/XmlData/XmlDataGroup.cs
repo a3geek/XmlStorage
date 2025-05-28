@@ -1,56 +1,47 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using XmlStorage.Data;
-using XmlStorage.XmlData.Models;
 
 namespace XmlStorage.XmlData
 {
-    internal sealed class XmlDataGroup : XmlDataGroupModel
+    [Serializable]
+    public class XmlDataGroup
     {
-        public readonly string GroupName;
-        public readonly XmlDataElement[] Elements;
-        
-        
-        
-        
-        public XmlDataGroup(in DataGroup group)
+        public string GroupName;
+        public XmlDataElement[] Elements;
+
+
+        public XmlDataGroup() { }
+
+        internal XmlDataGroup(DataGroup group)
         {
             this.GroupName = group.GroupName;
-            this.Elements = group
-                .GetData()
-                .GetElements()
-                .Select(e => new XmlDataElement(e))
-                .ToArray();
-        }
 
-        public XmlDataGroup(in XmlDataGroupModel model)
-        {
-            this.GroupName = model.GroupName;
+            var dataElements = group.GetData().GetElements();
 
-            this.Elements = new XmlDataElement[model.Elements.Length];
-            for(var i = 0; i < model.Elements.Length; i++)
+            var cnt = 0;
+            var elements = new XmlDataElement[dataElements.Count];
+            foreach (var dataElement in dataElements)
             {
-                this.Elements[i] = new XmlDataElement(model.Elements[i]);
+                elements[cnt++] = new XmlDataElement(dataElement);
             }
+
+            this.Elements = elements;
         }
 
-        public void GetModel(out XmlDataGroupModel model)
+        internal DataGroup ToDataGroup()
         {
-            var em = new XmlDataElementModel[this.Elements.Length];
-            
-            
-            model = new XmlDataGroupModel(
-                this.GroupName
-            );
-        }
+            var group = new DataGroup(this.GroupName);
 
-        public IEnumerator<XmlDataElement> GetEnumerator()
-        {
-            foreach (var element in this.Elements)
+            var data = group.GetData();
+            foreach (var e in this.Elements)
             {
-                yield return element;
+                if (e.TryGetDataElementTuple(out var tuple))
+                {
+                    data.Update(tuple.key, tuple.value, tuple.valueType);
+                }
             }
+
+            return group;
         }
     }
 }
