@@ -10,8 +10,6 @@ namespace XmlStorage.XmlData
         public XmlDataElement[] Elements;
 
 
-        public XmlDataGroup() { }
-
         internal XmlDataGroup(DataGroup group)
         {
             this.GroupName = group.GroupName;
@@ -28,10 +26,8 @@ namespace XmlStorage.XmlData
             this.Elements = elements;
         }
 
-        internal DataGroup ToDataGroup()
+        internal void LoadToDataGroup(DataGroup group)
         {
-            var group = new DataGroup(this.GroupName);
-
             var data = group.GetData();
             foreach (var e in this.Elements)
             {
@@ -40,8 +36,6 @@ namespace XmlStorage.XmlData
                     data.Update(tuple.key, tuple.value, tuple.valueType);
                 }
             }
-
-            return group;
         }
     }
 }

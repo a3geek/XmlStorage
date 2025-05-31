@@ -1,52 +1,35 @@
 using System.IO;
+using XmlStorage.Utilities.Extensions;
 
 namespace XmlStorage.Data
 {
-    public sealed partial class FilePath
+    public readonly ref partial struct FilePath
     {
-        public string DirectoryPath
+        private const char Dot = '.';
+        private static readonly char Separator = Path.DirectorySeparatorChar;
+
+        public readonly string DirectoryPath;
+        public readonly string FileName;
+        public readonly string Extension;
+
+
+        public FilePath(string directoryPath, string fileName, string extension)
         {
-            get => this.directory.Path;
-            set
+            this.DirectoryPath = directoryPath.AdjustAsDirectoryPath();
+            this.FileName = fileName.AdjustAsFileName();
+            this.Extension = extension;
+        }
+
+        public string GetFullPath()
+        {
+            var directory = this.DirectoryPath.TrimEnd(Separator);
+            if (!Directory.Exists(directory))
             {
-                this.directory.Path = value;
-                this.Set(this.directory, this.file);
+                Directory.CreateDirectory(directory);
             }
-        }
-        public string FileName
-        {
-            get => this.file.Name;
-            set
-            {
-                this.file.Name = value;
-                this.Set(this.directory, this.file);
-            }
-        }
-        public string FullPath { get; private set; } = null;
 
-        private DirectoryPathEntry directory = null;
-        private FileNameEntry file = null;
-
-
-        public FilePath() : this(null, null) { }
-
-        public FilePath(string filePath) : this(Path.GetDirectoryName(filePath), Path.GetFileName(filePath)) { }
-
-        public FilePath(in string directoryPath, in string fileName)
-        {
-            this.Set(new DirectoryPathEntry(directoryPath), new FileNameEntry(fileName));
-        }
-
-        public bool IsEquals(in FilePath other)
-        {
-            return this.FullPath == other.FullPath;
-        }
-
-        private void Set(in DirectoryPathEntry directoryPath, in FileNameEntry fileName)
-        {
-            this.directory = directoryPath;
-            this.file = fileName;
-            this.FullPath = this.DirectoryPath + this.FileName;
+            var extension = Dot + this.Extension.TrimStart(Dot);
+            return this.DirectoryPath + Separator + this.FileName + Separator + extension;
         }
     }
 }

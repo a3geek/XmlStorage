@@ -1,9 +1,9 @@
-using XmlStorage.Utils;
-using XmlStorage.Utils.Extensions;
+using XmlStorage.Utilities;
+using XmlStorage.Utilities.Extensions;
 
 namespace XmlStorage.Data
 {
-    public sealed partial class FilePath
+    public readonly ref partial struct FilePath
     {
         public sealed class DirectoryPathEntry : FilePathEntry
         {
@@ -14,9 +14,9 @@ namespace XmlStorage.Data
             }
 
 
-            public DirectoryPathEntry(in string directoryPath) : base(directoryPath, Const.SaveDirectoryPaths[0]) { }
+            public DirectoryPathEntry(string directoryPath) : base(directoryPath, Const.SaveDirectoryPaths[0]) { }
 
-            protected override string Validate(in string input) => input.AdjustAsDirectoryPath(creatable: false);
+            protected override string Validate(string input) => input.AdjustAsDirectoryPath(creatable: false);
         }
 
         public sealed class FileNameEntry : FilePathEntry
@@ -28,9 +28,9 @@ namespace XmlStorage.Data
             }
 
 
-            public FileNameEntry(in string fileName) : base(fileName, Const.SaveFileName) { }
+            public FileNameEntry(string fileName) : base(fileName, Const.SaveFileName) { }
 
-            protected override string Validate(in string input) => input.AdjustAsFileName();
+            protected override string Validate(string input) => input.AdjustAsFileName();
         }
 
         public abstract class FilePathEntry
@@ -48,12 +48,12 @@ namespace XmlStorage.Data
             private string entry = null;
 
 
-            protected FilePathEntry(in string value, in string defaultValue)
+            protected FilePathEntry(string value, string defaultValue)
             {
                 this.Value = string.IsNullOrEmpty(value) ? defaultValue : value;
             }
 
-            protected abstract string Validate(in string input);
+            protected abstract string Validate(string input);
         }
     }
 }

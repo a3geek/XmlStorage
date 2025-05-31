@@ -1,44 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
-using XmlStorage.Utils;
-using XmlStorage.Utils.Extensions;
+using XmlStorage.Utilities;
+using XmlStorage.Utilities.Extensions;
 
 namespace XmlStorage.XmlData
 {
     internal static class Serializer
     {
+        private static readonly UTF8Encoding Encode = new(false);
         private static readonly Dictionary<Type, XmlSerializer> XmlSerializers = new();
 
 
         public static void Serialize(string filePath, XmlDataGroup xmlDataGroup)
         {
-            using var sw = new StreamWriter(filePath, false, Const.Encode);
+            using var sw = new StreamWriter(filePath, false, Encode);
             GetXmlSerializer(typeof(XmlDataGroup)).Serialize(sw, xmlDataGroup);
         }
 
-        // public static object Serialize(in Type type, in object value)
-        // {
-        //     if (!type.IsNeedSerialize())
-        //     {
-        //         return value;
-        //     }
-        //
-        //     using var sw = new EncodedStringWriter(Const.Encode);
-        //     var serializer = GetXmlSerializer(type);
-        //     serializer.Serialize(sw, value);
-        //
-        //     return sw.ToString();
-        // }
-
-        public static XmlDataGroup Deserialize(in string filePath)
+        public static XmlDataGroup Deserialize(string filePath)
         {
-            using var sr = new StreamReader(filePath, Const.Encode);
-            return (XmlDataGroup)GetXmlSerializer(typeof(XmlDataGroup)).Deserialize(sr);
+            using var sr = new StreamReader(filePath, Encode);
+            return GetXmlSerializer(typeof(XmlDataGroup)).Deserialize(sr) as XmlDataGroup;
         }
 
-        public static object Deserialize(in Type type, in object value)
+        public static object Deserialize(object value, Type type)
         {
             if (!type.IsNeedSerialize())
             {

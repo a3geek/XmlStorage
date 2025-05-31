@@ -1,33 +1,21 @@
 using System.Collections.Generic;
-using XmlStorage.Utils;
-using XmlStorage.XmlData;
 
 namespace XmlStorage.Data
 {
     internal sealed class DataGroups
     {
-        private readonly Dictionary<string, DataGroup> groups = null; // Key: GroupName
+        private const string DefaultGroupName = nameof(XmlStorage);
 
+        private readonly Dictionary<string, DataGroup> groups = new(); // Key: GroupName
 
-        public DataGroups() : this(new Dictionary<string, DataGroup>()) { }
-
-        public DataGroups(in Dictionary<string, DataGroup> groups)
-        {
-            this.groups = groups;
-        }
-
-        public IEnumerable<DataGroup> Get()
-        {
-            return this.groups.Values;
-        }
-
-        public DataGroup Get(in string groupName)
+        
+        public DataGroup GetGroup(string groupName)
         {
             if (string.IsNullOrEmpty(groupName))
             {
-                return this.Get(Const.DataGroupName);
+                return this.GetGroup(DefaultGroupName);
             }
-            
+
             if (this.groups.TryGetValue(groupName, out var group))
             {
                 return group;
@@ -38,27 +26,27 @@ namespace XmlStorage.Data
 
             return group;
         }
-        
-        public void Merge(in XmlDataGroups xmlDataGroups)
-        {
-            foreach (var xmlDataGroup in xmlDataGroups)
-            {
-                if (this.groups.TryGetValue(xmlDataGroup.GroupName, out var group))
-                {
-                    group.GetData().Merge(xmlDataGroup);
-                }
-                else
-                {
-                    this.groups[xmlDataGroup.GroupName] = new DataGroup(xmlDataGroup);
-                }
-            }
-        }
 
-        public IEnumerator<(string groupName, DataGroup dataGroup)> GetEnumerator()
+        // public void Merge(in XmlDataGroups xmlDataGroups)
+        // {
+        //     foreach (var xmlDataGroup in xmlDataGroups)
+        //     {
+        //         if (this.groups.TryGetValue(xmlDataGroup.GroupName, out var group))
+        //         {
+        //             group.GetData().Merge(xmlDataGroup);
+        //         }
+        //         else
+        //         {
+        //             this.groups[xmlDataGroup.GroupName] = new DataGroup(xmlDataGroup);
+        //         }
+        //     }
+        // }
+
+        public IEnumerator<DataGroup> GetEnumerator()
         {
-            foreach (var (groupName, dataGroup) in this.groups)
+            foreach (var (_, dataGroup) in this.groups)
             {
-                yield return (groupName, dataGroup);
+                yield return dataGroup;
             }
         }
     }

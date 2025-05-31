@@ -13,7 +13,7 @@ namespace XmlStorage.Tests
             try
             {
                 Storage.CurrentDataGroupName = "TestGroup";
-                Storage.CurrentDataGroup.SaveFilePath.FileName = "TestGroup";
+                // Storage.CurrentDataGroup.SaveFilePath.FileName = "TestGroup";
                 Storage.SetInt("Int", 10);
                 Storage.SetFloat("Float", 12.345f);
                 Storage.SetBool("Bool", true);
@@ -29,7 +29,7 @@ namespace XmlStorage.Tests
                 );
 
                 Storage.CurrentDataGroupName = "NestedTestGroup";
-                Storage.CurrentDataGroup.SaveFilePath.FileName = "NestedTestGroup";
+                // Storage.CurrentDataGroup.SaveFilePath.FileName = "NestedTestGroup";
                 Storage.Set("NestedTestModel", new NestedTestModel()
                     {
                         Bool = true,

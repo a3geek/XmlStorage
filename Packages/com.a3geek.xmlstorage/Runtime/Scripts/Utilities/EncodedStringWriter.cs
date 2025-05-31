@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 
-namespace XmlStorage.Utils
+namespace XmlStorage.Utilities
 {
     internal class EncodedStringWriter : StringWriter
     {

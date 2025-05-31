@@ -1,13 +1,16 @@
 using System.IO;
 using System.Text;
 
-namespace XmlStorage.Utils
+namespace XmlStorage.Utilities
 {
     using Extensions;
 
     internal static class Const
     {
+        public static readonly char Dot = '.';
         public static readonly char Separator = Path.DirectorySeparatorChar;
+        
+        
         public const string Extension = ".xml";
         public const string FileSearchPattern = "*" + Extension;
         public static readonly UTF8Encoding Encode = new(false);

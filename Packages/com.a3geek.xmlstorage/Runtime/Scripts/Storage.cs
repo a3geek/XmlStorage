@@ -1,12 +1,16 @@
-﻿using XmlStorage.Data;
-using XmlStorage.Utils;
+﻿using System.IO;
+using XmlStorage.Data;
+using XmlStorage.Utilities;
 using XmlStorage.XmlData;
 
 namespace XmlStorage
 {
     public static partial class Storage
     {
-        public static DataGroup CurrentDataGroup => GetDataGroups().Get(CurrentDataGroupName);
+        private const string Extension = "xml";
+        private const string LoadPattern = "*." + Extension;
+        
+        public static DataGroup CurrentDataGroup => GetDataGroups().GetGroup(CurrentDataGroupName);
         public static string[] DirectoryPaths
         {
             get => DirectoryPathsInternal;
@@ -28,21 +32,27 @@ namespace XmlStorage
 
         public static void Save()
         {
-            XmlDataGroups.Save(GetDataGroups());
+            var directoryPath = DirectoryPaths[0];
+            foreach (var group in GetDataGroups())
+            {
+                var path = new FilePath(directoryPath, group.GroupName, Extension);
+                var xml = new XmlDataGroup(group);
+
+                Serializer.Serialize(path.GetFullPath(), xml);
+            }
         }
 
         public static void Load()
         {
-            var dataGroups = new DataGroups();
-            foreach (var path in DirectoryPaths)
-            {
-                foreach (var xmlDataGroups in XmlDataGroups.Load(path))
-                {
-                    dataGroups.Merge(xmlDataGroups);
-                }
-            }
+            var groups = new DataGroups();
+            var directoryPath = DirectoryPaths[0];
 
-            DataGroupsInternal = dataGroups;
+            var files = Directory.GetFiles(directoryPath, LoadPattern, SearchOption.TopDirectoryOnly);
+            foreach (var path in files)
+            {
+                var xml = Serializer.Deserialize(path);
+                xml?.LoadToDataGroup(groups.GetGroup(xml.GroupName));
+            }
         }
 
         private static DataGroups GetDataGroups()

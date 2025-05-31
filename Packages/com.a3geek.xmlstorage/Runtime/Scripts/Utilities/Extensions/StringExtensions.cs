@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace XmlStorage.Utils.Extensions
+namespace XmlStorage.Utilities.Extensions
 {
     internal static class StringExtensions
     {

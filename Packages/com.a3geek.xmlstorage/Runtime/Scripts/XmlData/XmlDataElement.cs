@@ -1,6 +1,6 @@
 using System;
 using XmlStorage.Data;
-using XmlStorage.Utils.Extensions;
+using XmlStorage.Utilities.Extensions;
 
 namespace XmlStorage.XmlData
 {
@@ -11,8 +11,6 @@ namespace XmlStorage.XmlData
         public object Value;
         public string TypeName;
 
-
-        public XmlDataElement() { }
 
         internal XmlDataElement(DataElement element)
         {
@@ -29,7 +27,7 @@ namespace XmlStorage.XmlData
                 return false;
             }
 
-            tuple = (this.Key, Serializer.Deserialize(type, this.Value), type);
+            tuple = (this.Key, Serializer.Deserialize(this.Value, type), type);
             return true;
         }
     }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using XmlStorage.Utils.Extensions;
 
 namespace XmlStorage.Data
 {
     internal sealed class Data
     {
+        private const char Connector = '_';
+
         private readonly StringBuilder builder = new();
         private readonly Dictionary<string, DataElement> data = new(); // Key: key + "_" + valueType.FullName
 
@@ -52,7 +53,12 @@ namespace XmlStorage.Data
 
         private string GetGlobalKey(string key, Type valueType)
         {
-            return this.builder.ToString(key, "_", valueType.FullName);
+            this.builder.Clear();
+            return this.builder
+                .Append(key)
+                .Append(Connector)
+                .Append(valueType.FullName)
+                .ToString();
         }
     }
 }
