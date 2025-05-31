@@ -27,21 +27,6 @@ namespace XmlStorage.Data
             return group;
         }
 
-        // public void Merge(in XmlDataGroups xmlDataGroups)
-        // {
-        //     foreach (var xmlDataGroup in xmlDataGroups)
-        //     {
-        //         if (this.groups.TryGetValue(xmlDataGroup.GroupName, out var group))
-        //         {
-        //             group.GetData().Merge(xmlDataGroup);
-        //         }
-        //         else
-        //         {
-        //             this.groups[xmlDataGroup.GroupName] = new DataGroup(xmlDataGroup);
-        //         }
-        //     }
-        // }
-
         public IEnumerator<DataGroup> GetEnumerator()
         {
             foreach (var (_, dataGroup) in this.groups)

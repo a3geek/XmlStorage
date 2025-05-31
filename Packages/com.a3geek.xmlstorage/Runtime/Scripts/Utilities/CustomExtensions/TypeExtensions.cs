@@ -1,6 +1,6 @@
 using System;
 
-namespace XmlStorage.Utilities.Extensions
+namespace XmlStorage.Utilities.CustomExtensions
 {
     internal static class TypeExtensions
     {

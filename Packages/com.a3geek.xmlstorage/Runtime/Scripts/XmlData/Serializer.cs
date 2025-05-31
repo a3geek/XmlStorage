@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using XmlStorage.Utilities;
-using XmlStorage.Utilities.Extensions;
+using XmlStorage.Utilities.CustomExtensions;
 
 namespace XmlStorage.XmlData
 {

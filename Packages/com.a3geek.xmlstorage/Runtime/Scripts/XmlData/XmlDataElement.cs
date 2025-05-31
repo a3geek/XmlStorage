@@ -1,6 +1,6 @@
 using System;
 using XmlStorage.Data;
-using XmlStorage.Utilities.Extensions;
+using XmlStorage.Utilities.CustomExtensions;
 
 namespace XmlStorage.XmlData
 {

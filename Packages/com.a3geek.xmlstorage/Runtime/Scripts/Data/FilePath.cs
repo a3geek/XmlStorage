@@ -1,5 +1,4 @@
 using System.IO;
-using XmlStorage.Utilities.Extensions;
 
 namespace XmlStorage.Data
 {
@@ -15,8 +14,8 @@ namespace XmlStorage.Data
 
         public FilePath(string directoryPath, string fileName, string extension)
         {
-            this.DirectoryPath = directoryPath.AdjustAsDirectoryPath();
-            this.FileName = fileName.AdjustAsFileName();
+            this.DirectoryPath = directoryPath;
+            this.FileName = fileName;
             this.Extension = extension;
         }
 
@@ -28,8 +27,7 @@ namespace XmlStorage.Data
                 Directory.CreateDirectory(directory);
             }
 
-            var extension = Dot + this.Extension.TrimStart(Dot);
-            return this.DirectoryPath + Separator + this.FileName + Separator + extension;
+            return this.DirectoryPath + Separator + this.FileName + Dot + this.Extension.TrimStart(Dot);
         }
     }
 }

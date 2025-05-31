@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using XmlStorage.Data;
-using XmlStorage.Utilities;
 using XmlStorage.XmlData;
 
 namespace XmlStorage
@@ -9,33 +8,32 @@ namespace XmlStorage
     {
         private const string Extension = "xml";
         private const string LoadPattern = "*." + Extension;
-        
-        public static DataGroup CurrentDataGroup => GetDataGroups().GetGroup(CurrentDataGroupName);
-        public static string[] DirectoryPaths
+        private const string DefaultDataGroupName = "Prefs";
+
+        public static string CurrentDataGroupName { get; set; } = DefaultDataGroupName;
+        public static DataGroup CurrentDataGroup => DataGroups.GetGroup(CurrentDataGroupName);
+        public static string DirectoryPath { get; set; } = GetDefaultDirectoryPath();
+
+        private static DataGroups DataGroups
         {
-            get => DirectoryPathsInternal;
-            set
+            get
             {
-                if ((value?.Length ?? -1) <= 0)
+                if (DataGroupsInternal == null)
                 {
-                    return;
+                    Load();
                 }
 
-                DirectoryPathsInternal = value;
+                return DataGroupsInternal;
             }
         }
-        public static string CurrentDataGroupName { get; set; } = Const.DataGroupName;
-
         private static DataGroups DataGroupsInternal = null;
-        private static string[] DirectoryPathsInternal = Const.SaveDirectoryPaths;
 
 
         public static void Save()
         {
-            var directoryPath = DirectoryPaths[0];
-            foreach (var group in GetDataGroups())
+            foreach (var group in DataGroups)
             {
-                var path = new FilePath(directoryPath, group.GroupName, Extension);
+                var path = new FilePath(DirectoryPath, group.GroupName, Extension);
                 var xml = new XmlDataGroup(group);
 
                 Serializer.Serialize(path.GetFullPath(), xml);
@@ -45,24 +43,24 @@ namespace XmlStorage
         public static void Load()
         {
             var groups = new DataGroups();
-            var directoryPath = DirectoryPaths[0];
-
-            var files = Directory.GetFiles(directoryPath, LoadPattern, SearchOption.TopDirectoryOnly);
+            
+            var files = Directory.GetFiles(DirectoryPath, LoadPattern, SearchOption.TopDirectoryOnly);
             foreach (var path in files)
             {
                 var xml = Serializer.Deserialize(path);
                 xml?.LoadToDataGroup(groups.GetGroup(xml.GroupName));
             }
+            
+            DataGroupsInternal = groups;
         }
-
-        private static DataGroups GetDataGroups()
+        
+        public static string GetDefaultDirectoryPath()
         {
-            if (DataGroupsInternal == null)
-            {
-                Load();
-            }
-
-            return DataGroupsInternal;
+        #if UNITY_EDITOR
+            return Directory.GetCurrentDirectory();
+        #else
+            return System.AppDomain.CurrentDomain.BaseDirectory;
+        #endif
         }
     }
 }

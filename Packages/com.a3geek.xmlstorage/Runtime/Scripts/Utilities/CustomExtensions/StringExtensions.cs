@@ -1,42 +1,10 @@
 using System;
-using System.IO;
 using System.Reflection;
 
-namespace XmlStorage.Utilities.Extensions
+namespace XmlStorage.Utilities.CustomExtensions
 {
     internal static class StringExtensions
     {
-        public static string AdjustAsFileName(this string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                return string.Empty;
-            }
-
-            return fileName.EndsWith(Const.Extension) ? fileName : fileName + Const.Extension;
-        }
-
-        public static string AdjustAsDirectoryPath(this string directoryPath, bool creatable = true)
-        {
-            if (string.IsNullOrEmpty(directoryPath))
-            {
-                return null;
-            }
-
-            var path = directoryPath.AdjustSeparateCharAsPath();
-            if (creatable && Directory.Exists(path) == false)
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            return path.EndsWith(Const.Separator) ? path : path + Const.Separator;
-        }
-
-        public static string AdjustSeparateCharAsPath(this string path)
-        {
-            return string.IsNullOrEmpty(path) ? string.Empty : path.Replace('\\', '/').Replace('/', Const.Separator);
-        }
-
         public static bool TryGetTypeAsTypeName(this string typeName, out Type type)
         {
             type = GetType(typeName, 0);
