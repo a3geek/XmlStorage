@@ -16,13 +16,36 @@ namespace XmlStorage.XmlData
         public static void Serialize(string filePath, XmlDataGroup xmlDataGroup)
         {
             using var sw = new StreamWriter(filePath, false, Encode);
-            GetXmlSerializer(typeof(XmlDataGroup)).Serialize(sw, xmlDataGroup);
+            var serializer = GetXmlSerializer(typeof(XmlDataGroup));
+            serializer.Serialize(sw, xmlDataGroup);
+        }
+
+        public static object Serialize(object value, Type type)
+        {
+            if (!type.IsNeedSerialize())
+            {
+                return value;
+            }
+
+            using var sw = new StringWriter();
+            var serializer = GetXmlSerializer(type);
+            serializer.Serialize(sw, value);
+
+            return sw.ToString();
         }
 
         public static XmlDataGroup Deserialize(string filePath)
         {
-            using var sr = new StreamReader(filePath, Encode);
-            return GetXmlSerializer(typeof(XmlDataGroup)).Deserialize(sr) as XmlDataGroup;
+            try
+            {
+                using var sr = new StreamReader(filePath, Encode);
+                var serializer = GetXmlSerializer(typeof(XmlDataGroup));
+                return serializer.Deserialize(sr) as XmlDataGroup;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public static object Deserialize(object value, Type type)

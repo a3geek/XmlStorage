@@ -6,7 +6,7 @@ namespace XmlStorage
 {
     public static partial class Storage
     {
-        private const string Extension = "xml";
+        internal const string Extension = "xml";
         private const string LoadPattern = "*." + Extension;
         private const string DefaultDataGroupName = "Prefs";
 
@@ -33,27 +33,28 @@ namespace XmlStorage
         {
             foreach (var group in DataGroups)
             {
-                var path = new FilePath(DirectoryPath, group.GroupName, Extension);
                 var xml = new XmlDataGroup(group);
-
-                Serializer.Serialize(path.GetFullPath(), xml);
+                Serializer.Serialize(group.FilePath.GetFullPath(), xml);
             }
         }
 
         public static void Load()
         {
             var groups = new DataGroups();
-            
-            var files = Directory.GetFiles(DirectoryPath, LoadPattern, SearchOption.TopDirectoryOnly);
-            foreach (var path in files)
+
+            if (Directory.Exists(DirectoryPath))
             {
-                var xml = Serializer.Deserialize(path);
-                xml?.LoadToDataGroup(groups.GetGroup(xml.GroupName));
+                var files = Directory.GetFiles(DirectoryPath, LoadPattern, SearchOption.TopDirectoryOnly);
+                foreach (var path in files)
+                {
+                    var xml = Serializer.Deserialize(path);
+                    xml?.LoadToDataGroup(groups.GetGroup(xml.GroupName));
+                }
             }
-            
+
             DataGroupsInternal = groups;
         }
-        
+
         public static string GetDefaultDirectoryPath()
         {
         #if UNITY_EDITOR

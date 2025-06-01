@@ -2,7 +2,7 @@ using System.IO;
 
 namespace XmlStorage.Data
 {
-    public readonly ref partial struct FilePath
+    public readonly ref struct FilePath
     {
         private const char Dot = '.';
         private static readonly char Separator = Path.DirectorySeparatorChar;

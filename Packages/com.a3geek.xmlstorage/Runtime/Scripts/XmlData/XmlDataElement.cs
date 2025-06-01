@@ -12,10 +12,12 @@ namespace XmlStorage.XmlData
         public string TypeName;
 
 
+        public XmlDataElement() { }
+
         internal XmlDataElement(DataElement element)
         {
             this.Key = element.Key;
-            this.Value = element.Value;
+            this.Value = Serializer.Serialize(element.Value, element.ValueType);
             this.TypeName = element.ValueType.AssemblyQualifiedName;
         }
 

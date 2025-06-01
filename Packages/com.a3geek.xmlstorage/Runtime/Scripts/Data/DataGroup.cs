@@ -4,6 +4,7 @@
     public sealed class DataGroup
     {
         public string GroupName { get; }
+        public FilePath FilePath => new(Storage.DirectoryPath, this.GroupName, Storage.Extension);
 
         private readonly Data data = new();
 

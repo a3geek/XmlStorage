@@ -10,6 +10,8 @@ namespace XmlStorage.XmlData
         public XmlDataElement[] Elements;
 
 
+        public XmlDataGroup() { }
+
         internal XmlDataGroup(DataGroup group)
         {
             this.GroupName = group.GroupName;
