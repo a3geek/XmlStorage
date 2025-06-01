@@ -1,17 +1,23 @@
 XmlStorage
 ===
-
-
-## Description
 XML形式でデータを保存するライブラリです。  
 
-Unityの[PlayerPrefs](https://docs.unity3d.com/jp/current/ScriptReference/PlayerPrefs.html)は、Windows上ではアプリケーション間でキー情報がコンフリクトしたり、レジストリに保存するために値の確認がし辛い等の問題があります。  
-それらの問題を解決し置き換えるのを目的として開発されたため、PlayerPrefsをStorageに全置換すればそのまま動作します。
+
+## 概要
+Unityの[PlayerPrefs](https://docs.unity3d.com/jp/current/ScriptReference/PlayerPrefs.html)は、対応する型が非常に限定的であり、レジストリに保存するため値の確認に手間がかかるなどの問題があります。  
+それらの問題を解決し置き換えることを目的として開発されたのがXmlStoraです。
+既存コードのPlayerPrefsをStorageに全置換すれば、そのまま動作させることができます。
+
+## 導入
+UPMで「Add package from git URL」選択して以下のURLを入力してください。
+```
+https://github.com/a3geek/XmlStorage.git?path=Packages/com.a3geek.xmlstorage
+```
 
 ## Usage
 サンプルコード
 ```` csharp
-void Start()
+private void Start()
 {
     Storage.Set("int1", 1);
     Storage.SetInt("int2", 2);
@@ -22,16 +28,18 @@ void Start()
     Debug.Log(Storage.GetInt("int3", 0)); // 0
 }
 ````
-より詳しい使い方は[Example](Assets/XmlStorage/Example/)を参照してください。
+より詳しい使い方は[Example](Assets/XmlStorage/Example/)や[Tests](Assets/XmlStorage/Tests)を参照してください。
 
 ## Behaviour
-- クラスのインスタンスでもシリアライズ可能であればそのまま保存できます。
+- シリアライズ可能なクラスであれば保存可能
 ```` csharp
 [System.Serializable]
 public class Test
 {
     public int int1 = 10;
     public string str = "str";
+
+    public Test() { }
 }
 
 void Start()
@@ -44,81 +52,49 @@ void Start()
     Storage.Save();
 
     Debug.Log(Storage.Get<Test>("test").int1); // 100
-    Debug.Log(Storage.Get("test", new Test()).str); // "STR"
+    Debug.Log(Storage.Get<Test>("test").str); // "STR"
 }
 ````
 <br />
 
-- Keyに指定した文字列が同一でも、保存するデータの型(System.Type情報)が異なれば別データとして保存されます。
-    - 保存するデータの型情報を明示する事もできます。
+- Keyに指定した文字列が同一でも、保存するデータの型(System.Type情報)が異なれば別データとして保存
 ```` csharp
 void Start()
 {
     Storage.Set("value", "str");
     Storage.Set("value", 10);
     Storage.Set("value", 11);
-    Storage.Set(typeof(object), "obj", 100);
     Storage.Save();
 
     Debug.Log(Storage.Get("value", "")); // str
     Debug.Log(Storage.Get("value", 0)); // 11
-
-    Debug.Log(Storage.Get(typeof(object), "obj", 0)); // 100
-    Debug.Log(Storage.Get<object>("obj")); // 100
-    Debug.Log(Storage.Get(typeof(int), "obj", 0)); // 0
-    Debug.Log(Storage.Get<int>("obj")); // 0
 }
 ````
 <br />
 
-- 各データはAggregation(集団)に所属しており、所属する集団を指定する事ができます。
-  - 各集団毎に保存する『ファイル名』を変更する事ができます。
-  - 各集団同士は独立しているので、キー情報はコンフリクトしません。
+- `Storage.CurrentDataGroupName`によってデータグループを切り替えることが可能
+  - デフォルトでは`Storage.DefaultDataGroupName`が設定されている
+  - 各グループは独立しており、同じキー情報を持つデータがあってもコンフリクトしない
+  - データグループ名が保存するファイル名に反映される
 ```` csharp
 void Start()
 {
-    Debug.Log(Storage.CurrentAggregationName); // Default
-    Storage.Set("str", "str0");
+    Debug.Log(Storage.CurrentDataGroupName); // Prefs
+    Storage.Set("float", 1f);
     Storage.Set("int", 10);
 
-    Debug.Log(Storage.Get("str", "")); // "str0"
+    Debug.Log(Storage.Get("str", 0f)); // 1.0
     Debug.Log(Storage.Get("int", 0)); // 10
     
-    Storage.ChangeAggregation("Test");
-    Debug.Log(Storage.CurrentAggregationName); // Test
+    // データグループを変更
+    Storage.CurrentDataGroupName = "Test";
+    Debug.Log(Storage.CurrentDataGroupName); // Test
 
-    Storage.Set("str", "str1");
+    Storage.Set("float", 10f);
     Storage.Set("int", 100);
 
-    Debug.Log(Storage.Get("str", "")); // "str1"
-    Debug.Log(Storage.Get("int", 0)); // 100
-
-    Storage.ChangeAggregation(Storage.DefaultAggregationName);
-    Debug.Log(Storage.CurrentAggregationName); // Default
-    Debug.Log(Storage.Get("str", "")); // "str0"
+    Debug.Log(Storage.Get("str", 0f)); // 10.0
     Debug.Log(Storage.Get("int", 0)); // 10
 }
 ````
 <br />
-
-- データの保存先のフォルダは、任意のタイミングで変更することができます。
-    - フォルダパスを変更した場合は`Storage.Load()`をよぶようにしてください。
-    - `Storage.Load()`をよばなかった場合は内部的なデータの初期化が行われないため、今までSetしてきたデータや集団情報もそのディレクトリに保存されます。
-```` csharp
-void Start()
-{
-    Storage.Set("test1", Vector2.zero); // Defaultの保存先に保存.
-    Storage.Save();
-
-    Storage.DirectoryPath = Application.dataPath + "/../Saves2/";   
-    Storage.Load();
-
-    Storage.Set("test2", Vector2.one); // 変更した保存先に保存.
-    Storage.Save(); // Sotrage.Loadをよばなかった場合、変更した保存先に"test1"も保存される。
-}
-````
-<br />
-    
-
-## Default save folder
-[Application.dataPath](https://docs.unity3d.com/ja/current/ScriptReference/Application-dataPath.html) + "/../Saves/"
