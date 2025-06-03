@@ -4,21 +4,21 @@ namespace XmlStorage
 {
     public static partial class Storage
     {
-        public static bool HasKey(string key, Type type)
+        public static bool HasKey(string key, Type type, string groupName = null)
         {
-            var group = CurrentDataGroup;
+            var group = GetCurrentDataGroup(groupName ?? CurrentDataGroupName);
             return group.GetData().TryGet(key, type, out _);
         }
 
-        public static bool Delete(string key, Type type)
+        public static bool Delete(string key, Type type, string groupName = null)
         {
-            var group = CurrentDataGroup;
+            var group = GetCurrentDataGroup(groupName ?? CurrentDataGroupName);
             return group.GetData().Delete(key, type);
         }
 
-        public static void DeleteAll()
+        public static void DeleteAll(string groupName = null)
         {
-            var group = CurrentDataGroup;
+            var group = GetCurrentDataGroup(groupName ?? CurrentDataGroupName);
             group.GetData().DeleteAll();
         }
 
@@ -48,9 +48,9 @@ namespace XmlStorage
             SetValue(key, value, typeof(string));
         }
 
-        private static void SetValue<T>(string key, T value, Type valueType)
+        private static void SetValue<T>(string key, T value, Type valueType, string groupName = null)
         {
-            var group = CurrentDataGroup;
+            var group = GetCurrentDataGroup(groupName ?? CurrentDataGroupName);
             group.GetData().Update(key, value, valueType);
         }
     #endregion
@@ -81,9 +81,9 @@ namespace XmlStorage
             return GetValue(key, defaultValue, typeof(string));
         }
 
-        private static T GetValue<T>(string key, T defaultValue, in Type valueType)
+        private static T GetValue<T>(string key, T defaultValue,  Type valueType, string groupName = null)
         {
-            var group = CurrentDataGroup;
+            var group = GetCurrentDataGroup(groupName ?? CurrentDataGroupName);
             if (!group.GetData().TryGet(key, valueType, out var data))
             {
                 return defaultValue;

@@ -11,7 +11,7 @@ namespace XmlStorage
         private const string DefaultDataGroupName = "Prefs";
 
         public static string CurrentDataGroupName { get; set; } = DefaultDataGroupName;
-        public static DataGroup CurrentDataGroup => DataGroups.GetGroup(CurrentDataGroupName);
+        public static DataGroup CurrentDataGroup => GetCurrentDataGroup(CurrentDataGroupName);
         public static string DirectoryPath { get; set; } = GetDefaultDirectoryPath();
 
         private static DataGroups DataGroups
@@ -62,6 +62,11 @@ namespace XmlStorage
         #else
             return System.AppDomain.CurrentDomain.BaseDirectory;
         #endif
+        }
+
+        private static DataGroup GetCurrentDataGroup(string groupName)
+        {
+            return DataGroups.GetGroup(string.IsNullOrEmpty(groupName) ? DefaultDataGroupName : groupName);
         }
     }
 }
