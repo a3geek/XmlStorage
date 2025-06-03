@@ -1,6 +1,6 @@
 {
   "name": "com.a3geek.xmlstorage",
   "displayName": "XmlStorage",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Provides data saving and loading operations for XML files."
 }
